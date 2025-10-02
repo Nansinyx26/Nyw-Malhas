@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (whatsappBtn) {
         whatsappBtn.addEventListener('click', function() {
             // Replace with your actual WhatsApp number
-            const phoneNumber = '5511999999999'; // Format: country code + area code + number
+            const phoneNumber = '5519981600429'; // Format: country code + area code + number
             const message = encodeURIComponent('Olá! Gostaria de saber mais sobre os produtos NYW MALHAS.');
             window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
         });
