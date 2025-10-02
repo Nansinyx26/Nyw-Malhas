@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - NYW MALHAS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+         :root {
+            --primary: #ff6600;
+            --primary-dark: #cc5200;
+            --primary-light: #ff8533;
+            --bg-dark: #0a0a0a;
+            --bg-medium: #141414;
+            --bg-light: #1e1e1e;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border: #2a2a2a;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-medium) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        /* LOGIN SCREEN */
+        
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .login-box {
+            background: var(--bg-light);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 2px solid var(--primary);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .login-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .login-logo i {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .login-logo h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-group label {
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .input-wrapper i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+        }
+        
+        .form-group input {
+            background: var(--bg-medium);
+            border: 2px solid var(--border);
+            color: var(--text-primary);
+            padding: 1rem 1rem 1rem 3rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
+        }
+        
+        .login-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .login-btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 102, 0, 0.4);
+        }
+        
+        .error-message {
+            background: var(--danger);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+            animation: shake 0.3s ease;
+        }
+        
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            75% {
+                transform: translateX(10px);
+            }
+        }
+        /* ADMIN PANEL */
+        
+        .admin-panel {
+            display: none;
+        }
+        
+        .admin-panel.active {
+            display: block;
+        }
+        
+        .admin-header {
+            background: var(--bg-light);
+            padding: 1.5rem 2rem;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .admin-header h1 {
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logout-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        .admin-content {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 102, 0, 0.2);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+        
+        .stat-info h3 {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-info p {
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .products-section {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid var(--border);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .section-header h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .add-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .add-btn:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+        }
+        
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow-x: auto;
+            display: block;
+        }
+        
+        .products-table thead {
+            background: var(--bg-medium);
+        }
+        
+        .products-table th,
+        .products-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .products-table th {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .products-table tbody {
+            display: table;
+            width: 100%;
+        }
+        
+        .product-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid var(--border);
+        }
+        
+        .status-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .status-badge.available {
+            background: var(--success);
+            color: white;
+        }
+        
+        .status-badge.unavailable {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-edit,
+        .btn-delete,
+        .btn-toggle {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .btn-edit {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background: #e67e22;
+        }
+        
+        .btn-delete {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+        
+        .btn-toggle {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-toggle:hover {
+            background: var(--primary-light);
+        }
+        /* MODAL */
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid var(--primary);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .modal-header h2 {
+            color: var(--primary);
+        }
+        
+        .close-modal {
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .modal-form .form-group label {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .modal-form input,
+        .modal-form select,
+        .modal-form textarea {
+            background: var(--bg-medium);
+            border: 2px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .modal-form input:focus,
+        .modal-form select:focus,
+        .modal-form textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .file-upload {
+            border: 2px dashed var(--border);
+            padding: 2rem;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload:hover {
+            border-color: var(--primary);
+            background: var(--bg-medium);
+        }
+        
+        .file-upload input {
+            display: none;
+        }
+        
+        .preview-image {
+            max-width: 200px;
+            margin: 1rem auto;
+            display: none;
+            border-radius: 10px;
+        }
+        
+        .preview-image.show {
+            display: block;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .btn-save,
+        .btn-cancel {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-save {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-save:hover {
+            background: #27ae60;
+        }
+        
+        .btn-cancel {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+        
+        .btn-cancel:hover {
+            background: var(--bg-medium);
+        }
+        
+        .contact-info-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .contact-display-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-medium);
+            border-radius: 10px;
+            border: 2px solid var(--border);
+        }
+        
+        .contact-display-item i {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-top: 0.3rem;
+        }
+        
+        .contact-display-item strong {
+            display: block;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+        
+        .contact-display-item p {
+            color: var(--text-secondary);
+            word-break: break-word;
+        }
+        
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .products-table {
+                font-size: 0.85rem;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- LOGIN SCREEN -->
+    <div class="login-container" id="loginScreen">
+        <div class="login-box">
+            <div class="login-logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>Painel Administrativo</h1>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem;">NYW MALHAS</p>
+            </div>
+            <div class="error-message" id="loginError">
+                Usuário ou senha incorretos!
+            </div>
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label>Usuário</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" placeholder="Digite seu usuário" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="Digite sua senha" required>
+                    </div>
+                </div>
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Entrar
+                </button>
+            </form>
+            <p style="color: var(--text-secondary); text-align: center; margin-top: 1.5rem; font-size: 0.9rem;">
+                <i class="fas fa-info-circle"></i> Usuário: admin | Senha: admin123
+            </p>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-header">
+            <h1><i class="fas fa-tachometer-alt"></i> Painel Administrativo</h1>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                Sair
+            </button>
+        </div>
+
+        <div class="admin-content">
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Total de Produtos</h3>
+                        <p id="totalProducts">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Disponíveis</h3>
+                        <p id="availableProducts">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Indisponíveis</h3>
+                        <p id="unavailableProducts">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information Section -->
+            <div class="products-section" style="margin-bottom: 2rem;">
+                <div class="section-header">
+                    <h2><i class="fas fa-address-book"></i> Informações de Contato</h2>
+                    <button class="add-btn" id="editContactBtn" style="background: var(--warning);">
+                        <i class="fas fa-edit"></i>
+                        Editar Contato
+                    </button>
+                </div>
+                <div class="contact-info-display">
+                    <div class="contact-display-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <strong>Email:</strong>
+                            <p id="displayEmail">contato@nywmalhas.com.br</p>
+                        </div>
+                    </div>
+                    <div class="contact-display-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <strong>Telefone:</strong>
+                            <p id="displayPhone">(XX) XXXX-XXXX</p>
+                        </div>
+                    </div>
+                    <div class="contact-display-item">
+                        <i class="fas fa-whatsapp"></i>
+                        <div>
+                            <strong>WhatsApp:</strong>
+                            <p id="displayWhatsapp">+55 XX XXXXX-XXXX</p>
+                        </div>
+                    </div>
+                    <div class="contact-display-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>Endereço:</strong>
+                            <p id="displayAddress">[Seu endereço completo]</p>
+                        </div>
+                    </div>
+                    <div class="contact-display-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <strong>Horário:</strong>
+                            <p id="displayHours">Segunda a Sexta, 08:00 às 18:00</p>
+                        </div>
+                    </div>
+                    <div class="contact-display-item">
+                        <i class="fab fa-facebook"></i>
+                        <div>
+                            <strong>Facebook:</strong>
+                            <p id="displayFacebook">https://facebook.com/nywmalhas</p>
+                        </div>
+                    </div>
+                    <div class="contact-display-item">
+                        <i class="fab fa-instagram"></i>
+                        <div>
+                            <strong>Instagram:</strong>
+                            <p id="displayInstagram">@nywmalhas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Table -->
+            <div class="products-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-list"></i> Gerenciar Produtos</h2>
+                    <button class="add-btn" id="addProductBtn">
+                        <i class="fas fa-plus"></i>
+                        Adicionar Produto
+                    </button>
+                </div>
+                <table class="products-table">
+                    <thead>
+                        <tr>
+                            <th>Imagem</th>
+                            <th>Nome</th>
+                            <th>Categoria</th>
+                            <th>Cor</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                        <!-- Products will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Adicionar Produto</h2>
+                <button class="close-modal" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form class="modal-form" id="productForm">
+                <div class="form-group">
+                    <label>Nome do Produto</label>
+                    <input type="text" id="productName" required placeholder="Ex: Malha PV Preta">
+                </div>
+                <div class="form-group">
+                    <label>Categoria</label>
+                    <select id="productCategory" required>
+                        <option value="">Selecione...</option>
+                        <option value="pv">Malha PV</option>
+                        <option value="pp">Malha PP</option>
+                        <option value="piquet">Malha Piquet</option>
+                        <option value="helanca">Helanca Light</option>
+                        <option value="algodao">Algodão Penteado</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Cor</label>
+                    <input type="text" id="productColor" required placeholder="Ex: Preta">
+                </div>
+                <div class="form-group">
+                    <label>Imagem do Produto</label>
+                    <div class="file-upload" id="fileUpload">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;"></i>
+                        <p>Clique para fazer upload</p>
+                        <input type="file" id="productImage" accept="image/*">
+                    </div>
+                    <img id="imagePreview" class="preview-image" alt="Preview">
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="productStatus" required>
+                        <option value="available">Disponível</option>
+                        <option value="unavailable">Indisponível</option>
+                    </select>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn-save">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                    <button type="button" class="btn-cancel" id="cancelBtn">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL CONTACT -->
+    <div class="modal" id="contactModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Editar Informações de Contato</h2>
+                <button class="close-modal" id="closeContactModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form class="modal-form" id="contactForm">
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="contactEmail" required placeholder="contato@exemplo.com">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-phone"></i> Telefone</label>
+                    <input type="tel" id="contactPhone" required placeholder="(XX) XXXX-XXXX">
+                </div>
+                <div class="form-group">
+                    <label><i class="fab fa-whatsapp"></i> WhatsApp</label>
+                    <input type="tel" id="contactWhatsapp" required placeholder="+55 XX XXXXX-XXXX">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-map-marker-alt"></i> Endereço Completo</label>
+                    <textarea id="contactAddress" rows="3" required placeholder="Rua, número, bairro, cidade, estado, CEP"></textarea>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-clock"></i> Horário de Atendimento</label>
+                    <input type="text" id="contactHours" required placeholder="Segunda a Sexta, 08:00 às 18:00">
+                </div>
+                <div class="form-group">
+                    <label><i class="fab fa-facebook"></i> Facebook (URL completa)</label>
+                    <input type="url" id="contactFacebook" placeholder="https://facebook.com/suapagina">
+                </div>
+                <div class="form-group">
+                    <label><i class="fab fa-instagram"></i> Instagram (@usuário)</label>
+                    <input type="text" id="contactInstagram" placeholder="@seuusuario">
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn-save">
+                        <i class="fas fa-save"></i> Salvar Alterações
+                    </button>
+                    <button type="button" class="btn-cancel" id="cancelContactBtn">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+    <script src="js/db-manager.js"></script>
+</body>
+
+</html>

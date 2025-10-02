@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NYW MALHAS - Tecidos de Alta Qualidade</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header com animação -->
+    <header>
+        <div class="header-content">
+            <img src="img/logo3.png" alt="Logo NYW MALHAS" class="logo">
+            <p class="tagline">Excelência em Tecidos Técnicos</p>
+        </div>
+    </header>
+
+    <!-- Navegação moderna -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-link active">
+                <i class="fas fa-home"></i>
+                <span>Início</span>
+            </a>
+            <a href="paginas/malha-pv.html" class="nav-link">
+                <i class="fas fa-tshirt"></i>
+                <span>Malha PV</span>
+            </a>
+            <a href="paginas/malha-pp.html" class="nav-link">
+                <i class="fas fa-layer-group"></i>
+                <span>Malha PP</span>
+            </a>
+            <a href="paginas/malha-piquet.html" class="nav-link">
+                <i class="fas fa-chess-board"></i>
+                <span>Piquet</span>
+            </a>
+            <a href="paginas/helanca-light.html" class="nav-link">
+                <i class="fas fa-wind"></i>
+                <span>Helanca Light</span>
+            </a>
+            <a href="paginas/contato.html" class="nav-link">
+                <i class="fas fa-phone"></i>
+                <span>Contato</span>
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Seção Malha PV -->
+        <section id="section-pv" class="product-section active">
+            <div class="section-header">
+                <h1>Malha PV</h1>
+                <p>Polyester com Elastano - Perfeita para uniformes e peças esportivas</p>
+            </div>
+            <div class="product-showcase">
+                <div class="product-viewer">
+                    <div class="image-container" id="pv-image">
+                        <div class="zoom-indicator">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Clique para ampliar</span>
+                        </div>
+                    </div>
+                    <div class="image-controls">
+                        <button type="button" class="control-btn" id="pv-zoom-in" aria-label="Ampliar">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                        <button type="button" class="control-btn" id="pv-zoom-out" aria-label="Reduzir">
+                            <i class="fas fa-search-minus"></i>
+                        </button>
+                        <button type="button" class="control-btn" id="pv-reset" aria-label="Resetar Zoom">
+                            <i class="fas fa-redo"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="info-card" id="pv-description">
+                        <h3>Selecione uma cor</h3>
+                        <p>Escolha ao lado para visualizar as especificações técnicas</p>
+                    </div>
+                    <div class="color-selector">
+                        <h4><i class="fas fa-palette"></i> Cores Disponíveis</h4>
+                        <div class="color-options">
+                            <label class="color-option">
+                                <input type="radio" name="pv" value="malha-pv-preta.jpg" data-color="Preta">
+                                <span class="color-swatch" style="background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);">
+                                    <span class="color-name">Preta</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="pv" value="malha-pv-bege.jpg" data-color="Bege">
+                                <span class="color-swatch" style="background: linear-gradient(135deg, #f5f5dc 0%, #d2b48c 100%);">
+                                    <span class="color-name">Bege</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="pv" value="malha-pv-azul-royal.jpg" data-color="Azul Royal">
+                                <span class="color-swatch" style="background: linear-gradient(135deg, #4169e1 0%, #0047ab 100%);">
+                                    <span class="color-name">Azul Royal</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="pv" value="malha-pv-verde-musgo.jpg" data-color="Verde Musgo">
+                                <span class="color-swatch" style="background: linear-gradient(135deg, #8b9556 0%, #556b2f 100%);">
+                                    <span class="color-name">Verde Musgo</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="specifications">
+                        <h4><i class="fas fa-info-circle"></i> Características</h4>
+                        <ul class="spec-list">
+                            <li><i class="fas fa-check"></i> Alta durabilidade</li>
+                            <li><i class="fas fa-check"></i> Secagem rápida</li>
+                            <li><i class="fas fa-check"></i> Conforto térmico</li>
+                            <li><i class="fas fa-check"></i> Fácil manutenção</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Malha PP -->
+        <section id="section-pp" class="product-section">
+            <div class="section-header">
+                <h1>Malha PP</h1>
+                <p>100% Polipropileno - Leveza e resistência excepcionais</p>
+            </div>
+            <div class="product-showcase">
+                <div class="product-viewer">
+                    <div class="image-container" id="pp-image">
+                        <div class="zoom-indicator">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Clique para ampliar</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="info-card" id="pp-description">
+                        <h3>Selecione uma cor</h3>
+                        <p>Escolha ao lado para visualizar as especificações técnicas</p>
+                    </div>
+                    <div class="color-selector">
+                        <h4><i class="fas fa-palette"></i> Cores Disponíveis</h4>
+                        <div class="color-options">
+                            <label class="color-option">
+                                <input type="radio" name="pp" value="malha-pp-preta.jpg" data-color="Preta">
+                                <span class="color-swatch" style="background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);">
+                                    <span class="color-name">Preta</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="pp" value="malha-pp-vinho.jpg" data-color="Vinho">
+                                <span class="color-swatch" style="background: linear-gradient(135deg, #8b0000 0%, #5c0000 100%);">
+                                    <span class="color-name">Vinho</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="specifications">
+                        <h4><i class="fas fa-info-circle"></i> Características</h4>
+                        <ul class="spec-list">
+                            <li><i class="fas fa-check"></i> Ultraleve</li>
+                            <li><i class="fas fa-check"></i> Resistente à abrasão</li>
+                            <li><i class="fas fa-check"></i> Não absorve umidade</li>
+                            <li><i class="fas fa-check"></i> Hipoalergênico</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Malha Piquet -->
+        <section id="section-piquet" class="product-section">
+            <div class="section-header">
+                <h1>Malha Piquet</h1>
+                <p>Textura clássica com tecnologia moderna</p>
+            </div>
+            <div class="product-showcase">
+                <div class="product-viewer">
+                    <div class="image-container" id="piquet-image">
+                        <div class="zoom-indicator">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Clique para ampliar</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="info-card" id="piquet-description">
+                        <h3>Selecione uma cor</h3>
+                        <p>Escolha ao lado para visualizar as especificações técnicas</p>
+                    </div>
+                    <div class="color-selector">
+                        <h4><i class="fas fa-palette"></i> Cores Disponíveis</h4>
+                        <div class="color-options">
+                            <label class="color-option">
+                                <input type="radio" name="piquet" value="azul-marinho-piquet-pv.jpg" data-color="Azul Marinho">
+                                <span class="color-swatch" style="background: linear-gradient(135deg, #000080 0%, #000050 100%);">
+                                    <span class="color-name">Azul Marinho</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="piquet" value="vermelho-piquet-pv.jpg" data-color="Vermelho">
+                                <span class="color-swatch" style="background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);">
+                                    <span class="color-name">Vermelho</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="piquet" value="malha-piquet-pa-cinza-chumbo.jpg" data-color="Cinza Chumbo">
+                                <span class="color-swatch" style="background: linear-gradient(135deg, #696969 0%, #3a3a3a 100%);">
+                                    <span class="color-name">Cinza Chumbo</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="piquet" value="malha-piquet-pa-bandeira.jpg" data-color="Bandeira">
+                                <span class="color-swatch" style="background: linear-gradient(135deg, #009c3b 0%, #006b28 100%);">
+                                    <span class="color-name">Bandeira</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="specifications">
+                        <h4><i class="fas fa-info-circle"></i> Características</h4>
+                        <ul class="spec-list">
+                            <li><i class="fas fa-check"></i> Textura diferenciada</li>
+                            <li><i class="fas fa-check"></i> Respirabilidade superior</li>
+                            <li><i class="fas fa-check"></i> Elegância casual</li>
+                            <li><i class="fas fa-check"></i> Versatilidade</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Helanca Light -->
+        <section id="section-helanca" class="product-section">
+            <div class="section-header">
+                <h1>Helanca Light</h1>
+                <p>Elasticidade e conforto para roupas fitness</p>
+            </div>
+            <div class="product-showcase">
+                <div class="product-viewer">
+                    <div class="image-container" id="helanca-image">
+                        <div class="zoom-indicator">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Clique para ampliar</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="info-card" id="helanca-description">
+                        <h3>Selecione uma cor</h3>
+                        <p>Escolha ao lado para visualizar as especificações técnicas</p>
+                    </div>
+                    <div class="color-selector">
+                        <h4><i class="fas fa-palette"></i> Cores Disponíveis</h4>
+                        <div class="color-options">
+                            <label class="color-option">
+                                <input type="radio" name="helanca" value="helanca-light-preto.jpg" data-color="Preto">
+                                <span class="color-swatch" style="background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);">
+                                    <span class="color-name">Preto</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="helanca" value="helanca-light-bordo.jpg" data-color="Bordô">
+                                <span class="color-swatch" style="background: linear-gradient(135deg, #800020 0%, #5c0017 100%);">
+                                    <span class="color-name">Bordô</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="specifications">
+                        <h4><i class="fas fa-info-circle"></i> Características</h4>
+                        <ul class="spec-list">
+                            <li><i class="fas fa-check"></i> Alta elasticidade</li>
+                            <li><i class="fas fa-check"></i> Ajuste perfeito</li>
+                            <li><i class="fas fa-check"></i> Leve e respirável</li>
+                            <li><i class="fas fa-check"></i> Ideal para fitness</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Algodão Penteado -->
+        <section id="section-algodao" class="product-section">
+            <div class="section-header">
+                <h1>Algodão Penteado</h1>
+                <p>100% Natural - Conforto incomparável</p>
+            </div>
+            <div class="product-showcase">
+                <div class="product-viewer">
+                    <div class="image-container" id="algodao-image">
+                        <div class="zoom-indicator">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Clique para ampliar</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="info-card" id="algodao-description">
+                        <h3>Selecione uma cor</h3>
+                        <p>Escolha ao lado para visualizar as especificações técnicas</p>
+                    </div>
+                    <div class="color-selector">
+                        <h4><i class="fas fa-palette"></i> Cores Disponíveis</h4>
+                        <div class="color-options">
+                            <label class="color-option">
+                                <input type="radio" name="algodao" value="algodao-branco.png" data-color="Branco">
+                                <span class="color-swatch" style="background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);">
+                                    <span class="color-name">Branco</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="algodao" value="algodao-preto.png" data-color="Preto">
+                                <span class="color-swatch" style="background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);">
+                                    <span class="color-name">Preto</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="algodao" value="algodao-cinza-claro.jpg" data-color="Cinza Claro">
+                                <span class="color-swatch" style="background: linear-gradient(135deg, #d3d3d3 0%, #a9a9a9 100%);">
+                                    <span class="color-name">Cinza Claro</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="specifications">
+                        <h4><i class="fas fa-info-circle"></i> Características</h4>
+                        <ul class="spec-list">
+                            <li><i class="fas fa-check"></i> 100% Natural</li>
+                            <li><i class="fas fa-check"></i> Maciez superior</li>
+                            <li><i class="fas fa-check"></i> Alta absorção</li>
+                            <li><i class="fas fa-check"></i> Respirável</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ✅ SEÇÃO DE CONTATO COM data-contact -->
+        <section id="section-contato" class="product-section contact-section">
+            <div class="section-header">
+                <h1>Entre em Contato</h1>
+                <p>Estamos prontos para atender você</p>
+            </div>
+            <div class="contact-container">
+                <div class="contact-card">
+                    <div class="qr-code">
+                        <img src="seu-qrcode.png" data-contact="qrcode" alt="QR Code WhatsApp">
+                        <p>Escaneie para WhatsApp</p>
+                    </div>
+                </div>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p data-contact="email">contato@nywmalhas.com.br</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Telefone</h4>
+                            <p data-contact="phone">(XX) XXXX-XXXX</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Endereço</h4>
+                            <p data-contact="address">[Seu endereço completo]</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h4>Horário</h4>
+                            <p data-contact="hours">Segunda a Sexta, 08:00 às 18:00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ✅ FOOTER COM data-contact -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 NYW MALHAS. Todos os direitos reservados.</p>
+            <div class="social-links">
+                <a href="#" data-contact="facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" data-contact="instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" data-contact="whatsapp"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ✅ SCRIPTS -->
+    <script src="js/script.js"></script>
+    <script src="js/contact-loader.js"></script>
+   
+
+</body>
+
+</html>
