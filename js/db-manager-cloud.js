@@ -40,10 +40,16 @@ window.DBManager = {
 
     async saveProduct(product, imageFile = null) {
         try {
-            // Se há arquivo de imagem, converter para Base64 (simplificado)
+            // Se há arquivo de imagem, converter para Base64
             if (imageFile) {
-                // TODO: Implementar upload de imagem ou conversão para Base64
-                console.warn('Upload de imagem ainda não implementado');
+                try {
+                    const base64Image = await this.convertFileToBase64(imageFile);
+                    product.image = base64Image;
+                } catch (imgError) {
+                    console.error("Erro ao converter imagem:", imgError);
+                    alert("Erro ao processar imagem. Tente um arquivo menor.");
+                    return;
+                }
             }
 
             if (product._id) {
@@ -58,6 +64,16 @@ window.DBManager = {
             console.error('Erro ao salvar produto:', error);
             throw error;
         }
+    },
+
+    // Função auxiliar para converter arquivo para Base64
+    convertFileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
     },
 
     async deleteProduct(id) {
