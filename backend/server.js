@@ -27,12 +27,22 @@ if (process.env.NODE_ENV === 'development') {
     });
 }
 
+// Servir arquivos estáticos da pasta raiz do projeto (frontend)
+const path = require('path');
+app.use(express.static(path.join(__dirname, '..')));
+
+
 // Rotas
 app.use('/api/products', require('./routes/products'));
 app.use('/api/contact', require('./routes/contact'));
 
-// Rota de teste
+// Rota raiz - serve o site
 app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'index.html'));
+});
+
+// Rota de status da API
+app.get('/api', (req, res) => {
     res.json({
         success: true,
         message: 'API NYW Malhas está funcionando!',
