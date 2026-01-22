@@ -106,12 +106,16 @@ async function syncStaticProducts() {
                 const imgEl = card.querySelector('img.card-img-top');
                 if (imgEl && productData.image) {
                     // Atualiza src da imagem se for diferente
-                    const newImageSrc = productData.image.startsWith('http')
-                        ? productData.image
-                        : `../img/${productData.image}`;
+                    let newImageSrc;
+                    if (productData.image.startsWith('http') || productData.image.startsWith('data:')) {
+                        newImageSrc = productData.image;
+                    } else {
+                        newImageSrc = `../img/${productData.image}`;
+                    }
+
                     if (imgEl.src !== newImageSrc && !imgEl.src.endsWith(productData.image)) {
                         imgEl.src = newImageSrc;
-                        console.log(`✅ Imagem atualizada: ${productData.name} → ${productData.image}`);
+                        // console.log(`✅ Imagem atualizada: ${productData.name}`);
                     }
                 }
 
