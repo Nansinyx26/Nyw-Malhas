@@ -1,7 +1,7 @@
 // ===== API CLIENT - Comunicação com MongoDB Backend =====
 
 class APIClient {
-    constructor(baseURL = 'http://localhost:5000/api') {
+    constructor(baseURL = 'https://nyw-malhas.onrender.com/api') {
         this.baseURL = baseURL;
     }
 
