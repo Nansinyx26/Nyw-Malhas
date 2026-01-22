@@ -268,7 +268,12 @@ function getCategoryName(category) {
         pp: 'Malha PP',
         piquet: 'Malha Piquet',
         helanca: 'Helanca Light',
-        algodao: 'Algodão Penteado'
+        algodao: 'Algodão Penteado',
+        dryfit: 'Dry Fit',
+        viscose: 'Viscose',
+        moletom: 'Moletom',
+        oxford: 'Oxford',
+        'helanca-escolar': 'Helanca Escolar'
     };
     return categories[category] || category;
 }

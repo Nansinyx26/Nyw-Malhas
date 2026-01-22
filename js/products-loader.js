@@ -198,6 +198,11 @@ function getCurrentPage() {
     if (url.includes('malha-pp')) return 'pp';
     if (url.includes('malha-piquet') || url.includes('piquet')) return 'piquet';
     if (url.includes('helanca')) return 'helanca';
+    if (url.includes('dry-fit') || url.includes('dryfit')) return 'dryfit';
+    if (url.includes('viscose') || url.includes('viscolycra')) return 'viscose';
+    if (url.includes('moletom')) return 'moletom';
+    if (url.includes('algodao') || url.includes('meia-malha')) return 'algodao';
+    if (url.includes('oxford')) return 'oxford';
 
     return null;
 }
@@ -207,7 +212,7 @@ function getCurrentPage() {
  */
 function getCategoryClass(produto) {
     const darkColors = ['preta', 'preto', 'azul', 'marinho', 'vinho', 'bordô', 'chumbo'];
-    const lightColors = ['bege', 'branco', 'vermelho', 'amarelo'];
+    const lightColors = ['bege', 'branco', 'vermelho', 'amarelo', 'rosa'];
 
     const colorLower = produto.color.toLowerCase();
 
@@ -220,10 +225,15 @@ function getCategoryClass(produto) {
 
 function getComposicao(category) {
     const composicoes = {
-        pv: '96% PES / 4% EL',
+        pv: '67% PES / 33% VI',
         pp: '100% Poliéster',
-        piquet: 'Poliamida ou 96% PES / 4% EL',
-        helanca: '92% PA / 8% EL'
+        piquet: '50% PES / 50% CO',
+        helanca: '100% Poliamida',
+        dryfit: '100% Poliéster',
+        viscose: '96% Viscose / 4% Elastano',
+        moletom: '50% Algodão / 50% Poliéster',
+        algodao: '100% Algodão',
+        oxford: '100% Poliéster'
     };
     return composicoes[category] || 'N/A';
 }
@@ -233,7 +243,12 @@ function getGramatura(category) {
         pv: '160 g/m²',
         pp: '150 g/m²',
         piquet: '180 g/m²',
-        helanca: '220 g/m²'
+        helanca: '130 g/m²',
+        dryfit: '130 g/m²',
+        viscose: '190 g/m²',
+        moletom: '300 g/m²',
+        algodao: '160 g/m²',
+        oxford: '150 g/m²'
     };
     return gramaturas[category] || 'N/A';
 }
@@ -242,10 +257,15 @@ function getDescricao(produto) {
     if (produto.description) return produto.description;
 
     const descricoes = {
-        pv: 'Ideal para uniformes corporativos e esportivos. Alta durabilidade e conforto.',
-        pp: 'Ideal para uniformes e peças do dia a dia. Resistente e durável.',
-        piquet: 'Textura clássica e elegante para peças de qualidade superior.',
-        helanca: 'Elasticidade superior e conforto máximo para roupas fitness e esportivas.'
+        pv: 'Malha fria, não amarrota e tem grande durabilidade. Ideal para uniformes.',
+        pp: 'Toque sintético, ideal para sublimação e uniformes esportivos.',
+        piquet: 'Tecido com textura em losango, clássico para camisas polo.',
+        helanca: 'Tecido flexível e resistente, ideal para forros e peças esportivas.',
+        dryfit: 'Tecnologia que facilita a evaporação do suor. Perfeito para esportes.',
+        viscose: 'Malha leve, com caimento fluido e toque macio. Muito confortável.',
+        moletom: 'Tecido encorpado e quente, parte interna felpuda. Ideal para inverno.',
+        algodao: 'Malha natural, hipoalergênica e com toque suave. Alta respirabilidade.',
+        oxford: 'Tecido plano, resistente e de fácil lavagem. Ideal para jalecos e sociais.'
     };
 
     return descricoes[produto.category] || 'Tecido de alta qualidade.';
@@ -268,11 +288,11 @@ function getColorGradient(color) {
         'bordo': 'linear-gradient(135deg, #800020 0%, #5c0017 100%)',
         'cinza chumbo': 'linear-gradient(135deg, #54626f 0%, #2f3640 100%)',
         'cinza mescla': 'linear-gradient(135deg, #d3d3d3 0%, #a9a9a9 100%)',
-        'cinza': 'linear-gradient(135deg, #d3d3d3 0%, #a9a9a9 100%)',
+        'cinza': 'linear-gradient(135deg, #808080 0%, #696969 100%)',
         'vermelho': 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)',
         'vermelha': 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)',
-        'rosa pink': 'linear-gradient(135deg, #ff69b4 0%, #ff1493 100%)',
-        'verde bandeira': 'linear-gradient(135deg, #006400 0%, #004b00 100%)',
+        'rosa pink': 'linear-gradient(135deg, #ff1493 0%, #ff007f 100%)',
+        'verde bandeira': 'linear-gradient(135deg, #008000 0%, #006400 100%)',
         'bandeira': 'linear-gradient(135deg, #003893 0%, #009c3b 50%, #ffdf00 100%)'
     };
 
@@ -293,11 +313,36 @@ function getDefaultProducts(category) {
         ],
         piquet: [
             { id: 8, name: 'Piquet PA Bandeira', category: 'piquet', color: 'Bandeira', image: '../img/malha-piquet-pa-bandeira.jpg', status: 'available' },
-            { id: 9, name: 'Piquet PA Cinza Chumbo', category: 'piquet', color: 'Cinza Chumbo', image: '../img/malha-piquet-pa-cinza-chumbo.jpg', status: 'available' }
+            { id: 9, name: 'Piquet PA Cinza Chumbo', category: 'piquet', color: 'Cinza Chumbo', image: '../img/malha-piquet-pa-cinza-chumbo.jpg', status: 'available' },
+            { id: 10, name: 'Piquet PA Preta', category: 'piquet', color: 'Preta', image: '../img/malha-piquet-preta.png', status: 'available' }
         ],
         helanca: [
             { id: 12, name: 'Helanca Light Preto', category: 'helanca', color: 'Preto', image: '../img/helanca-light-preto.jpg', status: 'available' },
-            { id: 13, name: 'Helanca Light Bordô', category: 'helanca', color: 'Bordô', image: '../img/helanca-light-bordo.jpg', status: 'available' }
+            { id: 13, name: 'Helanca Light Bordô', category: 'helanca', color: 'Bordô', image: '../img/helanca-light-bordo.jpg', status: 'available' },
+            { id: 14, name: 'Helanca Light Rosa Pink', category: 'helanca', color: 'Rosa Pink', image: '../img/helanca-light-rosa-pink.png', status: 'available' },
+            { id: 15, name: 'Helanca Light Azul Royal', category: 'helanca', color: 'Azul Royal', image: '../img/helanca-light-azul-royal.png', status: 'available' },
+            { id: 16, name: 'Helanca Escolar Verde Bandeira', category: 'helanca', color: 'Verde Bandeira', image: '../img/helanca-escolar-verde-bandeira.png', status: 'available' },
+            { id: 17, name: 'Helanca Escolar Cinza', category: 'helanca', color: 'Cinza', image: '../img/helanca-escolar-cinza.png', status: 'available' }
+        ],
+        dryfit: [
+            { id: 18, name: 'Dry Fit Branco', category: 'dryfit', color: 'Branco', image: '../img/dry-fit.png', status: 'available' },
+            { id: 19, name: 'Dry Fit Preto', category: 'dryfit', color: 'Preto', image: '../img/dry-fit-preto.jpg', status: 'available' }
+        ],
+        viscose: [
+            { id: 20, name: 'Viscose Cinza Mescla', category: 'viscose', color: 'Cinza Mescla', image: '../img/viscose-cinza-mescla.png', status: 'available' },
+            { id: 21, name: 'Viscose Vinho', category: 'viscose', color: 'Vinho', image: '../img/viscose-vinho.jpg', status: 'available' }
+        ],
+        moletom: [
+            { id: 22, name: 'Moletom Azul Marinho', category: 'moletom', color: 'Azul Marinho', image: '../img/moletom-azul-marinho.png', status: 'available' },
+            { id: 23, name: 'Moletom Bordô', category: 'moletom', color: 'Bordô', image: '../img/moletom-bordo.jpg', status: 'available' }
+        ],
+        algodao: [
+            { id: 24, name: 'Meia Malha 30.1 Azul Marinho', category: 'algodao', color: 'Azul Marinho', image: '../img/algodao-azul-marinho.png', status: 'available' },
+            { id: 25, name: 'Meia Malha 30.1 Vermelho', category: 'algodao', color: 'Vermelho', image: '../img/algodao-vermelho.png', status: 'available' }
+        ],
+        oxford: [
+            { id: 26, name: 'Oxford Azul Marinho', category: 'oxford', color: 'Azul Marinho', image: '../img/oxford-azul-marinho.png', status: 'available' },
+            { id: 27, name: 'Oxford Vermelho', category: 'oxford', color: 'Vermelho', image: '../img/oxford-vermelho.jpg', status: 'available' }
         ]
     };
 
