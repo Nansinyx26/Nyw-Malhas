@@ -12,6 +12,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Tabela de Estimativa de Frete por Região (Baseado na UF)
     // Valores base simulados para dar realismo
+    const PRODUCT_CATALOG = {
+        'malha-pv': { name: 'Malha PV', price: 30.00, unit: 'Kg', weightFactor: 0.33 },
+        'malha-pp': { name: 'Malha PP', price: 30.00, unit: 'Kg', weightFactor: 0.25 },
+        'malha-piquet': { name: 'Malha Piquet', price: 30.00, unit: 'Kg', weightFactor: 0.35 },
+        'helanca-light': { name: 'Helanca Light', price: 30.00, unit: 'Kg', weightFactor: 0.20 },
+        // NOVOS PRODUTOS (Preço Fixo R$ 30,00/kg)
+        'dry-fit': { name: 'Dry Fit', price: 30.00, unit: 'Kg', weightFactor: 0.25 }, // 1m = 0.25kg
+        'viscose': { name: 'Viscose c/ Elastano', price: 30.00, unit: 'Kg', weightFactor: 0.35 },
+        'moletom': { name: 'Moletom', price: 30.00, unit: 'Kg', weightFactor: 0.60 },
+        'helanca-escolar': { name: 'Helanca Escolar', price: 30.00, unit: 'Kg', weightFactor: 0.40 },
+        'algodao': { name: 'Algodão', price: 30.00, unit: 'Kg', weightFactor: 0.30 },
+        'oxford': { name: 'Oxford', price: 30.00, unit: 'Kg', weightFactor: 0.25 }
+    };
     const shippingRates = {
         'SP': { base: 25.00, perKg: 1.50 },
         'RJ': { base: 28.00, perKg: 1.80 },
@@ -139,18 +152,35 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ===== ATUALIZAR VALORES TOTAIS =====
     function updateValues() {
-        const quantity = parseFloat(document.getElementById('orderQuantity').value) || 0;
-        const unitPriceStr = document.getElementById('orderUnitPrice').value || '0';
-        const unitPrice = parseCurrency(unitPriceStr); // Agora usa a função helper robusta
-        const shippingStr = document.getElementById('shippingCost').value || '0';
-        const shipping = parseCurrency(shippingStr);
+        const productKey = new URLSearchParams(window.location.search).get('produto');
+        const product = PRODUCT_CATALOG[productKey];
+        if (!product) return;
 
-        const subtotal = quantity * unitPrice;
-        const total = subtotal + shipping;
+        const quantity = parseFloat(document.getElementById('orderQuantity').value) || 0;
+        const shippingCost = parseFloat(parseCurrency(document.getElementById('shippingCost').value)) || 0;
+        const unit = document.getElementById('orderUnit').value;
+
+        // Fixar Preço Unitário Visualmente
+        document.getElementById('orderUnitPrice').value = 'R$ 30,00';
+
+        let finalWeight = quantity;
+        let subtotal = 0;
+        const weightDisplay = document.getElementById('weightDisplay');
+
+        // Lógica de Conversão Metros -> Kg para produtos de R$30
+        if (unit === 'metro(s)' && product.weightFactor) {
+            finalWeight = quantity * product.weightFactor;
+            // Exibir aviso visual de conversão
+            weightDisplay.innerHTML = `<i class="fas fa-balance-scale"></i> ${quantity}m ≈ <strong>${finalWeight.toFixed(3).replace('.', ',')} kg</strong>`;
+        } else {
+            weightDisplay.innerHTML = '';
+        }
+
+        subtotal = finalWeight * product.price;
 
         document.getElementById('labelSubtotal').innerText = formatCurrency(subtotal);
-        document.getElementById('labelShipping').innerText = formatCurrency(shipping);
-        document.getElementById('labelTotal').innerText = formatCurrency(total);
+        document.getElementById('labelShipping').innerText = formatCurrency(shippingCost);
+        document.getElementById('labelTotal').innerText = formatCurrency(subtotal + shippingCost);
     }
 
     // Listeners manuais

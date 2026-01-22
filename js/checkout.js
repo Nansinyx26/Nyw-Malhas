@@ -1,77 +1,112 @@
 // ===== CHECKOUT.JS - Controle da Página de Finalização de Compra =====
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
 
     // Mapeamento de produtos para fotos e especificações
     const productData = {
         'malha-pv': {
             name: 'Malha PV',
-            specs: [
-                'Alta durabilidade',
-                'Secagem rápida',
-                'Conforto térmico',
-                'Fácil manutenção'
-            ],
+            specs: ['Alta durabilidade', 'Secagem rápida', 'Conforto térmico', 'Fácil manutenção'],
             colors: {
                 'preta': 'malha-pv-preta.jpg',
                 'bege': 'malha-pv-bege.jpg',
                 'azul-royal': 'malha-pv-azul-royal.jpg',
-                'verde-musgo': 'malha-pv-verde-musgo.jpg'
+                'verde-musgo': 'malha-pv-verde-musgo.jpg',
+                'cinza-mescla': 'malha-pv-cinza-mescla.png',
+                'vermelha': 'malha-pv-vermelha.png'
             }
         },
         'malha-pp': {
             name: 'Malha PP',
-            specs: [
-                'Ultraleve',
-                'Resistente à abrasão',
-                'Não absorve umidade',
-                'Hipoalergênico'
-            ],
+            specs: ['Ultraleve', 'Resistente à abrasão', 'Não absorve umidade', 'Hipoalergênico'],
             colors: {
                 'preta': 'malha-pp-preta.jpg',
-                'vinho': 'malha-pp-vinho.jpg'
+                'vinho': 'malha-pp-vinho.jpg',
+                'branca': 'malha-pp-branca.png',
+                'azul-marinho': 'malha-pp-azul-marinho.png'
             }
         },
         'malha-piquet': {
             name: 'Malha Piquet',
-            specs: [
-                'Textura diferenciada',
-                'Respirabilidade superior',
-                'Elegância casual',
-                'Versatilidade'
-            ],
+            specs: ['Textura diferenciada', 'Respirabilidade superior', 'Elegância casual', 'Versatilidade'],
             colors: {
                 'azul-marinho': 'azul-marinho-piquet-pv.jpg',
                 'vermelho': 'vermelho-piquet-pv.jpg',
                 'cinza-chumbo': 'malha-piquet-pa-cinza-chumbo.jpg',
-                'verde-bandeira': 'malha-piquet-pa-bandeira.jpg'
+                'verde-bandeira': 'malha-piquet-pa-bandeira.jpg',
+                'branco': 'malha-piquet-branca.png',
+                'preto': 'malha-piquet-preta.png'
             }
         },
         'helanca-light': {
             name: 'Helanca Light',
-            specs: [
-                'Alta elasticidade',
-                'Ajuste perfeito',
-                'Leve e respirável',
-                'Ideal para fitness'
-            ],
+            specs: ['Alta elasticidade', 'Ajuste perfeito', 'Leve e respirável', 'Ideal para fitness'],
             colors: {
                 'preto': 'helanca-light-preto.jpg',
-                'bordo': 'helanca-light-bordo.jpg'
+                'bordo': 'helanca-light-bordo.jpg',
+                'azul-royal': 'helanca-light.png',
+                'rosa-pink': 'helanca-light.png'
             }
         },
         'algodao': {
-            name: 'Algodão Penteado',
-            specs: [
-                '100% Natural',
-                'Maciez superior',
-                'Alta absorção',
-                'Respirável'
-            ],
+            name: 'Algodão 30.1',
+            specs: ['100% Algodão', 'Fio Penteado', 'Hipoalergênico', 'Toque Macio'],
             colors: {
-                'branco': 'algodao-branco.png',
-                'preto': 'algodao-preto.png',
-                'cinza-claro': 'algodao-cinza-claro.jpg'
+                'variadas': 'algodao.png',
+                'branco': 'algodao.png',
+                'azul-marinho': 'algodao.png',
+                'vermelho': 'algodao.png'
+            }
+        },
+        'dry-fit': {
+            name: 'Malha Dry Fit',
+            specs: ['Secagem Rápida', '100% Poliamida', 'Ideal para Esportes', 'Leve (130g)'],
+            colors: {
+                'variadas': 'dry-fit.png',
+                'azul': 'dry-fit.png',
+                'azul-royal': 'dry-fit.png',
+                'branco': 'dry-fit.png',
+                'preto': 'dry-fit-preto.jpg'
+            }
+        },
+        'viscose': {
+            name: 'Viscose c/ Elastano',
+            specs: ['Caimento Fluido', 'Toque Gelado', 'Conforto', '96% Viscose'],
+            colors: {
+                'variadas': 'viscose.png',
+                'vermelha': 'viscose.png',
+                'cinza-mescla': 'viscose.png',
+                'vinho': 'viscose.png'
+            }
+        },
+        'moletom': {
+            name: 'Moletom 3 Cabos',
+            specs: ['Felpado/Inverno', '320 g/m² (Pesado)', 'Alta Resistência', '50% Alg / 50% Pol'],
+            colors: {
+                'variadas': 'moletom.png',
+                'cinza-mescla': 'moletom.png',
+                'azul-marinho': 'moletom.png',
+                'bordo': 'moletom.png'
+            }
+        },
+        'helanca-escolar': {
+            name: 'Helanca Escolar',
+            specs: ['Indestrutível', 'Não Desbota', '100% Poliéster', 'Uso Diário'],
+            colors: {
+                'variadas': 'helanca-escolar.png',
+                'verde-bandeira': 'helanca-escolar.png',
+                'cinza': 'helanca-escolar.png',
+                'azul-marinho': 'helanca-escolar.png'
+            }
+        },
+        'oxford': {
+            name: 'Tecido Oxford',
+            specs: ['Nobre e Prático', 'Não Amarrota', '100% Poliéster', 'Camisaria/Avental'],
+            colors: {
+                'variadas': 'oxford.png',
+                'cinza': 'oxford.png',
+                'azul-marinho': 'oxford.png',
+                'vermelho': 'oxford-vermelho.jpg'
             }
         }
     };
@@ -86,6 +121,44 @@ document.addEventListener('DOMContentLoaded', function () {
         alert('Produto ou cor inválidos!');
         window.location.href = 'index.html';
         return;
+    }
+
+    // ===== VERIFICAÇÃO DE DISPONIBILIDADE NO BANCO =====
+    try {
+        if (window.DBManager) {
+            await window.DBManager.init();
+            const dbProducts = await window.DBManager.getAllProducts();
+
+            // Encontra o produto no banco buscando por nome ou categoria + cor
+            // Como o nome no banco pode ser diferente (ex: "Malha PV Preta"), usamos uma busca aproximada
+            // ou verificamos categoria e cor.
+
+            const productKey = productData[product].name; // Ex: "Malha PV"
+            const colorKey = color.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '); // Ex: "Preta", "Azul Royal"
+
+            // Tenta encontrar correspondência
+            const dbProduct = dbProducts.find(p => {
+                // Normaliza strings para comparação segura
+                const pName = p.name.toLowerCase();
+                const pColor = p.color.toLowerCase();
+                const targetName = productKey.toLowerCase();
+                const targetColor = colorKey.toLowerCase();
+
+                // Verifica se a cor bate e se o nome do produto contém a categoria principal
+                return pColor === targetColor && pName.includes(targetName.split(' ')[0].toLowerCase());
+            });
+
+            if (dbProduct && dbProduct.status === 'unavailable') {
+                alert(`O produto ${productKey} na cor ${colorKey} está temporariamente indisponível.`);
+                window.location.href = 'index.html';
+                return;
+            }
+        }
+    } catch (error) {
+        console.error('Erro ao verificar disponibilidade:', error);
+        // Em caso de erro no banco, permite continuar (fail-open) ou bloqueia?
+        // Fail-open: permite a venda. Fail-closed: bloqueia.
+        // Vamos permitir continuar para não travar vendas se o DB falhar.
     }
 
     // Carregar dados do produto

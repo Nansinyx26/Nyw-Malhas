@@ -44,9 +44,9 @@ async function loadProducts(forceReload = false) {
 
         // Busca produtos do IndexedDB
         const allProductsFromDB = await window.DBManager.getProductsByCategory(currentPage);
-        
+
         let allProducts = [];
-        
+
         if (allProductsFromDB && allProductsFromDB.length > 0) {
             allProducts = allProductsFromDB;
         } else {
@@ -56,11 +56,11 @@ async function loadProducts(forceReload = false) {
 
         // ✅ NOVA LÓGICA: Atualiza apenas se necessário
         const existingCards = productsGrid.querySelectorAll('.product-card');
-        
+
         // Se não há cards OU é forceReload, renderiza tudo
         if (existingCards.length === 0 || forceReload) {
             productsGrid.innerHTML = '';
-            
+
             if (allProducts.length === 0) {
                 productsGrid.innerHTML = `
                     <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 4rem;">
@@ -75,13 +75,13 @@ async function loadProducts(forceReload = false) {
             allProducts.forEach(produto => {
                 const card = createProductCard(produto);
                 productsGrid.appendChild(card);
-                
+
                 // Marca como carregado após um frame para permitir a animação inicial
                 setTimeout(() => {
                     card.classList.add('loaded');
                 }, 600);
             });
-            
+
             console.log(`✅ ${allProducts.length} produto(s) carregado(s)`);
         } else {
             // ✅ Atualiza apenas o status dos produtos existentes
@@ -120,18 +120,18 @@ function updateProductsStatus(products) {
         if (!availabilityEl.classList.contains(newStatusClass)) {
             // Adiciona transição suave
             availabilityEl.style.transition = 'all 0.3s ease';
-            
+
             // Remove classes antigas
             availabilityEl.classList.remove('available', 'unavailable');
-            
+
             // Adiciona nova classe
             availabilityEl.classList.add(newStatusClass);
-            
+
             // Atualiza ícone e texto
             availabilityEl.innerHTML = `
                 <i class="fas ${newStatusIcon}"></i> ${newStatusText}
             `;
-            
+
             console.log(`🔄 Status atualizado: ${produto.name} → ${newStatusText}`);
         }
     });
@@ -152,7 +152,7 @@ function createProductCard(produto) {
     const statusClass = isAvailable ? 'available' : 'unavailable';
 
     let imagePath = produto.image || '';
-    
+
     if (imagePath && !imagePath.startsWith('../') && !imagePath.startsWith('http') && !imagePath.startsWith('data:')) {
         imagePath = '../img/' + imagePath.split('/').pop();
     }
@@ -208,13 +208,13 @@ function getCurrentPage() {
 function getCategoryClass(produto) {
     const darkColors = ['preta', 'preto', 'azul', 'marinho', 'vinho', 'bordô', 'chumbo'];
     const lightColors = ['bege', 'branco', 'vermelho', 'amarelo'];
-    
+
     const colorLower = produto.color.toLowerCase();
-    
+
     if (darkColors.some(c => colorLower.includes(c))) return 'escura';
     if (lightColors.some(c => colorLower.includes(c))) return 'clara';
     if (colorLower.includes('bandeira')) return 'especial';
-    
+
     return 'mescla';
 }
 
@@ -240,34 +240,42 @@ function getGramatura(category) {
 
 function getDescricao(produto) {
     if (produto.description) return produto.description;
-    
+
     const descricoes = {
         pv: 'Ideal para uniformes corporativos e esportivos. Alta durabilidade e conforto.',
         pp: 'Ideal para uniformes e peças do dia a dia. Resistente e durável.',
         piquet: 'Textura clássica e elegante para peças de qualidade superior.',
         helanca: 'Elasticidade superior e conforto máximo para roupas fitness e esportivas.'
     };
-    
+
     return descricoes[produto.category] || 'Tecido de alta qualidade.';
 }
 
 function getColorGradient(color) {
     const colorLower = color.toLowerCase();
-    
+
     const gradients = {
         'preta': 'linear-gradient(135deg, #1a1a1a 0%, #000000 100%)',
         'preto': 'linear-gradient(135deg, #1a1a1a 0%, #000000 100%)',
+        'branca': 'linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%)',
+        'branco': 'linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%)',
         'bege': 'linear-gradient(135deg, #f5f5dc 0%, #d2b48c 100%)',
         'azul royal': 'linear-gradient(135deg, #4169e1 0%, #0047ab 100%)',
         'azul marinho': 'linear-gradient(135deg, #001f3f 0%, #000814 100%)',
         'verde musgo': 'linear-gradient(135deg, #8b9556 0%, #556b2f 100%)',
         'vinho': 'linear-gradient(135deg, #722f37 0%, #4a1f26 100%)',
         'bordô': 'linear-gradient(135deg, #800020 0%, #5c0017 100%)',
+        'bordo': 'linear-gradient(135deg, #800020 0%, #5c0017 100%)',
         'cinza chumbo': 'linear-gradient(135deg, #54626f 0%, #2f3640 100%)',
+        'cinza mescla': 'linear-gradient(135deg, #d3d3d3 0%, #a9a9a9 100%)',
+        'cinza': 'linear-gradient(135deg, #d3d3d3 0%, #a9a9a9 100%)',
         'vermelho': 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)',
+        'vermelha': 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)',
+        'rosa pink': 'linear-gradient(135deg, #ff69b4 0%, #ff1493 100%)',
+        'verde bandeira': 'linear-gradient(135deg, #006400 0%, #004b00 100%)',
         'bandeira': 'linear-gradient(135deg, #003893 0%, #009c3b 50%, #ffdf00 100%)'
     };
-    
+
     return gradients[colorLower] || 'linear-gradient(135deg, #666 0%, #333 100%)';
 }
 
@@ -292,7 +300,7 @@ function getDefaultProducts(category) {
             { id: 13, name: 'Helanca Light Bordô', category: 'helanca', color: 'Bordô', image: '../img/helanca-light-bordo.jpg', status: 'available' }
         ]
     };
-    
+
     return defaults[category] || [];
 }
 
@@ -329,7 +337,7 @@ async function initProductsLoader() {
         try {
             await window.DBManager.init();
             await loadProducts(true); // true = carregamento inicial completo
-            
+
             // Inicia auto-refresh após o carregamento inicial
             startAutoRefresh();
         } catch (error) {

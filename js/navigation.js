@@ -84,8 +84,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     */
 
-    // Garantir que a primeira seção (Malha PV) esteja ativa ao carregar
-    const firstSection = document.querySelector('.product-section');
+    // Garantir que a primeira seção (Home / Vitrine) esteja ativa ao carregar
+    const firstSection = document.getElementById('section-home');
     if (!document.querySelector('.product-section.active')) {
         firstSection?.classList.add('active');
     }

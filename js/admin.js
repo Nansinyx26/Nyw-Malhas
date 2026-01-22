@@ -7,76 +7,64 @@ const ADMIN_CREDENTIALS = {
 };
 
 // Produtos iniciais (para seed do banco)
-const INITIAL_PRODUCTS = [{
-        name: 'Malha PV Preta',
-        category: 'pv',
-        color: 'Preta',
-        image: 'img/malha-pv-preta.jpg',
-        status: 'available'
-    },
-    {
-        name: 'Malha PV Bege',
-        category: 'pv',
-        color: 'Bege',
-        image: 'img/malha-pv-bege.jpg',
-        status: 'available'
-    },
-    {
-        name: 'Malha PV Azul Royal',
-        category: 'pv',
-        color: 'Azul Royal',
-        image: 'img/malha-pv-azul-royal.jpg',
-        status: 'available'
-    },
-    {
-        name: 'Malha PV Verde Musgo',
-        category: 'pv',
-        color: 'Verde Musgo',
-        image: 'img/malha-pv-verde-musgo.jpg',
-        status: 'available'
-    },
-    {
-        name: 'Malha PP Preta',
-        category: 'pp',
-        color: 'Preta',
-        image: 'img/malha-pp-preta.jpg',
-        status: 'available'
-    },
-    {
-        name: 'Malha PP Vinho',
-        category: 'pp',
-        color: 'Vinho',
-        image: 'img/malha-pp-vinho.jpg',
-        status: 'available'
-    },
-    {
-        name: 'Piquet PA Bandeira',
-        category: 'piquet',
-        color: 'Bandeira',
-        image: 'img/malha-piquet-pa-bandeira.jpg',
-        status: 'available'
-    },
-    {
-        name: 'Piquet PA Cinza Chumbo',
-        category: 'piquet',
-        color: 'Cinza Chumbo',
-        image: 'img/malha-piquet-pa-cinza-chumbo.jpg',
-        status: 'available'
-    },
-    {
-        name: 'Helanca Light Preto',
-        category: 'helanca',
-        color: 'Preto',
-        image: 'img/helanca-light-preto.jpg',
-        status: 'available'
-    },
-    {
-        name: 'Helanca Light Bordô',
-        category: 'helanca',
-        color: 'Bordô',
-        image: 'img/helanca-light-bordo.jpg',
-        status: 'available'
-    }
+const INITIAL_PRODUCTS = [
+    // Malha PV
+    { name: 'Malha PV Preta', category: 'pv', color: 'Preta', image: 'img/malha-pv-preta.jpg', status: 'available' },
+    { name: 'Malha PV Bege', category: 'pv', color: 'Bege', image: 'img/malha-pv-bege.jpg', status: 'available' },
+    { name: 'Malha PV Azul Royal', category: 'pv', color: 'Azul Royal', image: 'img/malha-pv-azul-royal.jpg', status: 'available' },
+    { name: 'Malha PV Verde Musgo', category: 'pv', color: 'Verde Musgo', image: 'img/malha-pv-verde-musgo.jpg', status: 'available' },
+    { name: 'Malha PV Cinza Mescla', category: 'pv', color: 'Cinza Mescla', image: 'img/malha-pv-cinza-mescla.png', status: 'available' },
+    { name: 'Malha PV Vermelha', category: 'pv', color: 'Vermelha', image: 'img/malha-pv-vermelha.png', status: 'available' },
+
+    // Malha PP
+    { name: 'Malha PP Preta', category: 'pp', color: 'Preta', image: 'img/malha-pp-preta.jpg', status: 'available' },
+    { name: 'Malha PP Vinho', category: 'pp', color: 'Vinho', image: 'img/malha-pp-vinho.jpg', status: 'available' },
+    { name: 'Malha PP Branca', category: 'pp', color: 'Branca', image: 'img/malha-pp-branca.png', status: 'available' },
+    { name: 'Malha PP Azul Marinho', category: 'pp', color: 'Azul Marinho', image: 'img/malha-pp-azul-marinho.png', status: 'available' },
+
+    // Piquet (Malha Piquet)
+    { name: 'Piquet Azul Marinho', category: 'piquet', color: 'Azul Marinho', image: 'img/azul-marinho-piquet-pv.jpg', status: 'available' },
+    { name: 'Piquet Vermelho', category: 'piquet', color: 'Vermelho', image: 'img/vermelho-piquet-pv.jpg', status: 'available' },
+    { name: 'Piquet Cinza Chumbo', category: 'piquet', color: 'Cinza Chumbo', image: 'img/malha-piquet-pa-cinza-chumbo.jpg', status: 'available' },
+    { name: 'Piquet Verde Bandeira', category: 'piquet', color: 'Verde Bandeira', image: 'img/malha-piquet-pa-bandeira.jpg', status: 'available' },
+    { name: 'Piquet Branco', category: 'piquet', color: 'Branco', image: 'img/malha-piquet-branca.png', status: 'available' },
+    { name: 'Piquet Preto', category: 'piquet', color: 'Preto', image: 'img/malha-piquet-preta.png', status: 'available' },
+
+    // Helanca Light
+    { name: 'Helanca Light Preto', category: 'helanca', color: 'Preto', image: 'img/helanca-light-preto.jpg', status: 'available' },
+    { name: 'Helanca Light Bordô', category: 'helanca', color: 'Bordô', image: 'img/helanca-light-bordo.jpg', status: 'available' },
+    { name: 'Helanca Light Azul Royal', category: 'helanca', color: 'Azul Royal', image: 'img/helanca-light.png', status: 'available' },
+    { name: 'Helanca Light Rosa Pink', category: 'helanca', color: 'Rosa Pink', image: 'img/helanca-light.png', status: 'available' },
+
+    // Algodão 30.1
+    { name: 'Algodão Branco', category: 'algodao', color: 'Branco', image: 'img/algodao.png', status: 'available' },
+    { name: 'Algodão Azul Marinho', category: 'algodao', color: 'Azul Marinho', image: 'img/algodao.png', status: 'available' },
+    { name: 'Algodão Vermelho', category: 'algodao', color: 'Vermelho', image: 'img/algodao.png', status: 'available' },
+
+    // Dry Fit
+    { name: 'Dry Fit Preto', category: 'dry-fit', color: 'Preto', image: 'img/dry-fit-preto.jpg', status: 'available' },
+    { name: 'Dry Fit Branco', category: 'dry-fit', color: 'Branco', image: 'img/dry-fit.png', status: 'available' },
+    { name: 'Dry Fit Azul Royal', category: 'dry-fit', color: 'Azul Royal', image: 'img/dry-fit.png', status: 'available' },
+
+    // Viscose
+    { name: 'Viscose Vermelha', category: 'viscose', color: 'Vermelha', image: 'img/viscose.png', status: 'available' },
+    { name: 'Viscose Cinza Mescla', category: 'viscose', color: 'Cinza Mescla', image: 'img/viscose.png', status: 'available' },
+    { name: 'Viscose Vinho', category: 'viscose', color: 'Vinho', image: 'img/viscose.png', status: 'available' },
+
+    // Moletom
+    { name: 'Moletom Cinza Mescla', category: 'moletom', color: 'Cinza Mescla', image: 'img/moletom.png', status: 'available' },
+    { name: 'Moletom Azul Marinho', category: 'moletom', color: 'Azul Marinho', image: 'img/moletom.png', status: 'available' },
+    { name: 'Moletom Bordô', category: 'moletom', color: 'Bordô', image: 'img/moletom.png', status: 'available' },
+
+    // Helanca Escolar
+    { name: 'Helanca Escolar Verde Bandeira', category: 'helanca-escolar', color: 'Verde Bandeira', image: 'img/helanca-escolar.png', status: 'available' },
+    { name: 'Helanca Escolar Cinza', category: 'helanca-escolar', color: 'Cinza', image: 'img/helanca-escolar.png', status: 'available' },
+    { name: 'Helanca Escolar Azul Marinho', category: 'helanca-escolar', color: 'Azul Marinho', image: 'img/helanca-escolar.png', status: 'available' },
+
+    // Oxford
+    { name: 'Oxford Cinza', category: 'oxford', color: 'Cinza', image: 'img/oxford.png', status: 'available' },
+    { name: 'Oxford Azul Marinho', category: 'oxford', color: 'Azul Marinho', image: 'img/oxford.png', status: 'available' },
+    { name: 'Oxford Vermelho', category: 'oxford', color: 'Vermelho', image: 'img/oxford-vermelho.jpg', status: 'available' }
 ];
 
 // Dados de contato iniciais
@@ -95,7 +83,7 @@ let currentEditId = null;
 let products = [];
 let contactInfo = {};
 
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', async function () {
     // Aguarda o DBManager estar pronto
     if (!window.DBManager) {
         console.error('DBManager não encontrado!');
@@ -105,12 +93,35 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     try {
         await window.DBManager.init();
-        
+
         // Carrega produtos do IndexedDB
         products = await window.DBManager.getAllProducts();
-        
-        // Se não há produtos, faz seed inicial
-        if (products.length === 0) {
+
+        // Sincronização: Adiciona produtos novos que não estão no banco
+        if (products.length > 0) {
+            console.log('🔄 Verificando novos produtos...');
+            let newProductsAdded = 0;
+
+            for (const initialProduct of INITIAL_PRODUCTS) {
+                // Verifica se já existe produto com mesmo nome e cor
+                const exists = products.some(p =>
+                    p.name === initialProduct.name &&
+                    p.color === initialProduct.color
+                );
+
+                if (!exists) {
+                    console.log(`➕ Adicionando novo produto: ${initialProduct.name}`);
+                    await window.DBManager.saveProduct(initialProduct);
+                    newProductsAdded++;
+                }
+            }
+
+            if (newProductsAdded > 0) {
+                console.log(`✅ ${newProductsAdded} novos produtos adicionados.`);
+                products = await window.DBManager.getAllProducts();
+            }
+        } else {
+            // Se não há produtos, faz seed inicial completo
             console.log('📦 Iniciando banco com produtos padrão...');
             for (const product of INITIAL_PRODUCTS) {
                 await window.DBManager.saveProduct(product);
@@ -147,13 +158,13 @@ function initializeApp() {
     }
 
     // Login
-    loginForm.addEventListener('submit', function(e) {
+    loginForm.addEventListener('submit', function (e) {
         e.preventDefault();
         handleLogin();
     });
 
     // Logout
-    logoutBtn.addEventListener('click', function() {
+    logoutBtn.addEventListener('click', function () {
         handleLogout();
     });
 
@@ -204,7 +215,7 @@ async function showAdminPanel() {
 // ===== ATUALIZAR ESTATÍSTICAS =====
 async function updateStats() {
     const stats = await window.DBManager.getStats();
-    
+
     document.getElementById('totalProducts').textContent = stats.totalProducts;
     document.getElementById('availableProducts').textContent = stats.availableProducts;
     document.getElementById('unavailableProducts').textContent = stats.unavailableProducts;
@@ -213,7 +224,7 @@ async function updateStats() {
 // ===== CARREGAR PRODUTOS NA TABELA =====
 async function loadProducts() {
     products = await window.DBManager.getAllProducts();
-    
+
     const tbody = document.getElementById('productsTableBody');
     tbody.innerHTML = '';
 
@@ -320,7 +331,7 @@ function setupModalHandlers() {
     const productForm = document.getElementById('productForm');
     const modal = document.getElementById('productModal');
 
-    addBtn.addEventListener('click', function() {
+    addBtn.addEventListener('click', function () {
         currentEditId = null;
         document.getElementById('modalTitle').textContent = 'Adicionar Produto';
         productForm.reset();
@@ -328,21 +339,21 @@ function setupModalHandlers() {
         modal.classList.add('active');
     });
 
-    closeBtn.addEventListener('click', function() {
+    closeBtn.addEventListener('click', function () {
         modal.classList.remove('active');
     });
 
-    cancelBtn.addEventListener('click', function() {
+    cancelBtn.addEventListener('click', function () {
         modal.classList.remove('active');
     });
 
-    productForm.addEventListener('submit', function(e) {
+    productForm.addEventListener('submit', function (e) {
         e.preventDefault();
         handleProductSubmit();
     });
 
     // Fechar ao clicar fora
-    modal.addEventListener('click', function(e) {
+    modal.addEventListener('click', function (e) {
         if (e.target === modal) {
             modal.classList.remove('active');
         }
@@ -355,15 +366,15 @@ function setupFileUpload() {
     const fileInput = document.getElementById('productImage');
     const preview = document.getElementById('imagePreview');
 
-    fileUpload.addEventListener('click', function() {
+    fileUpload.addEventListener('click', function () {
         fileInput.click();
     });
 
-    fileInput.addEventListener('change', function(e) {
+    fileInput.addEventListener('change', function (e) {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 preview.src = e.target.result;
                 preview.classList.add('show');
             };
@@ -474,7 +485,7 @@ window.deleteProduct = deleteProduct;
 
 function loadContactInfo() {
     if (!contactInfo) return;
-    
+
     document.getElementById('displayEmail').textContent = contactInfo.email;
     document.getElementById('displayPhone').textContent = contactInfo.phone;
     document.getElementById('displayWhatsapp').textContent = contactInfo.whatsapp;
@@ -491,7 +502,7 @@ function setupContactModal() {
     const contactForm = document.getElementById('contactForm');
     const modal = document.getElementById('contactModal');
 
-    editBtn.addEventListener('click', function() {
+    editBtn.addEventListener('click', function () {
         // Preencher formulário com dados atuais
         document.getElementById('contactEmail').value = contactInfo.email || '';
         document.getElementById('contactPhone').value = contactInfo.phone || '';
@@ -504,21 +515,21 @@ function setupContactModal() {
         modal.classList.add('active');
     });
 
-    closeBtn.addEventListener('click', function() {
+    closeBtn.addEventListener('click', function () {
         modal.classList.remove('active');
     });
 
-    cancelBtn.addEventListener('click', function() {
+    cancelBtn.addEventListener('click', function () {
         modal.classList.remove('active');
     });
 
-    contactForm.addEventListener('submit', function(e) {
+    contactForm.addEventListener('submit', function (e) {
         e.preventDefault();
         handleContactSubmit();
     });
 
     // Fechar ao clicar fora
-    modal.addEventListener('click', function(e) {
+    modal.addEventListener('click', function (e) {
         if (e.target === modal) {
             modal.classList.remove('active');
         }

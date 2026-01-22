@@ -94,28 +94,31 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="navbar-nav mx-auto d-flex flex-wrap justify-content-center gap-2">
                     <a href="index.html" class="nav-link">
-                        <i class="fas fa-home"></i>
-                        <span>Início</span>
+                        <i class="fas fa-home"></i> <span>Início</span>
                     </a>
-                    <a href="malha-pv.html" class="nav-link">
-                        <i class="fas fa-tshirt"></i>
-                        <span>Malha PV</span>
-                    </a>
-                    <a href="malha-pp.html" class="nav-link">
-                        <i class="fas fa-layer-group"></i>
-                        <span>Malha PP</span>
-                    </a>
-                    <a href="malha-piquet.html" class="nav-link">
-                        <i class="fas fa-chess-board"></i>
-                        <span>Piquet</span>
-                    </a>
-                    <a href="helanca-light.html" class="nav-link">
-                        <i class="fas fa-wind"></i>
-                        <span>Helanca Light</span>
-                    </a>
+
+                    <a href="paginas/malha-pv.html" class="nav-link"><i class="fas fa-tshirt"></i> <span>Malha
+                            PV</span></a>
+                    <a href="paginas/malha-pp.html" class="nav-link"><i class="fas fa-layer-group"></i> <span>Malha
+                            PP</span></a>
+                    <a href="paginas/malha-piquet.html" class="nav-link"><i class="fas fa-chess-board"></i>
+                        <span>Piquet</span></a>
+                    <a href="paginas/helanca-light.html" class="nav-link"><i class="fas fa-wind"></i> <span>Helanca
+                            Light</span></a>
+                    <a href="paginas/helanca-escolar.html" class="nav-link"><i class="fas fa-child"></i> <span>Helanca
+                            Escolar</span></a>
+                    <a href="paginas/dry-fit.html" class="nav-link"><i class="fas fa-running"></i> <span>Dry
+                            Fit</span></a>
+                    <a href="paginas/viscose.html" class="nav-link"><i class="fas fa-feather-alt"></i>
+                        <span>Viscose</span></a>
+                    <a href="paginas/moletom.html" class="nav-link"><i class="fas fa-snowflake"></i>
+                        <span>Moletom</span></a>
+                    <a href="paginas/algodao.html" class="nav-link"><i class="fas fa-leaf"></i> <span>Algodão</span></a>
+                    <a href="paginas/oxford.html" class="nav-link"><i class="fas fa-briefcase"></i>
+                        <span>Oxford</span></a>
+
                     <a href="paginas/contato.html" class="nav-link">
-                        <i class="fas fa-phone"></i>
-                        <span>Contato</span>
+                        <i class="fas fa-phone"></i> <span>Contato</span>
                     </a>
                 </div>
             </div>
@@ -231,11 +234,12 @@
                                                 <option value="quilo(s)">Quilo(s)</option>
                                             </select>
                                         </div>
+                                        <small id="weightDisplay" class="text-info mt-1 d-block"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Valor Unitário</label>
+                                        <label class="form-label">Valor Unitário (p/ Kg)</label>
                                         <input type="text" id="orderUnitPrice" class="form-control glass-input"
-                                            placeholder="R$ 0,00">
+                                            placeholder="R$ 30,00" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -380,6 +384,7 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/shipping-rates.js"></script>
+    <script src="js/db-manager.js"></script>
     <script src="js/order-manager.js"></script>
     <script src="js/checkout.js"></script>
 
