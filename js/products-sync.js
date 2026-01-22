@@ -1,141 +1,165 @@
 /**
- * Products Sync - Sincroniza cards estáticos com o Banco de Dados (IndexedDB)
- * Garante que fotos e status alterados no admin reflitam em todo o site
+ * Products Sync v3 - Sincronização Robusta e Holística
+ * Resolve incompatibilidades de nomes e caminhos entre Admin e Site
  */
 
 async function syncStaticProducts() {
-    if (!window.DBManager) {
-        console.warn('DBManager não encontrado para sincronização.');
-        return;
-    }
+    if (!window.DBManager) return;
 
     try {
-        if (!window.DBManager.ready) {
-            await window.DBManager.init();
-        }
+        if (!window.DBManager.ready) await window.DBManager.init();
 
         const allProducts = await window.DBManager.getAllProducts();
         if (!allProducts || allProducts.length === 0) return;
 
-        // Mapeia produtos por nome para busca rápida
-        const productsMap = {};
+        // Mapeamentos para busca flexível
+        const productsByName = {};
+        const productsByCatColor = {};
+        const productsByCatFirst = {};
+
         allProducts.forEach(p => {
-            productsMap[p.name.toLowerCase().trim()] = p;
+            const nameKey = p.name.toLowerCase().trim();
+            const catKey = p.category.toLowerCase().trim();
+            const colorKey = p.color.toLowerCase().trim();
+
+            productsByName[nameKey] = p;
+            productsByCatColor[`${catKey}|${colorKey}`] = p;
+
+            // Prioriza o primeiro disponível de cada categoria
+            if (!productsByCatFirst[catKey] || (productsByCatFirst[catKey].status !== 'available' && p.status === 'available')) {
+                productsByCatFirst[catKey] = p;
+            }
         });
 
-        // 1. Sincroniza CARDS (Página Inicial e Subpáginas)
-        const cards = document.querySelectorAll('.card, .card-dark, .color-card, .product-card-home');
+        // 1. Sincroniza CARDS
+        const cards = document.querySelectorAll('.card, .card-dark, .color-card, .product-card-home, .product-card');
 
         cards.forEach(card => {
+            let productData = null;
+
+            // Tenta 1: Por Título (Exato ou Parcial)
             const titleEl = card.querySelector('h3, h5, .card-title, .card-title-dark');
-            if (!titleEl) return;
+            const titleText = titleEl ? titleEl.textContent.trim().toLowerCase() : "";
 
-            const productName = titleEl.textContent.trim().toLowerCase();
-            const productData = productsMap[productName];
+            if (titleText) {
+                productData = productsByName[titleText];
 
+                // Tenta 1.1: Fuzzy match para nomes como "Viscose-Elastano"
+                if (!productData) {
+                    const simplified = titleText.replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+                    productData = productsByName[simplified];
+
+                    // Tenta 1.2: Match por conter o nome (ex: "Viscose-Elastano Vermelha" contém "Viscose Vermelha"?)
+                    if (!productData) {
+                        productData = allProducts.find(p => titleText.includes(p.name.toLowerCase()) || p.name.toLowerCase().includes(titleText));
+                    }
+                }
+            }
+
+            // Tenta 2: Pelo HREF (Checkout ou Links de Página)
+            const links = card.querySelectorAll('a[href]');
+            links.forEach(link => {
+                if (productData) return;
+                const href = link.getAttribute('href').toLowerCase();
+
+                // Caso A: Link de Checkout (produto=x&cor=y)
+                const catMatch = href.match(/produto=([^&]+)/);
+                const corMatch = href.match(/cor=([^&]+)/);
+
+                if (catMatch) {
+                    const cat = catMatch[1].replace('dry-fit', 'dryfit'); // Normaliza
+                    if (corMatch) {
+                        productData = productsByCatColor[`${cat}|${corMatch[1]}`];
+                    } else {
+                        productData = productsByCatFirst[cat];
+                    }
+                }
+
+                // Caso B: Link de Página (usado na Home - ex: malha-pv.html)
+                if (!productData && href.includes('paginas/')) {
+                    const pageName = href.split('/').pop().replace('.html', '');
+                    const cat = pageName.replace('malha-', '').replace('-light', '').replace('-', '');
+                    // Mapeamento manual de categorias persistentes
+                    const catMap = { 'pv': 'pv', 'pp': 'pp', 'piquet': 'piquet', 'helanca': 'helanca', 'dryfit': 'dryfit', 'viscose': 'viscose', 'moletom': 'moletom', 'algodao': 'algodao', 'oxford': 'oxford', 'helancaescolar': 'helanca-escolar' };
+                    productData = productsByCatFirst[catMap[cat] || cat];
+                }
+            });
+
+            // Ação de Sincronização se encontrou dados
             if (productData) {
-                // Atualiza a Imagem
+                // FOTO
                 const img = card.querySelector('img');
                 if (img && productData.image) {
-                    // Se for uma subpágina, ajusta o caminho se necessário
-                    let imageSrc = productData.image;
-                    const isSubpage = window.location.pathname.includes('/paginas/');
-
-                    if (isSubpage && !imageSrc.startsWith('data:') && !imageSrc.startsWith('http') && !imageSrc.startsWith('../')) {
-                        imageSrc = '../' + imageSrc;
-                    } else if (!isSubpage && imageSrc.startsWith('../')) {
-                        imageSrc = imageSrc.replace('../', '');
+                    let src = productData.image;
+                    if (!src.startsWith('data:') && !src.startsWith('http')) {
+                        const isSub = window.location.pathname.includes('/paginas/') || window.location.href.includes('/paginas/');
+                        src = src.replace(/^(\.\.\/)+/, '').replace(/^img\//, 'img/');
+                        if (isSub) src = '../' + src;
                     }
+                    if (img.src !== src) img.src = src;
+                }
 
-                    if (img.src !== imageSrc) {
-                        img.src = imageSrc;
-                        console.log(`📸 Imagem sincronizada: ${productData.name}`);
+                // DISPONIBILIDADE
+                const isAvail = productData.status === 'available';
+
+                // Badges/Botões de Status
+                const statusEl = card.querySelector('.status-badge, .btn-success-pill, .btn-danger-pill, .availability');
+                if (statusEl) {
+                    if (statusEl.classList.contains('btn-sm')) { // Subpáginas
+                        statusEl.className = isAvail ? 'btn btn-success-pill btn-sm' : 'btn btn-danger-pill btn-sm';
+                        statusEl.innerHTML = isAvail ? '<i class="fas fa-check-circle me-1"></i> Disponível' : '<i class="fas fa-times-circle me-1"></i> Indisponível';
+                    } else {
+                        statusEl.className = `status-badge ${productData.status}`;
+                        statusEl.textContent = isAvail ? 'Disponível' : 'Indisponível';
                     }
                 }
 
-                // Atualiza Status (Disponibilidade)
-                const statusBadge = card.querySelector('.status-badge, .btn-success-pill, .btn-danger-pill, .availability');
-                if (statusBadge) {
-                    const isAvailable = productData.status === 'available';
-
-                    if (statusBadge.classList.contains('btn-success-pill') || statusBadge.classList.contains('btn-danger-pill')) {
-                        // Estilo Pilha (Subpáginas)
-                        statusBadge.className = isAvailable ? 'btn btn-success-pill btn-sm' : 'btn btn-danger-pill btn-sm';
-                        statusBadge.innerHTML = isAvailable
-                            ? '<i class="fas fa-check-circle me-1"></i> Disponível'
-                            : '<i class="fas fa-times-circle me-1"></i> Indisponível';
+                // Botão de ação (Comprar)
+                const actionBtn = card.querySelector('.btn-primary-pill, .btn-outline-primary, .card-link, .cta-button, .btn-success-pill, .btn-danger-pill');
+                if (actionBtn && actionBtn.tagName !== 'SPAN') {
+                    if (!isAvail) {
+                        actionBtn.classList.add('disabled');
+                        actionBtn.style.opacity = '0.4';
+                        actionBtn.style.pointerEvents = 'none';
+                        if (!actionBtn.textContent.includes('Indisponível')) {
+                            const icon = actionBtn.querySelector('i');
+                            actionBtn.innerHTML = '';
+                            if (icon) actionBtn.appendChild(icon);
+                            actionBtn.appendChild(document.createTextNode(' Indisponível'));
+                        }
                     } else {
-                        // Estilo Badge Padrão
-                        statusBadge.className = `status-badge ${productData.status}`;
-                        statusBadge.textContent = isAvailable ? 'Disponível' : 'Indisponível';
+                        actionBtn.classList.remove('disabled');
+                        actionBtn.style.opacity = '1';
+                        actionBtn.style.pointerEvents = 'auto';
                     }
                 }
 
-                // Desativar botão de compra se estiver indisponível
-                const buyBtn = card.querySelector('.btn-primary-pill, .btn-outline-primary');
-                if (buyBtn) {
-                    if (productData.status === 'unavailable') {
-                        buyBtn.classList.add('disabled');
-                        buyBtn.style.opacity = '0.5';
-                        buyBtn.style.pointerEvents = 'none';
-                        buyBtn.innerHTML = '<i class="fas fa-ban me-2"></i> Indisponível';
-                    } else {
-                        buyBtn.classList.remove('disabled');
-                        buyBtn.style.opacity = '1';
-                        buyBtn.style.pointerEvents = 'auto';
-                        if (!buyBtn.innerHTML.includes('Comprar') && !buyBtn.innerHTML.includes('Detalhes')) {
-                            buyBtn.innerHTML = '<i class="fas fa-shopping-cart me-2"></i> Comprar';
+                // PREÇO (Atualização Dinâmica)
+                const priceElements = card.querySelectorAll('.fas.fa-tag ~ strong, .text-orange strong, .alert-dark strong');
+                priceElements.forEach(priceEl => {
+                    const parentText = priceEl.parentElement && priceEl.parentElement.textContent;
+                    if (parentText && (parentText.includes('R$') || parentText.includes('kg'))) {
+                        const newPriceText = `R$ ${(productData.price || 30).toFixed(2)} / kg`;
+                        if (!priceEl.textContent.includes(newPriceText)) {
+                            // Preserva ícone se houver
+                            const icon = priceEl.previousElementSibling;
+                            priceEl.textContent = newPriceText;
                         }
                     }
-                }
+                });
             }
         });
 
-        // 2. Sincroniza SELETORES DE CORES (Se existirem na página)
-        const colorOptions = document.querySelectorAll('.color-option input');
-        colorOptions.forEach(input => {
-            const label = input.closest('.color-option');
-            if (!label) return;
-
-            const colorName = input.dataset.color || label.querySelector('.color-name')?.textContent;
-            if (!colorName) return;
-
-            // Tenta encontrar o produto baseado na seção (ex: Malha PV + Cor)
-            const section = input.closest('section');
-            const sectionTitle = section?.querySelector('h1')?.textContent || '';
-
-            const fullName = `${sectionTitle} ${colorName}`.toLowerCase().trim();
-            const productData = productsMap[fullName] || productsMap[colorName.toLowerCase().trim()];
-
-            if (productData && productData.status === 'unavailable') {
-                label.style.opacity = '0.4';
-                label.title = 'Cor indisponível no momento';
-                // Opcional: impedir seleção
-                // input.disabled = true;
-            } else {
-                label.style.opacity = '1';
-                label.title = '';
-            }
-        });
-
-    } catch (error) {
-        console.error('Erro na sincronização de produtos:', error);
+    } catch (e) {
+        console.error('Erro de Sync:', e);
     }
 }
 
-// Inicia sincronização
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        syncStaticProducts();
-        // Auto-refresh suave a cada 5 segundos
-        setInterval(syncStaticProducts, 5000);
-    });
-} else {
+// Inicialização
+document.addEventListener('DOMContentLoaded', () => {
     syncStaticProducts();
-    setInterval(syncStaticProducts, 5000);
-}
+    setInterval(syncStaticProducts, 2000); // 2s para resposta rápida
+});
 
-// Exporta
-window.ProductsSync = {
-    run: syncStaticProducts
-};
+// Força execução caso DOM já carregado
+if (document.readyState !== 'loading') syncStaticProducts();

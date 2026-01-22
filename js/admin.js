@@ -9,62 +9,64 @@ const ADMIN_CREDENTIALS = {
 // Produtos iniciais (para seed do banco)
 const INITIAL_PRODUCTS = [
     // Malha PV
-    { name: 'Malha PV Preta', category: 'pv', color: 'Preta', image: 'img/malha-pv-preta.jpg', status: 'available' },
-    { name: 'Malha PV Bege', category: 'pv', color: 'Bege', image: 'img/malha-pv-bege.jpg', status: 'available' },
-    { name: 'Malha PV Azul Royal', category: 'pv', color: 'Azul Royal', image: 'img/malha-pv-azul-royal.jpg', status: 'available' },
-    { name: 'Malha PV Verde Musgo', category: 'pv', color: 'Verde Musgo', image: 'img/malha-pv-verde-musgo.jpg', status: 'available' },
-    { name: 'Malha PV Cinza Mescla', category: 'pv', color: 'Cinza Mescla', image: 'img/malha-pv-cinza-mescla.png', status: 'available' },
-    { name: 'Malha PV Vermelha', category: 'pv', color: 'Vermelha', image: 'img/malha-pv-vermelha.png', status: 'available' },
+    { name: 'Malha PV Preta', category: 'pv', color: 'Preta', image: 'img/malha-pv-preta.jpg', status: 'available', price: 30.00 },
+    { name: 'Malha PV Bege', category: 'pv', color: 'Bege', image: 'img/malha-pv-bege.jpg', status: 'available', price: 30.00 },
+    { name: 'Malha PV Azul Royal', category: 'pv', color: 'Azul Royal', image: 'img/malha-pv-azul-royal.jpg', status: 'available', price: 30.00 },
+    { name: 'Malha PV Verde Musgo', category: 'pv', color: 'Verde Musgo', image: 'img/malha-pv-verde-musgo.jpg', status: 'available', price: 30.00 },
+    { name: 'Malha PV Cinza Mescla', category: 'pv', color: 'Cinza Mescla', image: 'img/malha-pv-cinza-mescla.png', status: 'available', price: 30.00 },
+    { name: 'Malha PV Vermelha', category: 'pv', color: 'Vermelha', image: 'img/malha-pv-vermelha.png', status: 'available', price: 30.00 },
 
     // Malha PP
-    { name: 'Malha PP Preta', category: 'pp', color: 'Preta', image: 'img/malha-pp-preta.jpg', status: 'available' },
-    { name: 'Malha PP Vinho', category: 'pp', color: 'Vinho', image: 'img/malha-pp-vinho.jpg', status: 'available' },
-    { name: 'Malha PP Branca', category: 'pp', color: 'Branca', image: 'img/malha-pp-branca.png', status: 'available' },
-    { name: 'Malha PP Azul Marinho', category: 'pp', color: 'Azul Marinho', image: 'img/malha-pp-azul-marinho.png', status: 'available' },
+    { name: 'Malha PP Preta', category: 'pp', color: 'Preta', image: 'img/malha-pp-preta.jpg', status: 'available', price: 30.00 },
+    { name: 'Malha PP Vinho', category: 'pp', color: 'Vinho', image: 'img/malha-pp-vinho.jpg', status: 'available', price: 30.00 },
+    { name: 'Malha PP Branca', category: 'pp', color: 'Branca', image: 'img/malha-pp-branca.png', status: 'available', price: 30.00 },
+    { name: 'Malha PP Azul Marinho', category: 'pp', color: 'Azul Marinho', image: 'img/malha-pp-azul-marinho.png', status: 'available', price: 30.00 },
 
     // Piquet (Malha Piquet)
-    { name: 'Piquet Azul Marinho', category: 'piquet', color: 'Azul Marinho', image: 'img/azul-marinho-piquet-pv.jpg', status: 'available' },
-    { name: 'Piquet Vermelho', category: 'piquet', color: 'Vermelho', image: 'img/vermelho-piquet-pv.jpg', status: 'available' },
-    { name: 'Piquet Cinza Chumbo', category: 'piquet', color: 'Cinza Chumbo', image: 'img/malha-piquet-pa-cinza-chumbo.jpg', status: 'available' },
-    { name: 'Piquet Verde Bandeira', category: 'piquet', color: 'Verde Bandeira', image: 'img/malha-piquet-pa-bandeira.jpg', status: 'available' },
-    { name: 'Piquet Branco', category: 'piquet', color: 'Branco', image: 'img/malha-piquet-branca.png', status: 'available' },
-    { name: 'Piquet Preto', category: 'piquet', color: 'Preto', image: 'img/malha-piquet-preta.png', status: 'available' },
+    { name: 'Piquet Azul Marinho', category: 'piquet', color: 'Azul Marinho', image: 'img/azul-marinho-piquet-pv.jpg', status: 'available', price: 30.00 },
+    { name: 'Piquet Vermelho', category: 'piquet', color: 'Vermelho', image: 'img/vermelho-piquet-pv.jpg', status: 'available', price: 30.00 },
+    { name: 'Piquet Cinza Chumbo', category: 'piquet', color: 'Cinza Chumbo', image: 'img/malha-piquet-pa-cinza-chumbo.jpg', status: 'available', price: 30.00 },
+    { name: 'Piquet Verde Bandeira', category: 'piquet', color: 'Verde Bandeira', image: 'img/malha-piquet-pa-bandeira.jpg', status: 'available', price: 30.00 },
+    { name: 'Piquet Branco', category: 'piquet', color: 'Branco', image: 'img/malha-piquet-branca.png', status: 'available', price: 30.00 },
+    { name: 'Piquet Preto', category: 'piquet', color: 'Preto', image: 'img/malha-piquet-preta.png', status: 'available', price: 30.00 },
 
     // Helanca Light
-    { name: 'Helanca Light Preto', category: 'helanca', color: 'Preto', image: 'img/helanca-light-preto.jpg', status: 'available' },
-    { name: 'Helanca Light Bordô', category: 'helanca', color: 'Bordô', image: 'img/helanca-light-bordo.jpg', status: 'available' },
-    { name: 'Helanca Light Azul Royal', category: 'helanca', color: 'Azul Royal', image: 'img/helanca-light.png', status: 'available' },
-    { name: 'Helanca Light Rosa Pink', category: 'helanca', color: 'Rosa Pink', image: 'img/helanca-light.png', status: 'available' },
+    { name: 'Helanca Light Preto', category: 'helanca', color: 'Preto', image: 'img/helanca-light-preto.jpg', status: 'available', price: 30.00 },
+    { name: 'Helanca Light Bordô', category: 'helanca', color: 'Bordô', image: 'img/helanca-light-bordo.jpg', status: 'available', price: 30.00 },
+    { name: 'Helanca Light Azul Royal', category: 'helanca', color: 'Azul Royal', image: 'img/helanca-light-azul-royal.png', status: 'available', price: 30.00 },
+    { name: 'Helanca Light Rosa Pink', category: 'helanca', color: 'Rosa Pink', image: 'img/helanca-light-rosa-pink.png', status: 'available', price: 30.00 },
 
     // Algodão 30.1
-    { name: 'Algodão Branco', category: 'algodao', color: 'Branco', image: 'img/algodao.png', status: 'available' },
-    { name: 'Algodão Azul Marinho', category: 'algodao', color: 'Azul Marinho', image: 'img/algodao.png', status: 'available' },
-    { name: 'Algodão Vermelho', category: 'algodao', color: 'Vermelho', image: 'img/algodao.png', status: 'available' },
+    { name: 'Meia Malha 30.1 Branco', category: 'algodao', color: 'Branco', image: 'img/algodao-branco.png', status: 'available', price: 30.00 },
+    { name: 'Meia Malha 30.1 Azul Marinho', category: 'algodao', color: 'Azul Marinho', image: 'img/algodao-azul-marinho.png', status: 'available', price: 30.00 },
+    { name: 'Meia Malha 30.1 Vermelho', category: 'algodao', color: 'Vermelho', image: 'img/algodao-vermelho.png', status: 'available', price: 30.00 },
+    { name: 'Meia Malha 30.1 Preto', category: 'algodao', color: 'Preto', image: 'img/algodao-preto.png', status: 'available', price: 30.00 },
+    { name: 'Meia Malha 30.1 Cinza Claro', category: 'algodao', color: 'Cinza Claro', image: 'img/algodao-cinza-claro.jpg', status: 'available', price: 30.00 },
 
     // Dry Fit
-    { name: 'Dry Fit Preto', category: 'dry-fit', color: 'Preto', image: 'img/dry-fit-preto.jpg', status: 'available' },
-    { name: 'Dry Fit Branco', category: 'dry-fit', color: 'Branco', image: 'img/dry-fit.png', status: 'available' },
-    { name: 'Dry Fit Azul Royal', category: 'dry-fit', color: 'Azul Royal', image: 'img/dry-fit.png', status: 'available' },
+    { name: 'Dry Fit Preto', category: 'dryfit', color: 'Preto', image: 'img/dry-fit-preto.jpg', status: 'available', price: 30.00 },
+    { name: 'Dry Fit Branco', category: 'dryfit', color: 'Branco', image: 'img/dry-fit-branco.png', status: 'available', price: 30.00 },
+    { name: 'Dry Fit Azul Royal', category: 'dryfit', color: 'Azul Royal', image: 'img/dry-fit.png', status: 'available', price: 30.00 },
 
     // Viscose
-    { name: 'Viscose Vermelha', category: 'viscose', color: 'Vermelha', image: 'img/viscose.png', status: 'available' },
-    { name: 'Viscose Cinza Mescla', category: 'viscose', color: 'Cinza Mescla', image: 'img/viscose.png', status: 'available' },
-    { name: 'Viscose Vinho', category: 'viscose', color: 'Vinho', image: 'img/viscose.png', status: 'available' },
+    { name: 'Viscose-Elastano Vermelha', category: 'viscose', color: 'Vermelha', image: 'img/viscose.png', status: 'available', price: 30.00 },
+    { name: 'Viscose-Elastano Cinza Mescla', category: 'viscose', color: 'Cinza Mescla', image: 'img/viscose-cinza-mescla.png', status: 'available', price: 30.00 },
+    { name: 'Viscose-Elastano Vinho', category: 'viscose', color: 'Vinho', image: 'img/viscose-vinho.jpg', status: 'available', price: 30.00 },
 
     // Moletom
-    { name: 'Moletom Cinza Mescla', category: 'moletom', color: 'Cinza Mescla', image: 'img/moletom.png', status: 'available' },
-    { name: 'Moletom Azul Marinho', category: 'moletom', color: 'Azul Marinho', image: 'img/moletom.png', status: 'available' },
-    { name: 'Moletom Bordô', category: 'moletom', color: 'Bordô', image: 'img/moletom.png', status: 'available' },
+    { name: 'Moletom Cinza Mescla', category: 'moletom', color: 'Cinza Mescla', image: 'img/moletom.png', status: 'available', price: 30.00 },
+    { name: 'Moletom Azul Marinho', category: 'moletom', color: 'Azul Marinho', image: 'img/moletom-azul-marinho.png', status: 'available', price: 30.00 },
+    { name: 'Moletom Bordô', category: 'moletom', color: 'Bordô', image: 'img/moletom-bordo.jpg', status: 'available', price: 30.00 },
 
     // Helanca Escolar
-    { name: 'Helanca Escolar Verde Bandeira', category: 'helanca-escolar', color: 'Verde Bandeira', image: 'img/helanca-escolar.png', status: 'available' },
-    { name: 'Helanca Escolar Cinza', category: 'helanca-escolar', color: 'Cinza', image: 'img/helanca-escolar.png', status: 'available' },
-    { name: 'Helanca Escolar Azul Marinho', category: 'helanca-escolar', color: 'Azul Marinho', image: 'img/helanca-escolar.png', status: 'available' },
+    { name: 'Helanca Escolar Verde Bandeira', category: 'helanca-escolar', color: 'Verde Bandeira', image: 'img/helanca-escolar-verde-bandeira.png', status: 'available', price: 30.00 },
+    { name: 'Helanca Escolar Cinza', category: 'helanca-escolar', color: 'Cinza', image: 'img/helanca-escolar-cinza.png', status: 'available', price: 30.00 },
+    { name: 'Helanca Escolar Azul Marinho', category: 'helanca-escolar', color: 'Azul Marinho', image: 'img/helanca-escolar.png', status: 'available', price: 30.00 },
 
     // Oxford
-    { name: 'Oxford Cinza', category: 'oxford', color: 'Cinza', image: 'img/oxford.png', status: 'available' },
-    { name: 'Oxford Azul Marinho', category: 'oxford', color: 'Azul Marinho', image: 'img/oxford.png', status: 'available' },
-    { name: 'Oxford Vermelho', category: 'oxford', color: 'Vermelho', image: 'img/oxford-vermelho.jpg', status: 'available' }
+    { name: 'Oxford Cinza', category: 'oxford', color: 'Cinza', image: 'img/oxford.png', status: 'available', price: 30.00 },
+    { name: 'Oxford Azul Marinho', category: 'oxford', color: 'Azul Marinho', image: 'img/oxford-azul-marinho.png', status: 'available', price: 30.00 },
+    { name: 'Oxford Vermelho', category: 'oxford', color: 'Vermelho', image: 'img/oxford-vermelho.jpg', status: 'available', price: 30.00 }
 ];
 
 // Dados de contato iniciais
@@ -135,6 +137,28 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.log('📞 Iniciando contato padrão...');
             await window.DBManager.saveContact(INITIAL_CONTACT);
             contactInfo = await window.DBManager.getContact();
+        }
+
+        // Migração: Corrige categorias incorretas no banco
+        let migrationFixed = 0;
+        for (let p of products) {
+            let needsUpdate = false;
+            if (p.category === 'dry-fit') {
+                p.category = 'dryfit';
+                needsUpdate = true;
+            }
+            if (!p.price || p.price === undefined) {
+                p.price = 30.00;
+                needsUpdate = true;
+            }
+            if (needsUpdate) {
+                await window.DBManager.saveProduct(p);
+                migrationFixed++;
+            }
+        }
+        if (migrationFixed > 0) {
+            console.log(`🔧 Migração: ${migrationFixed} produtos corrigidos.`);
+            products = await window.DBManager.getAllProducts();
         }
 
         initializeApp();
@@ -230,6 +254,7 @@ async function loadProducts() {
 
     products.forEach(product => {
         const row = document.createElement('tr');
+        const productId = product._id || product.id; // Suporte para MongoDB e IndexedDB
         row.innerHTML = `
             <td>
                 <img src="${product.image}" alt="${product.name}" class="product-image" 
@@ -238,6 +263,7 @@ async function loadProducts() {
             <td>${product.name}</td>
             <td>${getCategoryName(product.category)}</td>
             <td>${product.color}</td>
+            <td style="color: var(--success); font-weight: 600;">R$ ${(product.price || 30).toFixed(2)}</td>
             <td>
                 <span class="status-badge ${product.status}">
                     ${product.status === 'available' ? 'Disponível' : 'Indisponível'}
@@ -245,13 +271,13 @@ async function loadProducts() {
             </td>
             <td>
                 <div class="action-buttons">
-                    <button class="btn-toggle" onclick="toggleStatus(${product.id})">
+                    <button class="btn-toggle" onclick="toggleStatus('${productId}')">
                         <i class="fas fa-exchange-alt"></i> Status
                     </button>
-                    <button class="btn-edit" onclick="editProduct(${product.id})">
+                    <button class="btn-edit" onclick="editProduct('${productId}')">
                         <i class="fas fa-edit"></i> Editar
                     </button>
-                    <button class="btn-delete" onclick="deleteProduct(${product.id})">
+                    <button class="btn-delete" onclick="deleteProduct('${productId}')">
                         <i class="fas fa-trash"></i> Excluir
                     </button>
                 </div>
@@ -282,7 +308,7 @@ function getCategoryName(category) {
 async function toggleStatus(id) {
     try {
         // Busca o produto na lista carregada
-        const product = products.find(p => p.id === id);
+        const product = products.find(p => (p._id || p.id) === id);
         if (product) {
             product.status = product.status === 'available' ? 'unavailable' : 'available';
             await window.DBManager.saveProduct(product);
@@ -307,6 +333,7 @@ async function editProduct(id) {
         document.getElementById('productName').value = product.name;
         document.getElementById('productCategory').value = product.category;
         document.getElementById('productColor').value = product.color;
+        document.getElementById('productPrice').value = product.price || 30.00;
         document.getElementById('productStatus').value = product.status;
 
         // Mostrar preview da imagem atual
@@ -393,6 +420,7 @@ async function handleProductSubmit() {
     const name = document.getElementById('productName').value;
     const category = document.getElementById('productCategory').value;
     const color = document.getElementById('productColor').value;
+    const price = parseFloat(document.getElementById('productPrice').value) || 30.00;
     const status = document.getElementById('productStatus').value;
     const imageFile = document.getElementById('productImage').files[0];
 
@@ -404,6 +432,7 @@ async function handleProductSubmit() {
                 product.name = name;
                 product.category = category;
                 product.color = color;
+                product.price = price;
                 product.status = status;
 
                 // Se nova imagem foi selecionada, usa compressão do DBManager
@@ -417,6 +446,7 @@ async function handleProductSubmit() {
                 name: name,
                 category: category,
                 color: color,
+                price: price,
                 status: status,
                 image: 'img/placeholder.jpg'
             };
@@ -570,3 +600,54 @@ async function handleContactSubmit() {
         showNotification('Erro ao salvar contato: ' + error.message, 'error');
     }
 }
+
+// ===== ALTERAR PREÇOS EM MASSA =====
+async function handleMassPriceUpdate() {
+    const category = document.getElementById('massPriceCategory').value;
+    const newPrice = parseFloat(document.getElementById('massPriceValue').value);
+
+    if (!category) {
+        showNotification('Por favor, selecione uma categoria!', 'error');
+        return;
+    }
+
+    if (!newPrice || newPrice <= 0) {
+        showNotification('Por favor, insira um preço válido!', 'error');
+        return;
+    }
+
+    if (!confirm(`Tem certeza que deseja alterar o preço de TODOS os produtos da categoria ${getCategoryName(category)} para R$ ${newPrice.toFixed(2)}/kg?`)) {
+        return;
+    }
+
+    try {
+        let updatedCount = 0;
+
+        for (let product of products) {
+            if (product.category === category) {
+                product.price = newPrice;
+                await window.DBManager.saveProduct(product);
+                updatedCount++;
+            }
+        }
+
+        await loadProducts();
+        await updateStats();
+
+        document.getElementById('massPriceCategory').value = '';
+        document.getElementById('massPriceValue').value = '';
+
+        showNotification(`✅ Preço atualizado para ${updatedCount} produtos!`, 'success');
+    } catch (error) {
+        console.error('Erro ao atualizar preços:', error);
+        showNotification('Erro ao atualizar preços: ' + error.message, 'error');
+    }
+}
+
+// Setup Mass Price Update Button
+document.addEventListener('DOMContentLoaded', function () {
+    const massPriceBtn = document.getElementById('applyMassPriceBtn');
+    if (massPriceBtn) {
+        massPriceBtn.addEventListener('click', handleMassPriceUpdate);
+    }
+});
