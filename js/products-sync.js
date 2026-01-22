@@ -102,6 +102,30 @@ async function syncStaticProducts() {
                 // DISPONIBILIDADE
                 const isAvail = productData.status === 'available';
 
+                // IMAGEM (Atualização Dinâmica)
+                const imgEl = card.querySelector('img.card-img-top');
+                if (imgEl && productData.image) {
+                    // Atualiza src da imagem se for diferente
+                    const newImageSrc = productData.image.startsWith('http')
+                        ? productData.image
+                        : `../img/${productData.image}`;
+                    if (imgEl.src !== newImageSrc && !imgEl.src.endsWith(productData.image)) {
+                        imgEl.src = newImageSrc;
+                        console.log(`✅ Imagem atualizada: ${productData.name} → ${productData.image}`);
+                    }
+                }
+
+                // NOME DO PRODUTO (Atualização Dinâmica)
+                const titleEl = card.querySelector('.card-title-dark, h5');
+                if (titleEl && productData.name) {
+                    const currentTitle = titleEl.textContent.trim();
+                    // Atualiza título se mudou no banco
+                    if (!currentTitle.includes(productData.name.split(' ').slice(-1)[0])) {
+                        titleEl.textContent = productData.name;
+                        console.log(`✅ Nome atualizado: ${currentTitle} → ${productData.name}`);
+                    }
+                }
+
                 // Badges/Botões de Status
                 const statusEl = card.querySelector('.status-badge, .btn-success-pill, .btn-danger-pill, .availability');
                 if (statusEl) {
