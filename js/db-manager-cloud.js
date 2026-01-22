@@ -66,12 +66,51 @@ window.DBManager = {
         }
     },
 
-    // Função auxiliar para converter arquivo para Base64
+    // Função auxiliar para converter arquivo para Base64 com COMPRESSÃO
     convertFileToBase64(file) {
         return new Promise((resolve, reject) => {
+            const maxWidth = 800; // Largura máxima (HD)
+            const maxHeight = 800;
+            const quality = 0.7;  // 70% de qualidade (bom equilíbrio)
+
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    // Criar Canvas para redimensionar
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    // Calcular novas dimensões mantendo proporção
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height *= maxWidth / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width *= maxHeight / height;
+                            height = maxHeight;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    // Desenhar imagem redimensionada no canvas
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Converter para Base64 (JPEG comprimido)
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+
+                    console.log(`📸 Imagem otimizada: De ${(file.size / 1024).toFixed(2)}KB para ${(compressedBase64.length / 1024).toFixed(2)}KB`);
+                    resolve(compressedBase64);
+                };
+            };
             reader.onerror = error => reject(error);
         });
     },
