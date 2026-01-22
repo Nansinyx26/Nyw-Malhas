@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NYW MALHAS - Tecidos de Alta Qualidade</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header com animação -->
+    <header>
+        <div class="header-content">
+            <img src="img/logo3.png" alt="Logo NYW MALHAS" class="logo">
+            <p class="tagline">Excelência em Tecidos Técnicos</p>
+        </div>
+    </header>
+
+    <!-- Navegação moderna com Bootstrap -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container-fluid nav-container">
+            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav mx-auto d-flex flex-wrap justify-content-center gap-2">
+                    <a href="index.html" class="nav-link active">
+                        <i class="fas fa-home"></i>
+                        <span>Início</span>
+                    </a>
+                    <a href="paginas/malha-pv.html" class="nav-link">
+                        <i class="fas fa-tshirt"></i>
+                        <span>Malha PV</span>
+                    </a>
+                    <a href="paginas/malha-pp.html" class="nav-link">
+                        <i class="fas fa-layer-group"></i>
+                        <span>Malha PP</span>
+                    </a>
+                    <a href="paginas/malha-piquet.html" class="nav-link">
+                        <i class="fas fa-chess-board"></i>
+                        <span>Piquet</span>
+                    </a>
+                    <a href="paginas/helanca-light.html" class="nav-link">
+                        <i class="fas fa-wind"></i>
+                        <span>Helanca Light</span>
+                    </a>
+                    <a href="paginas/contato.html" class="nav-link">
+                        <i class="fas fa-phone"></i>
+                        <span>Contato</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Seção Malha PV -->
+        <section id="section-pv" class="product-section active">
+            <div class="section-header">
+                <h1>Malha PV</h1>
+                <p>Polyester com Elastano - Perfeita para uniformes e peças esportivas</p>
+            </div>
+            <div class="product-showcase">
+                <div class="product-viewer">
+                    <div class="image-container" id="pv-image">
+                        <div class="zoom-indicator">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Clique para ampliar</span>
+                        </div>
+                    </div>
+                    <div class="image-controls">
+                        <button type="button" class="control-btn" id="pv-zoom-in" aria-label="Ampliar">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                        <button type="button" class="control-btn" id="pv-zoom-out" aria-label="Reduzir">
+                            <i class="fas fa-search-minus"></i>
+                        </button>
+                        <button type="button" class="control-btn" id="pv-reset" aria-label="Resetar Zoom">
+                            <i class="fas fa-redo"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="info-card" id="pv-description">
+                        <h3>Selecione uma cor</h3>
+                        <p>Escolha ao lado para visualizar as especificações técnicas</p>
+                    </div>
+                    <div class="color-selector">
+                        <h4><i class="fas fa-palette"></i> Cores Disponíveis</h4>
+                        <div class="color-options">
+                            <label class="color-option">
+                                <input type="radio" name="pv" value="malha-pv-preta.jpg" data-color="Preta">
+                                <span class="color-swatch"
+                                    style="background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);">
+                                    <span class="color-name">Preta</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="pv" value="malha-pv-bege.jpg" data-color="Bege">
+                                <span class="color-swatch"
+                                    style="background: linear-gradient(135deg, #f5f5dc 0%, #d2b48c 100%);">
+                                    <span class="color-name">Bege</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="pv" value="malha-pv-azul-royal.jpg" data-color="Azul Royal">
+                                <span class="color-swatch"
+                                    style="background: linear-gradient(135deg, #4169e1 0%, #0047ab 100%);">
+                                    <span class="color-name">Azul Royal</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="pv" value="malha-pv-verde-musgo.jpg" data-color="Verde Musgo">
+                                <span class="color-swatch"
+                                    style="background: linear-gradient(135deg, #8b9556 0%, #556b2f 100%);">
+                                    <span class="color-name">Verde Musgo</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="specifications">
+                        <h4><i class="fas fa-info-circle"></i> Características</h4>
+                        <ul class="spec-list">
+                            <li><i class="fas fa-check"></i> Alta durabilidade</li>
+                            <li><i class="fas fa-check"></i> Secagem rápida</li>
+                            <li><i class="fas fa-check"></i> Conforto térmico</li>
+                            <li><i class="fas fa-check"></i> Fácil manutenção</li>
+                        </ul>
+                    </div>
+                    <div class="order-cta mt-4">
+                        <button class="btn btn-orange w-100 py-3 fw-bold shadow-lg"
+                            onclick="openOrderModal('Malha PV', document.querySelector('input[name=\'pv\']:checked')?.dataset.color)">
+                            <i class="fas fa-shopping-cart me-2"></i> FAZER PEDIDO AGORA
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Malha PP -->
+        <section id="section-pp" class="product-section">
+            <div class="section-header">
+                <h1>Malha PP</h1>
+                <p>100% Polipropileno - Leveza e resistência excepcionais</p>
+            </div>
+            <div class="product-showcase">
+                <div class="product-viewer">
+                    <div class="image-container" id="pp-image">
+                        <div class="zoom-indicator">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Clique para ampliar</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="info-card" id="pp-description">
+                        <h3>Selecione uma cor</h3>
+                        <p>Escolha ao lado para visualizar as especificações técnicas</p>
+                    </div>
+                    <div class="color-selector">
+                        <h4><i class="fas fa-palette"></i> Cores Disponíveis</h4>
+                        <div class="color-options">
+                            <label class="color-option">
+                                <input type="radio" name="pp" value="malha-pp-preta.jpg" data-color="Preta">
+                                <span class="color-swatch"
+                                    style="background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);">
+                                    <span class="color-name">Preta</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="pp" value="malha-pp-vinho.jpg" data-color="Vinho">
+                                <span class="color-swatch"
+                                    style="background: linear-gradient(135deg, #8b0000 0%, #5c0000 100%);">
+                                    <span class="color-name">Vinho</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="specifications">
+                        <h4><i class="fas fa-info-circle"></i> Características</h4>
+                        <ul class="spec-list">
+                            <li><i class="fas fa-check"></i> Ultraleve</li>
+                            <li><i class="fas fa-check"></i> Resistente à abrasão</li>
+                            <li><i class="fas fa-check"></i> Não absorve umidade</li>
+                            <li><i class="fas fa-check"></i> Hipoalergênico</li>
+                        </ul>
+                    </div>
+                    <div class="order-cta mt-4">
+                        <button class="btn btn-orange w-100 py-3 fw-bold shadow-lg"
+                            onclick="openOrderModal('Malha PP', document.querySelector('input[name=\'pp\']:checked')?.dataset.color)">
+                            <i class="fas fa-shopping-cart me-2"></i> FAZER PEDIDO AGORA
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Malha Piquet -->
+        <section id="section-piquet" class="product-section">
+            <div class="section-header">
+                <h1>Malha Piquet</h1>
+                <p>Textura clássica com tecnologia moderna</p>
+            </div>
+            <div class="product-showcase">
+                <div class="product-viewer">
+                    <div class="image-container" id="piquet-image">
+                        <div class="zoom-indicator">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Clique para ampliar</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="info-card" id="piquet-description">
+                        <h3>Selecione uma cor</h3>
+                        <p>Escolha ao lado para visualizar as especificações técnicas</p>
+                    </div>
+                    <div class="color-selector">
+                        <h4><i class="fas fa-palette"></i> Cores Disponíveis</h4>
+                        <div class="color-options">
+                            <label class="color-option">
+                                <input type="radio" name="piquet" value="azul-marinho-piquet-pv.jpg"
+                                    data-color="Azul Marinho">
+                                <span class="color-swatch"
+                                    style="background: linear-gradient(135deg, #000080 0%, #000050 100%);">
+                                    <span class="color-name">Azul Marinho</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="piquet" value="vermelho-piquet-pv.jpg" data-color="Vermelho">
+                                <span class="color-swatch"
+                                    style="background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);">
+                                    <span class="color-name">Vermelho</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="piquet" value="malha-piquet-pa-cinza-chumbo.jpg"
+                                    data-color="Cinza Chumbo">
+                                <span class="color-swatch"
+                                    style="background: linear-gradient(135deg, #696969 0%, #3a3a3a 100%);">
+                                    <span class="color-name">Cinza Chumbo</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="piquet" value="malha-piquet-pa-bandeira.jpg"
+                                    data-color="Bandeira">
+                                <span class="color-swatch"
+                                    style="background: linear-gradient(135deg, #009c3b 0%, #006b28 100%);">
+                                    <span class="color-name">Bandeira</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="specifications">
+                        <h4><i class="fas fa-info-circle"></i> Características</h4>
+                        <ul class="spec-list">
+                            <li><i class="fas fa-check"></i> Textura diferenciada</li>
+                            <li><i class="fas fa-check"></i> Respirabilidade superior</li>
+                            <li><i class="fas fa-check"></i> Elegância casual</li>
+                            <li><i class="fas fa-check"></i> Versatilidade</li>
+                        </ul>
+                    </div>
+                    <div class="order-cta mt-4">
+                        <button class="btn btn-orange w-100 py-3 fw-bold shadow-lg"
+                            onclick="openOrderModal('Malha Piquet', document.querySelector('input[name=\'piquet\']:checked')?.dataset.color)">
+                            <i class="fas fa-shopping-cart me-2"></i> FAZER PEDIDO AGORA
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Helanca Light -->
+        <section id="section-helanca" class="product-section">
+            <div class="section-header">
+                <h1>Helanca Light</h1>
+                <p>Elasticidade e conforto para roupas fitness</p>
+            </div>
+            <div class="product-showcase">
+                <div class="product-viewer">
+                    <div class="image-container" id="helanca-image">
+                        <div class="zoom-indicator">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Clique para ampliar</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="info-card" id="helanca-description">
+                        <h3>Selecione uma cor</h3>
+                        <p>Escolha ao lado para visualizar as especificações técnicas</p>
+                    </div>
+                    <div class="color-selector">
+                        <h4><i class="fas fa-palette"></i> Cores Disponíveis</h4>
+                        <div class="color-options">
+                            <label class="color-option">
+                                <input type="radio" name="helanca" value="helanca-light-preto.jpg" data-color="Preto">
+                                <span class="color-swatch"
+                                    style="background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);">
+                                    <span class="color-name">Preto</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="helanca" value="helanca-light-bordo.jpg" data-color="Bordô">
+                                <span class="color-swatch"
+                                    style="background: linear-gradient(135deg, #800020 0%, #5c0017 100%);">
+                                    <span class="color-name">Bordô</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="specifications">
+                        <h4><i class="fas fa-info-circle"></i> Características</h4>
+                        <ul class="spec-list">
+                            <li><i class="fas fa-check"></i> Alta elasticidade</li>
+                            <li><i class="fas fa-check"></i> Ajuste perfeito</li>
+                            <li><i class="fas fa-check"></i> Leve e respirável</li>
+                            <li><i class="fas fa-check"></i> Ideal para fitness</li>
+                        </ul>
+                    </div>
+                    <div class="order-cta mt-4">
+                        <button class="btn btn-orange w-100 py-3 fw-bold shadow-lg"
+                            onclick="openOrderModal('Helanca Light', document.querySelector('input[name=\'helanca\']:checked')?.dataset.color)">
+                            <i class="fas fa-shopping-cart me-2"></i> FAZER PEDIDO AGORA
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Algodão Penteado -->
+        <section id="section-algodao" class="product-section">
+            <div class="section-header">
+                <h1>Algodão Penteado</h1>
+                <p>100% Natural - Conforto incomparável</p>
+            </div>
+            <div class="product-showcase">
+                <div class="product-viewer">
+                    <div class="image-container" id="algodao-image">
+                        <div class="zoom-indicator">
+                            <i class="fas fa-search-plus"></i>
+                            <span>Clique para ampliar</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="info-card" id="algodao-description">
+                        <h3>Selecione uma cor</h3>
+                        <p>Escolha ao lado para visualizar as especificações técnicas</p>
+                    </div>
+                    <div class="color-selector">
+                        <h4><i class="fas fa-palette"></i> Cores Disponíveis</h4>
+                        <div class="color-options">
+                            <label class="color-option">
+                                <input type="radio" name="algodao" value="algodao-branco.png" data-color="Branco">
+                                <span class="color-swatch"
+                                    style="background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);">
+                                    <span class="color-name">Branco</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="algodao" value="algodao-preto.png" data-color="Preto">
+                                <span class="color-swatch"
+                                    style="background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);">
+                                    <span class="color-name">Preto</span>
+                                </span>
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="algodao" value="algodao-cinza-claro.jpg"
+                                    data-color="Cinza Claro">
+                                <span class="color-swatch"
+                                    style="background: linear-gradient(135deg, #d3d3d3 0%, #a9a9a9 100%);">
+                                    <span class="color-name">Cinza Claro</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="specifications">
+                        <h4><i class="fas fa-info-circle"></i> Características</h4>
+                        <ul class="spec-list">
+                            <li><i class="fas fa-check"></i> 100% Natural</li>
+                            <li><i class="fas fa-check"></i> Maciez superior</li>
+                            <li><i class="fas fa-check"></i> Alta absorção</li>
+                            <li><i class="fas fa-check"></i> Respirável</li>
+                        </ul>
+                    </div>
+                    <div class="order-cta mt-4">
+                        <button class="btn btn-orange w-100 py-3 fw-bold shadow-lg"
+                            onclick="openOrderModal('Algodão Penteado', document.querySelector('input[name=\'algodao\']:checked')?.dataset.color)">
+                            <i class="fas fa-shopping-cart me-2"></i> FAZER PEDIDO AGORA
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WhatsApp Floating Button -->
+        <style>
+            .whatsapp-btn {
+                position: fixed;
+                right: 20px;
+                bottom: 20px;
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background: #25D366;
+                color: white;
+                padding: 12px 14px;
+                border-radius: 50px;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+                text-decoration: none;
+                font-weight: 600;
+                font-family: sans-serif;
+            }
+
+            .whatsapp-btn svg {
+                width: 22px;
+                height: 22px;
+            }
+
+            .whatsapp-label {
+                display: none;
+            }
+
+            @media(min-width:600px) {
+                .whatsapp-label {
+                    display: inline-block;
+                }
+            }
+        </style>
+
+        <a class="whatsapp-btn" id="whatsappLink" target="_blank" rel="noopener noreferrer">
+            <!-- ícone WhatsApp (SVG) -->
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path
+                    d="M20.52 3.48A11.86 11.86 0 0012 .5C6.21.5 1.56 4.92 1.08 10.4c-.48 5.48 3.09 10.66 8.15 12.03l.01.01 1.09.29.44-1.04c.34-.8.86-1.9 1.26-2.54.33-.52.67-.38 1.12-.22.86.33 2.37.86 3.25 1.09.84.22 1.59.3 2.13.11 4.11-1.47 6.97-6.1 6.77-10.87a11.86 11.86 0 00-3.63-7.28zM12 21.5c-2.02 0-3.9-.6-5.46-1.63l-.39-.23-2.59.68.69-2.52-.25-.41A9.6 9.6 0 012.5 10.4 9.5 9.5 0 1112 21.5z">
+                </path>
+                <path
+                    d="M17.6 14.38c-.3-.15-1.77-.87-2.05-.97-.28-.10-.48-.15-.68.15-.2.29-.78.97-.95 1.17-.17.2-.34.22-.63.07-.3-.15-1.27-.47-2.42-1.48-.9-.8-1.51-1.79-1.69-2.09-.17-.31-.02-.48.13-.63.13-.13.3-.34.45-.51.15-.17.2-.29.3-.48.1-.2.05-.37-.02-.52-.07-.15-.68-1.64-.93-2.25-.24-.59-.48-.51-.66-.52-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.29-1.03 1.01-1.03 2.46 0 1.44 1.06 2.83 1.2 3.03.14.2 2.07 3.34 5.02 4.68 2.95 1.34 2.95.9 3.48.84.53-.06 1.72-.7 1.97-1.38.25-.69.25-1.28.18-1.39-.07-.11-.26-.17-.56-.32z">
+                </path>
+            </svg>
+            <span class="whatsapp-label">Entrar em Contato via WhatsApp</span>
+        </a>
+
+        <script>
+            (function () {
+                const phone = '5519981600429'; // coloque seu número aqui (formato internacional sem +)
+                const message = 'Olá!%20Quero%20mais%20informações%20sobre%20Malhas%20e%20Tecidos.'; // já codificada ou use encodeURIComponent
+                const ua = navigator.userAgent || '';
+                const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(ua);
+                const base = isMobile ? 'https://wa.me/' : 'https://web.whatsapp.com/send';
+                const href = `${base}/${phone}?text=${message}`;
+                document.getElementById('whatsappLink').setAttribute('href', href);
+            })();
+        </script>
+
+
+        <!-- ✅ SEÇÃO DE CONTATO COM data-contact -->
+        <section id="section-contato" class="product-section contact-section">
+            <div class="section-header">
+                <h1>Entre em Contato</h1>
+                <p>Estamos prontos para atender você</p>
+            </div>
+            <div class="contact-container">
+                <div class="contact-card">
+                    <div class="qr-code">
+                        <img src="seu-qrcode.png" data-contact="qrcode" alt="QR Code WhatsApp">
+                        <p>Escaneie para WhatsApp</p>
+                    </div>
+                </div>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p data-contact="email">contato@nywmalhas.com.br</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Telefone</h4>
+                            <p data-contact="phone">(XX) XXXX-XXXX</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Endereço</h4>
+                            <p data-contact="address">[Seu endereço completo]</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h4>Horário</h4>
+                            <p data-contact="hours">Segunda a Sexta, 08:00 às 18:00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ✅ MODAL DE PEDIDO (GLASSMORPHISM) -->
+        <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content glass-modal">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title" id="orderModalLabel">🧵 Resumo do Pedido</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="orderForm">
+                            <!-- Seção: Produto -->
+                            <div class="order-section mb-4">
+                                <h6 class="section-title"><i class="fas fa-shopping-basket"></i> Produto Selecionado
+                                </h6>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Produto</label>
+                                        <input type="text" id="orderProduct" class="form-control glass-input" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Cor / Estampa</label>
+                                        <input type="text" id="orderColor" class="form-control glass-input" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Quantidade</label>
+                                        <div class="input-group">
+                                            <input type="number" id="orderQuantity" class="form-control glass-input"
+                                                placeholder="0" min="1" required>
+                                            <select class="form-select glass-input w-auto" id="orderUnit">
+                                                <option value="metro(s)">Metro(s)</option>
+                                                <option value="quilo(s)">Quilo(s)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Valor Unitário</label>
+                                        <input type="text" id="orderUnitPrice" class="form-control glass-input"
+                                            placeholder="R$ 0,00">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Seção: Cliente -->
+                            <div class="order-section mb-4">
+                                <h6 class="section-title"><i class="fas fa-user-circle"></i> Dados do Cliente</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <input type="text" id="clientName" class="form-control glass-input"
+                                            placeholder="Nome completo / Razão Social" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" id="clientTaxId" class="form-control glass-input"
+                                            placeholder="CPF / CNPJ" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="tel" id="clientPhone" class="form-control glass-input"
+                                            placeholder="Telefone / WhatsApp" required>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="email" id="clientEmail" class="form-control glass-input"
+                                            placeholder="E-mail" required>
+                                        <div class="form-text text-light opacity-75 mt-2">
+                                            <small><i class="fas fa-info-circle"></i> E-mail para NF, atualizações e
+                                                rastreio.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Seção: Endereço -->
+                            <div class="order-section mb-4">
+                                <h6 class="section-title"><i class="fas fa-map-marker-alt"></i> Endereço de Entrega</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-9">
+                                        <input type="text" id="addrStreet" class="form-control glass-input"
+                                            placeholder="Endereço" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" id="addrNumber" class="form-control glass-input"
+                                            placeholder="Nº" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" id="addrComplement" class="form-control glass-input"
+                                            placeholder="Complemento">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" id="addrNeighborhood" class="form-control glass-input"
+                                            placeholder="Bairro" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" id="addrCity" class="form-control glass-input"
+                                            placeholder="Cidade" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" id="addrUF" class="form-control glass-input" placeholder="UF"
+                                            maxlength="2" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" id="addrZip" class="form-control glass-input"
+                                            placeholder="CEP" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Seção: Pagamento e Envio -->
+                            <div class="order-section mb-4">
+                                <h6 class="section-title"><i class="fas fa-truck"></i> Envio e Pagamento</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <select class="form-select glass-input" id="shippingMethod">
+                                            <option value="Correios">Correios</option>
+                                            <option value="Transportadora">Transportadora</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" id="shippingCost" class="form-control glass-input"
+                                            placeholder="Valor do Frete (R$)">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="d-flex gap-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="payment" id="payCC"
+                                                    value="Cartão de crédito" checked>
+                                                <label class="form-check-label text-light" for="payCC">Cartão</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="payment" id="payPix"
+                                                    value="Pix">
+                                                <label class="form-check-label text-light" for="payPix">Pix</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="payment"
+                                                    id="payBoleto" value="Boleto">
+                                                <label class="form-check-label text-light"
+                                                    for="payBoleto">Boleto</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Resumo de Valores -->
+                            <div class="summary-box glass-card p-3 mb-4 text-center">
+                                <div class="row">
+                                    <div class="col-4 border-end border-secondary">
+                                        <small class="text-secondary d-block">Subtotal</small>
+                                        <span id="labelSubtotal" class="fw-bold">R$ 0,00</span>
+                                    </div>
+                                    <div class="col-4 border-end border-secondary">
+                                        <small class="text-secondary d-block">Frete</small>
+                                        <span id="labelShipping" class="fw-bold">R$ 0,00</span>
+                                    </div>
+                                    <div class="col-4">
+                                        <small class="text-secondary d-block">Total</small>
+                                        <span id="labelTotal" class="fw-bold text-orange fs-5">R$ 0,00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" form="orderForm" class="btn btn-success px-4 py-2 fw-bold">
+                            <i class="fab fa-whatsapp me-2"></i> Finalizar no WhatsApp
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ✅ FOOTER COM data-contact -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 NYW MALHAS. Todos os direitos reservados.</p>
+            <div class="social-links">
+                <a href="#" data-contact="facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" data-contact="instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" data-contact="whatsapp"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ✅ SCRIPTS -->
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="js/parallax.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/contact-loader.js"></script>
+    <script src="js/shipping-rates.js"></script>
+    <script src="js/order-manager.js"></script>
+
+
+</body>
+
+</html>

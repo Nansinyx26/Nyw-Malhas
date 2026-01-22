@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Compra - NYW MALHAS</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        .checkout-container {
+            min-height: 80vh;
+            padding: 60px 20px;
+        }
+
+        .product-image-large {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-details {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+        }
+
+        .product-title {
+            background: linear-gradient(120deg, #2980b9, #8e44ad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .product-color-tag {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(41, 128, 185, 0.2);
+            border: 1px solid rgba(41, 128, 185, 0.4);
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .order-button {
+            font-size: 1.3rem;
+            padding: 20px 40px;
+            border-radius: 15px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .order-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(41, 128, 185, 0.4);
+        }
+
+        .back-button {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <img src="img/logo3.png" alt="Logo NYW MALHAS" class="logo">
+            <p class="tagline">Excelência em Tecidos Técnicos</p>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container-fluid nav-container">
+            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav mx-auto d-flex flex-wrap justify-content-center gap-2">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        <span>Início</span>
+                    </a>
+                    <a href="malha-pv.html" class="nav-link">
+                        <i class="fas fa-tshirt"></i>
+                        <span>Malha PV</span>
+                    </a>
+                    <a href="malha-pp.html" class="nav-link">
+                        <i class="fas fa-layer-group"></i>
+                        <span>Malha PP</span>
+                    </a>
+                    <a href="malha-piquet.html" class="nav-link">
+                        <i class="fas fa-chess-board"></i>
+                        <span>Piquet</span>
+                    </a>
+                    <a href="helanca-light.html" class="nav-link">
+                        <i class="fas fa-wind"></i>
+                        <span>Helanca Light</span>
+                    </a>
+                    <a href="paginas/contato.html" class="nav-link">
+                        <i class="fas fa-phone"></i>
+                        <span>Contato</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="checkout-container container">
+            <button class="btn btn-outline-light back-button" onclick="history.back()">
+                <i class="fas fa-arrow-left me-2"></i> Voltar
+            </button>
+
+            <div class="row g-5">
+                <!-- Imagem do Produto -->
+                <div class="col-lg-6">
+                    <img id="productImage" src="" alt="Produto" class="product-image-large">
+                </div>
+
+                <!-- Detalhes do Produto -->
+                <div class="col-lg-6">
+                    <div class="product-details">
+                        <h1 id="productTitle" class="product-title">Nome do Produto</h1>
+                        <div id="productColorTag" class="product-color-tag">
+                            <i class="fas fa-palette me-2"></i> <span id="colorName">Cor</span>
+                        </div>
+
+                        <div class="product-specs mb-4">
+                            <h4><i class="fas fa-info-circle me-2"></i> Características</h4>
+                            <ul class="list-unstyled" id="productSpecs">
+                                <li><i class="fas fa-check text-primary me-2"></i> Carregando...</li>
+                            </ul>
+                        </div>
+
+                        <button class="btn btn-primary w-100 order-button" onclick="openOrderModalFromCheckout()">
+                            <i class="fas fa-shopping-cart me-2"></i> FAZER PEDIDO AGORA
+                        </button>
+
+                        <div class="shipping-calculator mt-4 p-3"
+                            style="background: rgba(255,255,255,0.05); border-radius: 15px; border: 1px solid rgba(255,255,255,0.1);">
+                            <h5 class="mb-3 text-white"><i class="fas fa-truck me-2"></i> Calcular Frete e Prazo</h5>
+
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <input type="text" id="checkoutZip" class="form-control glass-input"
+                                        placeholder="Seu CEP" maxlength="9">
+                                </div>
+                                <div class="col-6">
+                                    <div class="input-group">
+                                        <input type="number" id="checkoutQty" class="form-control glass-input"
+                                            placeholder="Qtd" value="1" min="1">
+                                        <span class="input-group-text glass-input text-white border-start-0"
+                                            style="font-size: 0.8rem; background: rgba(255,255,255,0.1);">kg/m</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary w-100 mb-3" type="button" id="btnCalculateShipping">
+                                <i class="fas fa-search me-2"></i> Calcular Estimativa
+                            </button>
+
+                            <div id="shippingResult" class="d-none">
+                                <div class="d-flex justify-content-between align-items-center mb-2 p-2 rounded"
+                                    style="background: rgba(0,0,0,0.2);">
+                                    <span><i class="fas fa-shipping-fast text-primary me-2"></i> PAC</span>
+                                    <span class="text-white fw-bold" id="shippingValue">R$ 0,00</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-2 p-2 rounded"
+                                    style="background: rgba(0,0,0,0.2);">
+                                    <span><i class="fas fa-shipping-fast text-warning me-2"></i> SEDEX</span>
+                                    <span class="text-white fw-bold" id="shippingValueSedex">R$ 0,00</span>
+                                </div>
+                                <small class="text-white-50 d-block mt-2" style="font-size: 0.8rem;">
+                                    <i class="fas fa-exclamation-triangle me-1"></i>
+                                    *Valor aproximado. Pode variar conforme peso final e embalagem.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Pedido -->
+        <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content glass-modal">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title" id="orderModalLabel">🧵 Resumo do Pedido</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="orderForm">
+                            <div class="order-section mb-4">
+                                <h6 class="section-title"><i class="fas fa-shopping-basket"></i> Produto Selecionado
+                                </h6>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Produto</label>
+                                        <input type="text" id="orderProduct" class="form-control glass-input" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Cor / Estampa</label>
+                                        <input type="text" id="orderColor" class="form-control glass-input" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Quantidade</label>
+                                        <div class="input-group">
+                                            <input type="number" id="orderQuantity" class="form-control glass-input"
+                                                placeholder="0" min="1" required>
+                                            <select class="form-select glass-input w-auto" id="orderUnit">
+                                                <option value="metro(s)">Metro(s)</option>
+                                                <option value="quilo(s)">Quilo(s)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Valor Unitário</label>
+                                        <input type="text" id="orderUnitPrice" class="form-control glass-input"
+                                            placeholder="R$ 0,00">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="order-section mb-4">
+                                <h6 class="section-title"><i class="fas fa-user-circle"></i> Dados do Cliente</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <input type="text" id="clientName" class="form-control glass-input"
+                                            placeholder="Nome completo / Razão Social" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" id="clientTaxId" class="form-control glass-input"
+                                            placeholder="CPF / CNPJ" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="tel" id="clientPhone" class="form-control glass-input"
+                                            placeholder="Telefone / WhatsApp" required>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="email" id="clientEmail" class="form-control glass-input"
+                                            placeholder="E-mail" required>
+                                        <div class="form-text text-light opacity-75 mt-2">
+                                            <small><i class="fas fa-info-circle"></i> E-mail para NF, atualizações e
+                                                rastreio.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="order-section mb-4">
+                                <h6 class="section-title"><i class="fas fa-map-marker-alt"></i> Endereço de Entrega</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-9">
+                                        <input type="text" id="addrStreet" class="form-control glass-input"
+                                            placeholder="Endereço" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" id="addrNumber" class="form-control glass-input"
+                                            placeholder="Nº" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" id="addrComplement" class="form-control glass-input"
+                                            placeholder="Complemento">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" id="addrNeighborhood" class="form-control glass-input"
+                                            placeholder="Bairro" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" id="addrCity" class="form-control glass-input"
+                                            placeholder="Cidade" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" id="addrUF" class="form-control glass-input" placeholder="UF"
+                                            maxlength="2" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" id="addrZip" class="form-control glass-input"
+                                            placeholder="CEP" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="order-section mb-4">
+                                <h6 class="section-title"><i class="fas fa-truck"></i> Envio e Pagamento</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <select class="form-select glass-input" id="shippingMethod">
+                                            <option value="Correios">Correios</option>
+                                            <option value="Transportadora">Transportadora</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" id="shippingCost" class="form-control glass-input"
+                                            placeholder="Valor do Frete (R$)">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="d-flex gap-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="payment" id="payCC"
+                                                    value="Cartão de crédito" checked>
+                                                <label class="form-check-label text-light" for="payCC">Cartão</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="payment" id="payPix"
+                                                    value="Pix">
+                                                <label class="form-check-label text-light" for="payPix">Pix</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="payment"
+                                                    id="payBoleto" value="Boleto">
+                                                <label class="form-check-label text-light"
+                                                    for="payBoleto">Boleto</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="summary-box glass-card p-3 mb-4 text-center">
+                                <div class="row">
+                                    <div class="col-4 border-end border-secondary">
+                                        <small class="text-secondary d-block">Subtotal</small>
+                                        <span id="labelSubtotal" class="fw-bold">R$ 0,00</span>
+                                    </div>
+                                    <div class="col-4 border-end border-secondary">
+                                        <small class="text-secondary d-block">Frete</small>
+                                        <span id="labelShipping" class="fw-bold">R$ 0,00</span>
+                                    </div>
+                                    <div class="col-4">
+                                        <small class="text-secondary d-block">Total</small>
+                                        <span id="labelTotal" class="fw-bold text-primary fs-5">R$ 0,00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" form="orderForm" class="btn btn-primary px-4 py-2 fw-bold">
+                            <i class="fab fa-whatsapp me-2"></i> Finalizar no WhatsApp
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 NYW MALHAS. Todos os direitos reservados.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/shipping-rates.js"></script>
+    <script src="js/order-manager.js"></script>
+    <script src="js/checkout.js"></script>
+
+</body>
+
+</html>
