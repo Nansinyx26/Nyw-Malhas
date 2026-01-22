@@ -103,7 +103,8 @@
 
     @media (max-width: 768px) {
         .color-preview-image {
-            height: 180px;
+            height: 140px;
+            /* Adjusting card image specifically for mobile focus */
         }
 
         .section-header h1 {
@@ -1061,15 +1062,28 @@ footer {
     }
 
     .nav-link span {
-        display: none;
+        display: block;
+        /* Restore text labels */
+        font-size: 0.9rem;
     }
 
     .nav-link {
-        padding: 0.8rem;
+        padding: 0.6rem 1rem;
+        flex-direction: row;
+        /* Ensure horizontal alignment inside links */
+        justify-content: flex-start;
+        width: 100%;
+        /* Links take full width in mobile menu */
+    }
+
+    .navbar-nav {
+        gap: 0.5rem !important;
+        padding: 1rem 0;
     }
 
     .image-container {
-        height: 350px;
+        height: 250px;
+        /* Slightly shorter image containers */
     }
 
     .color-options {
@@ -1097,11 +1111,24 @@ footer {
 
 @media (max-width: 480px) {
     .logo {
-        max-height: 120px;
+        max-height: 80px;
+        /* Smaller logo for mobile */
     }
 
     .section-header h1 {
         font-size: 1.5rem;
+    }
+
+    header {
+        padding: 1.5rem 1rem !important;
+        /* Reduce header padding */
+    }
+
+    .tagline {
+        font-size: 0.8rem !important;
+        letter-spacing: 1px !important;
+        /* Reduce letter spacing */
+        margin-top: 0.5rem !important;
     }
 
     .image-container {
@@ -1129,6 +1156,60 @@ footer {
     .info-card,
     .nav-link {
         box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    /* Reduce glow impact on mobile */
+    header,
+    nav.scrolled,
+    .navbar.scrolled {
+        box-shadow: 0 4px 15px var(--shadow) !important;
+    }
+
+    .nav-link:hover {
+        box-shadow: 0 4px 12px var(--glow) !important;
+    }
+
+    /* Checkout Mobile Specifics */
+    .product-image-large {
+        height: 280px !important;
+        margin-bottom: 20px;
+    }
+
+    .product-details {
+        padding: 20px !important;
+    }
+
+    .product-title {
+        font-size: 1.8rem !important;
+    }
+
+    .glass-modal {
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.8) !important;
+    }
+
+    .modal-header .btn-close {
+        padding: 1rem;
+        /* Larger touch target */
+        margin: -1rem;
+    }
+
+    .order-section {
+        margin-bottom: 2rem !important;
+    }
+
+    .section-title {
+        font-size: 1rem;
+        padding-bottom: 0.3rem;
+    }
+
+    .shipping-calculator h5 {
+        font-size: 1rem;
+    }
+
+    .input-group-text {
+        font-size: 0.75rem !important;
+        padding: 0.5rem !important;
     }
 }
 
