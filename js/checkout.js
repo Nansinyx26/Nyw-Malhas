@@ -111,6 +111,33 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     };
 
+    let storageAllProducts = [];
+
+    // Função para buscar imagem do banco com fallback para estático
+    function findDbImage(productKey, colorKey, fallbackImage) {
+        if (!storageAllProducts || storageAllProducts.length === 0) return 'img/' + fallbackImage;
+
+        const dbProduct = storageAllProducts.find(p => {
+            const pName = p.name.toLowerCase();
+            const pColor = p.color.toLowerCase();
+            const targetName = productKey.toLowerCase();
+            const targetColor = colorKey.toLowerCase();
+            // Busca por categoria (parte do nome) e cor exata
+            return pColor === targetColor && pName.includes(targetName.split(' ')[0].toLowerCase());
+        });
+
+        if (dbProduct && dbProduct.image) {
+            // Se a imagem for Base64 ou URL completa, retorna direto
+            if (dbProduct.image.startsWith('data:') || dbProduct.image.startsWith('http')) {
+                return dbProduct.image;
+            }
+            // Se for apenas o nome do arquivo, adiciona o prefixo img/
+            return 'img/' + dbProduct.image.replace(/^img\//, '');
+        }
+
+        return 'img/' + fallbackImage;
+    }
+
     // Pegar parâmetros da URL
     const urlParams = new URLSearchParams(window.location.search);
     const product = urlParams.get('produto');
@@ -127,7 +154,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     try {
         if (window.DBManager) {
             await window.DBManager.init();
-            const dbProducts = await window.DBManager.getAllProducts();
+            storageAllProducts = await window.DBManager.getAllProducts();
+            const dbProducts = storageAllProducts;
 
             // Encontra o produto no banco buscando por nome ou categoria + cor
             // Como o nome no banco pode ser diferente (ex: "Malha PV Preta"), usamos uma busca aproximada
@@ -163,8 +191,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Carregar dados do produto
     const productInfo = productData[product];
-    const imagePath = 'img/' + productInfo.colors[color];
     const colorDisplay = color.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    const imagePath = findDbImage(productInfo.name, colorDisplay, productInfo.colors[color]);
 
     // Atualizar elementos da página
     document.getElementById('productImage').src = imagePath;
@@ -244,8 +272,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             colorDiv.onclick = function () {
                 // Atualizar imagens e textos
-                const newImagePath = 'img/' + value;
                 const newColorDisplay = colorDisplayName;
+                const newImagePath = findDbImage(productInfo.name, newColorDisplay, value);
 
                 document.getElementById('productImage').src = newImagePath;
                 document.getElementById('productImage').alt = `${productInfo.name} - ${newColorDisplay}`;
