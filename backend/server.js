@@ -35,6 +35,9 @@ app.use(express.static(path.join(__dirname, '..')));
 // Rotas
 app.use('/api/products', require('./routes/products'));
 app.use('/api/contact', require('./routes/contact'));
+app.use('/api/orders', require('./routes/orders'));
+app.use('/api/analytics', require('./routes/analytics'));
+app.use('/api/notifications', require('./routes/notifications'));
 
 // Rota raiz - serve o site
 app.get('/', (req, res) => {
@@ -46,10 +49,13 @@ app.get('/api', (req, res) => {
     res.json({
         success: true,
         message: 'API NYW Malhas está funcionando!',
-        version: '1.0.0',
+        version: '2.0.0',
         endpoints: {
             products: '/api/products',
-            contact: '/api/contact'
+            contact: '/api/contact',
+            orders: '/api/orders',
+            analytics: '/api/analytics',
+            notifications: '/api/notifications'
         }
     });
 });

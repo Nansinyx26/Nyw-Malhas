@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - NYW MALHAS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+
+<body style="background: #0f0f13; color: white;">
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="admin.html">
+                <i class="fas fa-arrow-left me-2"></i> Voltar ao Admin
+            </a>
+            <span class="navbar-text">
+                <i class="fas fa-chart-line me-2"></i> Dashboard Analytics
+            </span>
+        </div>
+    </nav>
+
+    <div class="container-fluid py-4">
+        <!-- KPI Cards -->
+        <div class="row g-3 mb-4" id="kpiCards">
+            <!-- Preenchido via JS -->
+        </div>
+
+        <!-- Gráficos -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="card bg-dark text-white">
+                    <div class="card-body">
+                        <h5><i class="fas fa-layer-group me-2"></i> Produtos por Categoria</h5>
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-dark text-white">
+                    <div class="card-body">
+                        <h5><i class="fas fa-chart-line me-2"></i> Estoque nos Últimos 30 Dias</h5>
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Listas -->
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card bg-dark text-white">
+                    <div class="card-header"><i class="fas fa-exclamation-triangle me-2 text-warning"></i> Estoque Baixo
+                    </div>
+                    <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                        <div id="lowStockList">Carregando...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-dark text-white">
+                    <div class="card-header"><i class="fas fa-times-circle me-2 text-danger"></i> Sem Estoque</div>
+                    <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                        <div id="outOfStockList">Carregando...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api-client.js"></script>
+    <script>
+        // KPIs
+        async function loadKPIs() {
+            const data = await window.APIClient.get('/analytics/overview');
+            const kpis = [
+                { icon: 'box', color: 'primary', label: 'Total Produtos', value: data.products.total },
+                { icon: 'check-circle', color: 'success', label: 'Disponíveis', value: data.products.available },
+                { icon: 'exclamation-circle', color: 'warning', label: 'Estoque Baixo', value: data.products.lowStock },
+                { icon: 'times-circle', color: 'danger', label: 'Sem Estoque', value: data.products.outOfStock },
+                { icon: 'layer-group', color: 'info', label: 'Estoque Total', value: `${data.stock.total} un` },
+                { icon: 'dollar-sign', color: 'success', label: 'Valor Inventário', value: `R$ ${data.stock.inventoryValue.toFixed(2)}` }
+            ];
+
+            document.getElementById('kpiCards').innerHTML = kpis.map(kpi => `
+                <div class="col-md-4 col-lg-2">
+                    <div class="card bg-dark text-white border-${kpi.color}">
+                        <div class="card-body text-center">
+                            <i class="fas fa-${kpi.icon} text-${kpi.color} fa-2x mb-2"></i>
+                            <h3 class="text-${kpi.color}">${kpi.value}</h3>
+                            <small class="text-muted">${kpi.label}</small>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Gráfico de Categorias
+        async function loadCategoryChart() {
+            const data = await window.APIClient.get('/analytics/by-category');
+            new Chart(document.getElementById('categoryChart'), {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d._id),
+                    datasets: [{
+                        label: 'Produtos',
+                        data: data.map(d => d.count),
+                        backgroundColor: 'rgba(255, 102, 0, 0.8)'
+                    }]
+                },
+                options: { responsive: true, plugins: { legend: { labels: { color: 'white' } } }, scales: { y: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } }, x: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } } } }
+            });
+        }
+
+        // Gráfico Timeline
+        async function loadTimelineChart() {
+            const data = await window.APIClient.get('/analytics/stock-timeline?days=30');
+            new Chart(document.getElementById('timelineChart'), {
+                type: 'line',
+                data: {
+                    labels: data.map(d => `${d._id.day}/${d._id.month}`),
+                    datasets: [{
+                        label: 'Adicionado',
+                        data: data.map(d => d.stockAdded),
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        fill: false
+                    }, {
+                        label: 'Removido',
+                        data: data.map(d => d.stockRemoved),
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        fill: false
+                    }]
+                },
+                options: { responsive: true, plugins: { legend: { labels: { color: 'white' } } }, scales: { y: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } }, x: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } } } }
+            });
+        }
+
+        // Listas
+        async function loadLists() {
+            const lowStock = await window.APIClient.get('/analytics/low-stock');
+            const outOfStock = await window.APIClient.get('/analytics/out-of-stock');
+
+            document.getElementById('lowStockList').innerHTML = lowStock.length ? lowStock.map(p => `
+                <div class="mb-2 p-2 bg-warning bg-opacity-10 rounded">
+                    <strong>${p.name}</strong> <span class="badge bg-warning">${p.stock} un</span>
+                </div>
+            `).join('') : '<p class="text-muted">Nenhum produto com estoque baixo</p>';
+
+            document.getElementById('outOfStockList').innerHTML = outOfStock.length ? outOfStock.map(p => `
+                <div class="mb-2 p-2 bg-danger bg-opacity-10 rounded">
+                    <strong>${p.name}</strong> <span class="badge bg-danger">0 un</span>
+                </div>
+            `).join('') : '<p class="text-muted">Nenhum produto sem estoque</p>';
+        }
+
+        // Inicializar
+        (async () => {
+            await loadKPIs();
+            await loadCategoryChart();
+            await loadTimelineChart();
+            await loadLists();
+            setInterval(loadKPIs, 30000); // Refresh a cada 30s
+        })();
+    </script>
+</body>
+
+</html>

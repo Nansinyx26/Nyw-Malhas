@@ -111,7 +111,8 @@ function updateProductsStatus(products) {
         const availabilityEl = card.querySelector('.availability');
         if (!availabilityEl) return;
 
-        const isAvailable = produto.status === 'available';
+        // ✅ BASEADO EM ESTOQUE: Verde se >= 1, Vermelho se 0
+        const isAvailable = produto.stock > 0;
         const newStatusClass = isAvailable ? 'available' : 'unavailable';
         const newStatusIcon = isAvailable ? 'fa-check-circle' : 'fa-times-circle';
         const newStatusText = isAvailable ? 'Disponível' : 'Indisponível';
@@ -132,13 +133,13 @@ function updateProductsStatus(products) {
                 <i class="fas ${newStatusIcon}"></i> ${newStatusText}
             `;
 
-            console.log(`🔄 Status atualizado: ${produto.name} → ${newStatusText}`);
+            console.log(`🔄 Status atualizado: ${produto.name} → ${newStatusText} (Estoque: ${produto.stock})`);
         }
     });
 }
 
 /**
- * Cria um card de produto com status dinâmico
+ * Cria um card de produto com status dinâmico baseado em estoque
  */
 function createProductCard(produto) {
     const card = document.createElement('div');
@@ -146,7 +147,8 @@ function createProductCard(produto) {
     card.setAttribute('data-category', getCategoryClass(produto));
     card.setAttribute('data-product-id', produto.id);
 
-    const isAvailable = produto.status === 'available';
+    // ✅ BASEADO EM ESTOQUE: Verde se >= 1, Vermelho se 0
+    const isAvailable = produto.stock > 0;
     const statusIcon = isAvailable ? 'fa-check-circle' : 'fa-times-circle';
     const statusText = isAvailable ? 'Disponível' : 'Indisponível';
     const statusClass = isAvailable ? 'available' : 'unavailable';
@@ -160,8 +162,8 @@ function createProductCard(produto) {
     card.innerHTML = `
         <div class="card-image" style="background-image: url('${imagePath}');">
             <div class="card-overlay">
-                <button class="view-details">
-                    <i class="fas fa-search-plus"></i> Ver Detalhes
+                <button class="view-details" ${!isAvailable ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                    <i class="fas fa-search-plus"></i> ${isAvailable ? 'Ver Detalhes' : 'Sem Estoque'}
                 </button>
             </div>
         </div>
@@ -178,12 +180,21 @@ function createProductCard(produto) {
             <p class="card-description">${getDescricao(produto)}</p>
             <div class="card-footer">
                 <span class="color-indicator" style="background: ${getColorGradient(produto.color)};"></span>
-                <span class="availability ${statusClass}">
-                    <i class="fas ${statusIcon}"></i> ${statusText}
-                </span>
+                <div class="card-stock-info">
+                    <span class="stock-label">Estoque: <strong>${produto.stock || 0}</strong></span>
+                    <span class="availability ${statusClass}">
+                        <i class="fas ${statusIcon}"></i> ${statusText}
+                    </span>
+                </div>
             </div>
         </div>
     `;
+
+    // ✅ Adiciona opacidade reduzida para produtos sem estoque
+    if (!isAvailable) {
+        card.style.opacity = '0.7';
+        card.style.pointerEvents = 'none';
+    }
 
     return card;
 }
@@ -309,12 +320,15 @@ function getDefaultProducts(category) {
         ],
         pp: [
             { id: 6, name: 'Malha PP Preta', category: 'pp', color: 'Preta', image: '../img/malha-pp-preta.jpg', status: 'available' },
-            { id: 7, name: 'Malha PP Vinho', category: 'pp', color: 'Vinho', image: '../img/malha-pp-vinho.jpg', status: 'available' }
+            { id: 7, name: 'Malha PP Vinho', category: 'pp', color: 'Vinho', image: '../img/malha-pp-vinho.jpg', status: 'available' },
+            { id: 71, name: 'Malha PP Branca', category: 'pp', color: 'Branca', image: '../img/malha-pp-branca.png', status: 'available' },
+            { id: 72, name: 'Malha PP Azul Marinho', category: 'pp', color: 'Azul Marinho', image: '../img/malha-pp-azul-marinho.jpg', status: 'available' }
         ],
         piquet: [
             { id: 8, name: 'Piquet PA Bandeira', category: 'piquet', color: 'Bandeira', image: '../img/malha-piquet-pa-bandeira.jpg', status: 'available' },
             { id: 9, name: 'Piquet PA Cinza Chumbo', category: 'piquet', color: 'Cinza Chumbo', image: '../img/malha-piquet-pa-cinza-chumbo.jpg', status: 'available' },
-            { id: 10, name: 'Piquet PA Preta', category: 'piquet', color: 'Preta', image: '../img/malha-piquet-preta.png', status: 'available' }
+            { id: 10, name: 'Piquet PA Preta', category: 'piquet', color: 'Preta', image: '../img/malha-piquet-preta.png', status: 'available' },
+            { id: 101, name: 'Piquet PA Branco', category: 'piquet', color: 'Branco', image: '../img/malha-piquet-branca.jpg', status: 'available' }
         ],
         helanca: [
             { id: 12, name: 'Helanca Light Preto', category: 'helanca', color: 'Preto', image: '../img/helanca-light-preto.jpg', status: 'available' },

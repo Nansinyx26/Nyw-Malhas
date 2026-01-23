@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'preta': 'malha-pp-preta.jpg',
                 'vinho': 'malha-pp-vinho.jpg',
                 'branca': 'malha-pp-branca.png',
-                'azul-marinho': 'malha-pp-azul-marinho.png'
+                'azul-marinho': 'malha-pp-azul-marinho.jpg'
             }
         },
         'malha-piquet': {
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'vermelho': 'vermelho-piquet-pv.jpg',
                 'cinza-chumbo': 'malha-piquet-pa-cinza-chumbo.jpg',
                 'verde-bandeira': 'malha-piquet-pa-bandeira.jpg',
-                'branco': 'malha-piquet-branca.png',
+                'branco': 'malha-piquet-branca.jpg',
                 'preto': 'malha-piquet-preta.png'
             }
         },
@@ -176,10 +176,40 @@ document.addEventListener('DOMContentLoaded', async function () {
                 return pColor === targetColor && pName.includes(targetName.split(' ')[0].toLowerCase());
             });
 
-            if (dbProduct && dbProduct.status === 'unavailable') {
-                alert(`O produto ${productKey} na cor ${colorKey} está temporariamente indisponível.`);
-                window.location.href = 'index.html';
-                return;
+            if (dbProduct) {
+                const stockVal = dbProduct.stock || 0;
+                if (dbProduct.status === 'unavailable' || stockVal <= 0) {
+                    alert(`O produto ${productKey} na cor ${colorKey} está temporariamente indisponível.`);
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                // Mostrar estoque na página
+                const colorTag = document.getElementById('productColorTag');
+                if (colorTag) {
+                    let stockTag = document.getElementById('productStockTag');
+                    if (!stockTag) {
+                        stockTag = document.createElement('div');
+                        stockTag.id = 'productStockTag';
+                        stockTag.className = 'product-color-tag ms-2';
+                        stockTag.style.background = 'rgba(46, 204, 113, 0.1)';
+                        stockTag.style.borderColor = 'rgba(46, 204, 113, 0.3)';
+                        stockTag.style.color = '#27ae60';
+                        colorTag.parentNode.insertBefore(stockTag, colorTag.nextSibling);
+                    }
+                    const isAvail = stockVal > 0;
+                    // ✅ Mostrar apenas Disponível/Indisponível SEM quantidade
+                    stockTag.innerHTML = `<i class="fas fa-${isAvail ? 'check' : 'times'}-circle me-2"></i><strong>${isAvail ? 'Disponível' : 'Indisponível'}</strong>`;
+                    if (!isAvail) {
+                        stockTag.style.background = 'rgba(231, 76, 60, 0.1)';
+                        stockTag.style.borderColor = 'rgba(231, 76, 60, 0.3)';
+                        stockTag.style.color = '#e74c3c';
+                    } else {
+                        stockTag.style.background = 'rgba(46, 204, 113, 0.1)';
+                        stockTag.style.borderColor = 'rgba(46, 204, 113, 0.3)';
+                        stockTag.style.color = '#27ae60';
+                    }
+                }
             }
         }
     } catch (error) {
@@ -298,6 +328,32 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const newUrl = new URL(window.location);
                 newUrl.searchParams.set('cor', key);
                 window.history.replaceState(null, '', newUrl);
+
+                // Atualizar estoque para a nova cor
+                if (storageAllProducts) {
+                    const dbProduct = storageAllProducts.find(p => {
+                        const pName = p.name.toLowerCase();
+                        const pColor = p.color.toLowerCase();
+                        return pColor === newColorDisplay.toLowerCase() && pName.includes(productInfo.name.split(' ')[0].toLowerCase());
+                    });
+
+                    const stockTag = document.getElementById('productStockTag');
+                    if (dbProduct && stockTag) {
+                        const stockVal = dbProduct.stock || 0;
+                        const isAvail = stockVal > 0;
+                        // ✅ Mostrar apenas Disponível/Indisponível SEM quantidade
+                        stockTag.innerHTML = `<i class="fas fa-${isAvail ? 'check' : 'times'}-circle me-2"></i><strong>${isAvail ? 'Disponível' : 'Indisponível'}</strong>`;
+                        if (stockVal <= 0) {
+                            stockTag.style.background = 'rgba(231, 76, 60, 0.1)';
+                            stockTag.style.borderColor = 'rgba(231, 76, 60, 0.3)';
+                            stockTag.style.color = '#e74c3c';
+                        } else {
+                            stockTag.style.background = 'rgba(46, 204, 113, 0.1)';
+                            stockTag.style.borderColor = 'rgba(46, 204, 113, 0.3)';
+                            stockTag.style.color = '#27ae60';
+                        }
+                    }
+                }
 
                 console.log(`Cor alterada para: ${newColorDisplay}`);
             };

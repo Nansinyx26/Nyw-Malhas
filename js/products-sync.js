@@ -99,8 +99,8 @@ async function syncStaticProducts() {
                     if (img.src !== src) img.src = src;
                 }
 
-                // DISPONIBILIDADE
-                const isAvail = productData.status === 'available';
+                // DISPONIBILIDADE - ✅ BASEADO EM ESTOQUE
+                const isAvail = productData.stock > 0;
 
                 // IMAGEM (Atualização Dinâmica)
                 const imgEl = card.querySelector('img.card-img-top');
@@ -130,16 +130,35 @@ async function syncStaticProducts() {
                     }
                 }
 
-                // Badges/Botões de Status
-                const statusEl = card.querySelector('.status-badge, .btn-success-pill, .btn-danger-pill, .availability');
+                // Badges/Botões de Status - ✅ VERDE se estoque > 0, VERMELHO se estoque = 0
+                const statusEl = card.querySelector('.status-badge, .btn-success-pill, .btn-danger-pill, .availability, button[class*="btn-"][class*="-pill"]');
                 if (statusEl) {
-                    if (statusEl.classList.contains('btn-sm')) { // Subpáginas
-                        statusEl.className = isAvail ? 'btn btn-success-pill btn-sm' : 'btn btn-danger-pill btn-sm';
-                        statusEl.innerHTML = isAvail ? '<i class="fas fa-check-circle me-1"></i> Disponível' : '<i class="fas fa-times-circle me-1"></i> Indisponível';
+                    // Determinar se é um botão (btn) ou span/label
+                    const isButton = statusEl.tagName === 'BUTTON';
+
+                    if (isButton) {
+                        // Remover classes antigas
+                        statusEl.classList.remove('btn-success-pill', 'btn-danger-pill');
+
+                        // Adicionar classe correta baseada no estoque
+                        if (isAvail) {
+                            statusEl.classList.add('btn-success-pill');
+                            statusEl.innerHTML = '<i class="fas fa-check-circle me-1"></i> Disponível';
+                        } else {
+                            statusEl.classList.add('btn-danger-pill');
+                            statusEl.innerHTML = '<i class="fas fa-times-circle me-1"></i> Indisponível';
+                        }
+                    } else if (statusEl.classList.contains('availability')) {
+                        // Galeria com classe availability
+                        statusEl.className = isAvail ? 'availability available' : 'availability unavailable';
+                        statusEl.innerHTML = isAvail ? '<i class="fas fa-check-circle"></i> Disponível' : '<i class="fas fa-times-circle"></i> Indisponível';
                     } else {
-                        statusEl.className = `status-badge ${productData.status}`;
-                        statusEl.textContent = isAvail ? 'Disponível' : 'Indisponível';
+                        // Padrão - status-badge
+                        statusEl.className = isAvail ? 'status-badge available' : 'status-badge unavailable';
+                        statusEl.innerHTML = isAvail ? '<i class="fas fa-check-circle me-1"></i> Disponível' : '<i class="fas fa-times-circle me-1"></i> Indisponível';
                     }
+
+                    console.log(`🔄 Status: ${productData.name} → ${isAvail ? 'VERDE' : 'VERMELHO'} (Estoque: ${productData.stock})`);
                 }
 
                 // Botão de ação (Comprar)
@@ -175,6 +194,37 @@ async function syncStaticProducts() {
                         }
                     }
                 });
+
+                // ESTOQUE (Atualização Dinâmica)
+                let stockEl = card.querySelector('.stock-display, .stock-label, .card-stock');
+                if (!stockEl) {
+                    // Tenta encontrar um lugar para injetar se não existir
+                    const footer = card.querySelector('.card-footer-actions, .card-footer, .card-body');
+                    if (footer) {
+                        const stockDiv = document.createElement('div');
+                        stockDiv.className = 'stock-display small text-white-50 mt-1';
+                        stockDiv.style.fontSize = '0.8rem';
+                        // Insere antes do status ou botão se possível
+                        const statusBadge = footer.querySelector('.btn-success-pill, .btn-danger-pill, .status-badge, .availability');
+                        if (statusBadge) {
+                            footer.insertBefore(stockDiv, statusBadge);
+                        } else {
+                            footer.appendChild(stockDiv);
+                        }
+                        stockEl = stockDiv;
+                    }
+                }
+
+                if (stockEl) {
+                    const stockVal = productData.stock || 0;
+                    stockEl.innerHTML = `<i class="fas fa-layer-group me-1"></i> Estoque: <strong>${stockVal}</strong>`;
+                    if (stockVal <= 0) {
+                        stockEl.classList.add('text-danger');
+                        stockEl.classList.remove('text-white-50');
+                    } else {
+                        stockEl.classList.remove('text-danger');
+                    }
+                }
             }
         });
 

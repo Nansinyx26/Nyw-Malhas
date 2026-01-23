@@ -137,12 +137,56 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     // ===== ABRIR MODAL =====
-    window.openOrderModal = function (product, color) {
+    window.openOrderModal = async function (product, color) {
         document.getElementById('orderProduct').value = product;
 
         // Cor padrão se não fornecida
         const selectedColor = color || window.checkoutColorName || 'Selecione abaixo';
         document.getElementById('orderColor').value = selectedColor;
+
+        // Buscar estoque do banco se disponível
+        let stockValue = '...';
+        if (window.DBManager) {
+            try {
+                const allProducts = await window.DBManager.getAllProducts();
+                const dbProduct = allProducts.find(p => {
+                    const pName = p.name.toLowerCase();
+                    const pColor = p.color.toLowerCase();
+                    return pColor === selectedColor.toLowerCase() && pName.includes(product.split(' ')[0].toLowerCase());
+                });
+                if (dbProduct) {
+                    stockValue = dbProduct.stock || 0;
+                    // ✅ PREVENÇÃO DE VENDA: Bloquear modal se estoque = 0
+                    if (stockValue <= 0) {
+                        alert('⚠️ Produto sem estoque! Este item não está disponível para venda no momento.');
+                        return;
+                    }
+                }
+            } catch (e) { console.error('Erro ao buscar estoque:', e); }
+        }
+
+        // Atualizar display de estoque no modal
+        let stockDisplay = document.getElementById('modalStockDisplay');
+        if (!stockDisplay) {
+            const container = document.querySelector('#orderForm .order-section');
+            if (container) {
+                const div = document.createElement('div');
+                div.id = 'modalStockDisplay';
+                div.className = 'alert alert-info py-2 px-3 mb-3 d-flex align-items-center gap-2';
+                div.style.background = stockValue > 0 ? 'rgba(46, 204, 113, 0.1)' : 'rgba(231, 76, 60, 0.1)';
+                div.style.border = stockValue > 0 ? '1px solid rgba(46, 204, 113, 0.3)' : '1px solid rgba(231, 76, 60, 0.3)';
+                div.style.color = '#fff';
+                div.innerHTML = `<i class="fas fa-boxes"></i> <span>Estoque disponível: <strong id="modalStockValue" style="color: ${stockValue > 0 ? '#2ecc71' : '#e74c3c'}">${stockValue}</strong></span>`;
+                container.parentNode.insertBefore(div, container);
+                stockDisplay = div;
+            }
+        } else {
+            const valEl = document.getElementById('modalStockValue');
+            valEl.textContent = stockValue;
+            valEl.style.color = stockValue > 0 ? '#2ecc71' : '#e74c3c';
+            stockDisplay.style.background = stockValue > 0 ? 'rgba(46, 204, 113, 0.1)' : 'rgba(231, 76, 60, 0.1)';
+            stockDisplay.style.border = stockValue > 0 ? '1px solid rgba(46, 204, 113, 0.3)' : '1px solid rgba(231, 76, 60, 0.3)';
+        }
 
         // Atualizar imagem no modal se estivermos no checkout
         const productImage = document.getElementById('productImage');
@@ -198,8 +242,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('shippingCost').addEventListener('input', updateValues);
     document.getElementById('orderUnitPrice').addEventListener('input', updateValues);
 
-    // ===== SUBMISSÃO DO PEDIDO =====
-    orderForm.addEventListener('submit', function (e) {
+    // ===== SUBMISSÃO DO PEDAMENTO =====
+    orderForm.addEventListener('submit', async function (e) {
         e.preventDefault();
 
         // 1. Coletar dados
@@ -233,10 +277,63 @@ document.addEventListener('DOMContentLoaded', function () {
             payment: document.querySelector('input[name="payment"]:checked').value
         };
 
+        // ✅ SALVAR PEDIDO NA API (NOVO SISTEMA)
+        let apiOrderNumber = null;
+        try {
+            if (window.APIClient) {
+                // Buscar produto do banco para obter ID
+                const products = await window.DBManager.getAllProducts();
+                const productMatch = products.find(p =>
+                    p.name.toLowerCase().includes(data.product.split(' ')[0].toLowerCase()) &&
+                    p.color.toLowerCase() === data.color.toLowerCase()
+                );
+
+                if (productMatch) {
+                    const orderPayload = {
+                        customer: {
+                            name: data.clientName,
+                            email: data.clientEmail,
+                            phone: data.clientPhone,
+                            taxId: data.clientTaxId
+                        },
+                        items: [{
+                            productId: productMatch._id,
+                            productName: productMatch.name,
+                            color: data.color,
+                            quantity: parseFloat(data.quantity),
+                            unit: data.unit,
+                            unitPrice: 30,
+                            subtotal: parseCurrency(data.subtotal)
+                        }],
+                        shipping: {
+                            method: data.shippingMethod,
+                            cost: parseCurrency(data.shipping),
+                            address: data.address
+                        },
+                        payment: {
+                            method: data.payment
+                        },
+                        total: parseCurrency(data.total)
+                    };
+
+                    const orderResponse = await window.APIClient.post('/orders', orderPayload);
+                    if (orderResponse.success) {
+                        apiOrderNumber = orderResponse.data.orderNumber;
+                        console.log(`✅ Pedido salvo na API: ${apiOrderNumber}`);
+                        alert(`✅ Pedido #${apiOrderNumber} registrado com sucesso!\n\nEstoque atualizado automaticamente.\nVocê será redirecionado ao WhatsApp.`);
+                    }
+                }
+            }
+        } catch (apiError) {
+            console.warn('⚠️ Erro ao salvar pedido na API:', apiError);
+            const continuar = confirm('Não foi possível registrar o pedido no sistema.\n\nDeseja continuar apenas com WhatsApp?');
+            if (!continuar) return;
+        }
+
         // 2. Formatar mensagem (Modelo Exato)
         const message = `🧵 *RESUMO DO PEDIDO*
 
-Pedido nº: *#${data.orderId}*
+Pedido nº: *#${apiOrderNumber || data.orderId}*
 
 *Produto:* ${data.product}
 *Tipo / Composição:* ${data.product === 'Malha PV' ? 'Polyester com Elastano' : (data.product === 'Malha PP' ? '100% Polipropileno' : 'Tecido Técnico')}
@@ -292,10 +389,10 @@ A nota fiscal será emitida após a confirmação do pagamento.
 *Forma de pagamento:*
 ☑ ${data.payment}
 
-*Status:* Aguardando confirmação
+*Status:* ${apiOrderNumber ? 'Registrado no sistema' : 'Aguardando confirmação'}
 
 📌 *INFORMAÇÕES IMPORTANTES*
-O pedido será preparado após a confirmação do pagamento.
+${apiOrderNumber ? 'O pedido já foi registrado e o estoque foi atualizado.' : 'O pedido será preparado após a confirmação do pagamento.'}
 Agradecemos pela confiança! 🧵💙`;
 
         // 3. Gerar link e redirecionar

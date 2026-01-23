@@ -73,6 +73,20 @@ exports.createProduct = async (req, res) => {
 // @access  Private (Admin only)
 exports.updateProduct = async (req, res) => {
     try {
+        // Buscar produto antes da atualização para comparar estoque
+        const oldProduct = await Product.findById(req.params.id);
+
+        if (!oldProduct) {
+            return res.status(404).json({
+                success: false,
+                message: 'Produto não encontrado'
+            });
+        }
+
+        const oldStock = oldProduct.stock;
+        const newStock = req.body.stock !== undefined ? req.body.stock : oldStock;
+
+        // Atualizar produto
         const product = await Product.findByIdAndUpdate(
             req.params.id,
             req.body,
@@ -82,15 +96,56 @@ exports.updateProduct = async (req, res) => {
             }
         );
 
-        if (!product) {
-            return res.status(404).json({
-                success: false,
-                message: 'Produto não encontrado'
-            });
-        }
-
         // Atualiza status baseado no estoque
         await product.updateStockStatus();
+
+        // ✅ REGISTRAR HISTÓRICO se o estoque mudou
+        if (oldStock !== newStock) {
+            const StockHistory = require('../models/StockHistory');
+            const Notification = require('../models/Notification');
+
+            await StockHistory.create({
+                productId: product._id,
+                productName: product.name,
+                action: 'admin_edit',
+                oldStock: oldStock,
+                newStock: newStock,
+                reason: req.body.reason || 'Atualização manual pelo admin',
+                metadata: {
+                    adminName: req.body.adminName || 'Admin',
+                    ip: req.ip
+                }
+            });
+
+            // ✅ CRIAR NOTIFICAÇÃO baseada no tipo de mudança
+            let notificationType = 'stock_updated';
+            let notificationTitle = 'Estoque Atualizado';
+            let notificationMessage = `${product.name}: ${oldStock} → ${newStock}`;
+
+            if (newStock === 0 && oldStock > 0) {
+                notificationType = 'stock_zero';
+                notificationTitle = '⚠️ Estoque Zerado';
+                notificationMessage = `${product.name} ficou SEM ESTOQUE!`;
+            } else if (newStock > 0 && newStock <= 10 && oldStock > 10) {
+                notificationType = 'stock_low';
+                notificationTitle = '⚠️ Esto que Baixo';
+                notificationMessage = `${product.name} está com estoque baixo (${newStock} unidades)`;
+            }
+
+            await Notification.create({
+                type: notificationType,
+                productId: product._id,
+                title: notificationTitle,
+                message: notificationMessage,
+                data: {
+                    oldStock,
+                    newStock,
+                    productName: product.name
+                }
+            });
+
+            console.log(`📊 Histórico registrado: ${product.name} (${oldStock} → ${newStock})`);
+        }
 
         res.json({
             success: true,

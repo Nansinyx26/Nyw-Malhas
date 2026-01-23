@@ -186,13 +186,32 @@
     box-shadow: 0 2px 8px var(--shadow);
 }
 
-.availability {
-    color: #00C853;
-    font-weight: 600;
+.card-stock-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.3rem;
+}
+
+.stock-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.stock-label strong {
+    color: var(--primary);
     font-size: 0.9rem;
+}
+
+.availability {
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.85rem;
     display: flex;
     align-items: center;
     gap: 0.4rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
 }
 
 .availability i {

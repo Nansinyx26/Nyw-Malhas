@@ -17,14 +17,14 @@ const INITIAL_PRODUCTS = [
     { name: 'Malha PP Preta', category: 'pp', color: 'Preta', image: 'img/malha-pp-preta.jpg', status: 'available', price: 30.00, stock: 100 },
     { name: 'Malha PP Vinho', category: 'pp', color: 'Vinho', image: 'img/malha-pp-vinho.jpg', status: 'available', price: 30.00, stock: 100 },
     { name: 'Malha PP Branca', category: 'pp', color: 'Branca', image: 'img/malha-pp-branca.png', status: 'available', price: 30.00, stock: 100 },
-    { name: 'Malha PP Azul Marinho', category: 'pp', color: 'Azul Marinho', image: 'img/malha-pp-azul-marinho.png', status: 'available', price: 30.00, stock: 100 },
+    { name: 'Malha PP Azul Marinho', category: 'pp', color: 'Azul Marinho', image: 'img/malha-pp-azul-marinho.jpg', status: 'available', price: 30.00, stock: 100 },
 
     // Piquet
     { name: 'Piquet Azul Marinho', category: 'piquet', color: 'Azul Marinho', image: 'img/azul-marinho-piquet-pv.jpg', status: 'available', price: 30.00, stock: 100 },
     { name: 'Piquet Vermelho', category: 'piquet', color: 'Vermelho', image: 'img/vermelho-piquet-pv.jpg', status: 'available', price: 30.00, stock: 100 },
     { name: 'Piquet Cinza Chumbo', category: 'piquet', color: 'Cinza Chumbo', image: 'img/malha-piquet-pa-cinza-chumbo.jpg', status: 'available', price: 30.00, stock: 100 },
     { name: 'Piquet Verde Bandeira', category: 'piquet', color: 'Verde Bandeira', image: 'img/malha-piquet-pa-bandeira.jpg', status: 'available', price: 30.00, stock: 100 },
-    { name: 'Piquet Branco', category: 'piquet', color: 'Branco', image: 'img/malha-piquet-branca.png', status: 'available', price: 30.00, stock: 100 },
+    { name: 'Piquet Branco', category: 'piquet', color: 'Branco', image: 'img/malha-piquet-branca.jpg', status: 'available', price: 30.00, stock: 100 },
     { name: 'Piquet Preto', category: 'piquet', color: 'Preto', image: 'img/malha-piquet-preta.png', status: 'available', price: 30.00, stock: 100 },
 
     // Helanca Light
