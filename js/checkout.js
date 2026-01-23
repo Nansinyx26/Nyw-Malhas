@@ -44,8 +44,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             colors: {
                 'preto': 'helanca-light-preto.jpg',
                 'bordo': 'helanca-light-bordo.jpg',
-                'azul-royal': 'helanca-light.png',
-                'rosa-pink': 'helanca-light.png'
+                'azul-royal': 'helanca-light-azul-royal.png',
+                'rosa-pink': 'helanca-light-rosa-pink.png'
             }
         },
         'algodao': {
@@ -53,9 +53,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             specs: ['100% Algodão', 'Fio Penteado', 'Hipoalergênico', 'Toque Macio'],
             colors: {
                 'variadas': 'algodao.png',
-                'branco': 'algodao.png',
-                'azul-marinho': 'algodao.png',
-                'vermelho': 'algodao.png'
+                'branco': 'algodao-branco.png',
+                'azul-marinho': 'algodao-azul-marinho.png',
+                'vermelho': 'algodao-vermelho.png'
             }
         },
         'dry-fit': {
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'variadas': 'dry-fit.png',
                 'azul': 'dry-fit.png',
                 'azul-royal': 'dry-fit.png',
-                'branco': 'dry-fit.png',
+                'branco': 'dry-fit-branco.png',
                 'preto': 'dry-fit-preto.jpg'
             }
         },
@@ -75,8 +75,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             colors: {
                 'variadas': 'viscose.png',
                 'vermelha': 'viscose.png',
-                'cinza-mescla': 'viscose.png',
-                'vinho': 'viscose.png'
+                'cinza-mescla': 'viscose-cinza-mescla.png',
+                'vinho': 'viscose-vinho.jpg'
             }
         },
         'moletom': {
@@ -85,18 +85,18 @@ document.addEventListener('DOMContentLoaded', async function () {
             colors: {
                 'variadas': 'moletom.png',
                 'cinza-mescla': 'moletom.png',
-                'azul-marinho': 'moletom.png',
-                'bordo': 'moletom.png'
+                'azul-marinho': 'moletom-azul-marinho.png',
+                'bordo': 'moletom-bordo.jpg'
             }
         },
         'helanca-escolar': {
             name: 'Helanca Escolar',
             specs: ['Indestrutível', 'Não Desbota', '100% Poliéster', 'Uso Diário'],
             colors: {
-                'variadas': 'helanca-escolar.png',
-                'verde-bandeira': 'helanca-escolar.png',
-                'cinza': 'helanca-escolar.png',
-                'azul-marinho': 'helanca-escolar.png'
+                'azul-marinho': 'helanca-escolar.png',
+                'verde-bandeira': 'helanca-escolar-verde-bandeira.png',
+                'cinza': 'helanca-escolar-cinza.png',
+                'variadas': 'helanca-escolar.png'
             }
         },
         'oxford': {

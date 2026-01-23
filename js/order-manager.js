@@ -139,7 +139,18 @@ document.addEventListener('DOMContentLoaded', function () {
     // ===== ABRIR MODAL =====
     window.openOrderModal = function (product, color) {
         document.getElementById('orderProduct').value = product;
-        document.getElementById('orderColor').value = color || window.checkoutColorName || 'Selecione abaixo';
+
+        // Cor padrão se não fornecida
+        const selectedColor = color || window.checkoutColorName || 'Selecione abaixo';
+        document.getElementById('orderColor').value = selectedColor;
+
+        // Atualizar imagem no modal se estivermos no checkout
+        const productImage = document.getElementById('productImage');
+        const modalImage = document.getElementById('modalProductImage');
+        if (productImage && modalImage) {
+            modalImage.src = productImage.src;
+            modalImage.alt = productImage.alt;
+        }
 
         // Resetar campos
         document.getElementById('orderQuantity').value = '';
