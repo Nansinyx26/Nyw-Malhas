@@ -178,6 +178,83 @@ document.addEventListener('DOMContentLoaded', async function () {
         `<li><i class="fas fa-check text-primary me-2"></i> ${spec}</li>`
     ).join('');
 
+    // ===== SELETOR DE CORES =====
+    const colorContainer = document.getElementById('colorSelectorContainer');
+    if (colorContainer) {
+        colorContainer.innerHTML = ''; // Limpar container
+        const colors = productInfo.colors;
+
+        for (const [key, value] of Object.entries(colors)) {
+            const colorDiv = document.createElement('div');
+            const colorDisplayName = key.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
+            // Estilizar o botão de cor
+            colorDiv.className = 'color-option-btn';
+            colorDiv.style.width = '30px';
+            colorDiv.style.height = '30px';
+            colorDiv.style.borderRadius = '50%';
+            colorDiv.style.cursor = 'pointer';
+            colorDiv.style.border = '2px solid rgba(0,0,0,0.1)';
+            colorDiv.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+            colorDiv.title = colorDisplayName;
+
+            // Tentar inferir a cor visualmente para o background (simplificado)
+            // Mapeamento básico para cores comuns
+            const colorMap = {
+                'preta': '#000', 'preto': '#000',
+                'branca': '#fff', 'branco': '#fff',
+                'azul-royal': '#4169E1', 'azul-marinho': '#000080', 'azul': '#0000FF',
+                'vermelha': '#FF0000', 'vermelho': '#FF0000', 'vinho': '#800000', 'bordo': '#800000',
+                'verde-musgo': '#556B2F', 'verde-bandeira': '#006400', 'verde': '#008000',
+                'cinza-mescla': '#808080', 'cinza-chumbo': '#696969', 'cinza': '#808080',
+                'bege': '#F5F5DC',
+                'rosa-pink': '#FFC0CB',
+                'variadas': 'linear-gradient(45deg, red, blue, green)'
+            };
+
+            // Se for gradiente (variadas), usa background, senão backgroundColor
+            if (colorMap[key] && colorMap[key].includes('gradient')) {
+                colorDiv.style.background = colorMap[key];
+            } else {
+                colorDiv.style.backgroundColor = colorMap[key] || '#ccc'; // Fallback cinza
+            }
+
+            // Marcar o selecionado
+            if (key === color) {
+                colorDiv.style.border = '2px solid #ff6600';
+                colorDiv.style.transform = 'scale(1.2)';
+            }
+
+            colorDiv.onclick = function () {
+                // Atualizar imagens e textos
+                const newImagePath = 'img/' + value;
+                const newColorDisplay = colorDisplayName;
+
+                document.getElementById('productImage').src = newImagePath;
+                document.getElementById('productImage').alt = `${productInfo.name} - ${newColorDisplay}`;
+                document.getElementById('colorName').textContent = newColorDisplay;
+
+                // Atualizar variáveis globais do modal
+                window.checkoutColorName = newColorDisplay;
+
+                // Atualizar visual da seleção
+                Array.from(colorContainer.children).forEach(c => {
+                    c.style.border = '2px solid rgba(0,0,0,0.1)';
+                    c.style.transform = 'scale(1)';
+                });
+                colorDiv.style.border = '2px solid #ff6600';
+                colorDiv.style.transform = 'scale(1.2)';
+
+                // Atualizar URL sem recarregar (opcional, para se o usuário der F5 voltar na mesma cor)
+                const newUrl = new URL(window.location);
+                newUrl.searchParams.set('cor', key);
+                window.history.replaceState(null, '', newUrl);
+            };
+
+            colorContainer.appendChild(colorDiv);
+        }
+    }
+
     // Salvar dados para o modal
     window.checkoutProductName = productInfo.name;
     window.checkoutColorName = colorDisplay;
