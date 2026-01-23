@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ===== ABRIR MODAL =====
     window.openOrderModal = function (product, color) {
         document.getElementById('orderProduct').value = product;
-        document.getElementById('orderColor').value = color || 'Selecione abaixo';
+        document.getElementById('orderColor').value = color || window.checkoutColorName || 'Selecione abaixo';
 
         // Resetar campos
         document.getElementById('orderQuantity').value = '';

@@ -204,12 +204,14 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'preta': '#000', 'preto': '#000',
                 'branca': '#fff', 'branco': '#fff',
                 'azul-royal': '#4169E1', 'azul-marinho': '#000080', 'azul': '#0000FF',
-                'vermelha': '#FF0000', 'vermelho': '#FF0000', 'vinho': '#800000', 'bordo': '#800000',
+                'vermelha': '#FF0000', 'vermelho': '#FF0000',
+                'vinho': '#800000', 'bordo': '#800000', 'bordô': '#800000',
                 'verde-musgo': '#556B2F', 'verde-bandeira': '#006400', 'verde': '#008000',
-                'cinza-mescla': '#808080', 'cinza-chumbo': '#696969', 'cinza': '#808080',
+                'cinza-mescla': '#808080', 'cinza-chumbo': '#696969', 'cinza': '#808080', 'chumbo': '#2F4F4F',
                 'bege': '#F5F5DC',
-                'rosa-pink': '#FFC0CB',
-                'variadas': 'linear-gradient(45deg, red, blue, green)'
+                'rosa-pink': '#FF1493', 'rosa': '#FFC0CB',
+                'amarelo': '#FFFF00', 'laranja': '#FF8C00',
+                'variadas': 'linear-gradient(45deg, red, blue, green, yellow)'
             };
 
             // Se for gradiente (variadas), usa background, senão backgroundColor
@@ -221,9 +223,24 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             // Marcar o selecionado
             if (key === color) {
-                colorDiv.style.border = '2px solid #ff6600';
+                colorDiv.style.border = '3px solid #ff6600';
                 colorDiv.style.transform = 'scale(1.2)';
+                colorDiv.style.boxShadow = '0 0 15px rgba(255, 102, 0, 0.5)';
             }
+
+            // Hover effects via JS para garantir feedback imediato
+            colorDiv.onmouseover = function () {
+                if (window.checkoutColorName !== colorDisplayName) {
+                    this.style.transform = 'scale(1.1)';
+                    this.style.boxShadow = '0 0 10px rgba(0,0,0,0.2)';
+                }
+            };
+            colorDiv.onmouseout = function () {
+                if (window.checkoutColorName !== colorDisplayName) {
+                    this.style.transform = 'scale(1)';
+                    this.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+                }
+            };
 
             colorDiv.onclick = function () {
                 // Atualizar imagens e textos
@@ -234,21 +251,27 @@ document.addEventListener('DOMContentLoaded', async function () {
                 document.getElementById('productImage').alt = `${productInfo.name} - ${newColorDisplay}`;
                 document.getElementById('colorName').textContent = newColorDisplay;
 
-                // Atualizar variáveis globais do modal
+                // Atualizar variáveis globais do modal de forma segura
                 window.checkoutColorName = newColorDisplay;
+                const orderColorInput = document.getElementById('orderColor');
+                if (orderColorInput) orderColorInput.value = newColorDisplay;
 
                 // Atualizar visual da seleção
                 Array.from(colorContainer.children).forEach(c => {
                     c.style.border = '2px solid rgba(0,0,0,0.1)';
                     c.style.transform = 'scale(1)';
+                    c.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
                 });
-                colorDiv.style.border = '2px solid #ff6600';
+                colorDiv.style.border = '3px solid #ff6600';
                 colorDiv.style.transform = 'scale(1.2)';
+                colorDiv.style.boxShadow = '0 0 15px rgba(255, 102, 0, 0.5)';
 
-                // Atualizar URL sem recarregar (opcional, para se o usuário der F5 voltar na mesma cor)
+                // Atualizar URL sem recarregar
                 const newUrl = new URL(window.location);
                 newUrl.searchParams.set('cor', key);
                 window.history.replaceState(null, '', newUrl);
+
+                console.log(`Cor alterada para: ${newColorDisplay}`);
             };
 
             colorContainer.appendChild(colorDiv);
