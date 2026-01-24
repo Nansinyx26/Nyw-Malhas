@@ -236,13 +236,143 @@ async function showAdminPanel() {
     await updateStats();
 }
 
-// ===== ATUALIZAR ESTATÍSTICAS =====
+// ===== ATUALIZAR ESTATÍSTICAS E DASHBOARD =====
 async function updateStats() {
-    const stats = await window.DBManager.getStats();
+    try {
+        // Busca estatísticas reais da API
+        const response = await fetch('/api/analytics/overview');
+        const analytics = await response.json();
 
-    document.getElementById('totalProducts').textContent = stats.totalProducts;
-    document.getElementById('availableProducts').textContent = stats.availableProducts;
-    document.getElementById('unavailableProducts').textContent = stats.unavailableProducts;
+        if (analytics.success) {
+            const data = analytics.data;
+
+            // Cards Superiores
+            document.getElementById('totalProducts').textContent = data.products.total;
+            document.getElementById('availableProducts').textContent = data.products.available;
+            document.getElementById('unavailableProducts').textContent = data.products.outOfStock;
+
+            // Cards Financeiros / Pedidos (se existirem no HTML)
+            // Vamos injetar/atualizar se existirem elementos com esses IDs, ou criar lógica para dashboard
+            const revenueEl = document.getElementById('totalRevenue');
+            if (revenueEl) revenueEl.textContent = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(data.stock.inventoryValue); // Valor em estoque
+
+            // Atualizar Gráficos com Dados Reais
+            updateCharts(data);
+        }
+
+        // Atualizar Notificações (Sino)
+        updateNotificationsBadge();
+
+    } catch (error) {
+        console.error('Erro ao buscar analytics:', error);
+    }
+}
+
+// ===== GRÁFICOS (Chart.js) =====
+let salesChart = null;
+let productsChart = null;
+
+function updateCharts(data) {
+    // Se não tiver elemento canvas, não faz nada
+    const ctxSales = document.getElementById('salesChart');
+    const ctxProducts = document.getElementById('productsChart');
+
+    if (!ctxSales || !ctxProducts) return;
+
+    // Destruir gráficos anteriores se existirem
+    if (salesChart) salesChart.destroy();
+    if (productsChart) productsChart.destroy();
+
+    // Gráfico de Estoque por Status (Exemplo)
+    productsChart = new Chart(ctxProducts, {
+        type: 'doughnut',
+        data: {
+            labels: ['Disponível', 'Sem Estoque', 'Baixo Estoque'],
+            datasets: [{
+                data: [data.products.available, data.products.outOfStock, data.products.lowStock],
+                backgroundColor: ['#2ecc71', '#e74c3c', '#f1c40f'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+
+    // Para o gráfico de vendas, precisaríamos do histórico (que vem de outro endpoint), 
+    // mas vamos por enquanto usar os totais gerais ou buscar timeline
+    fetchStockTimeline(ctxSales);
+}
+
+async function fetchStockTimeline(canvas) {
+    try {
+        const resp = await fetch('/api/analytics/stock-timeline?days=7');
+        const json = await resp.json();
+
+        if (json.success) {
+            const labels = json.data.map(d => `${d._id.day}/${d._id.month}`);
+            const dataAdded = json.data.map(d => d.stockAdded);
+            const dataRemoved = json.data.map(d => d.stockRemoved);
+
+            salesChart = new Chart(canvas, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Entrada de Estoque',
+                            data: dataAdded,
+                            backgroundColor: '#2ecc71',
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Saída/Vendas',
+                            data: dataRemoved,
+                            backgroundColor: '#e74c3c',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+    } catch (e) {
+        console.error('Erro chart timeline:', e);
+    }
+}
+
+// ===== NOTIFICAÇÕES (Sino) =====
+async function updateNotificationsBadge() {
+    try {
+        const res = await fetch('/api/notifications'); // Assume endpoint lista todas, ideal seria ?unread=true
+        const json = await res.json();
+
+        if (json.success) {
+            const unreadCount = json.data.filter(n => !n.read).length;
+            const badge = document.querySelector('.notification-badge'); // Adicionar essa classe no HTML do admin
+            const icon = document.querySelector('.fa-bell');
+
+            if (badge) {
+                badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
+                badge.style.display = unreadCount > 0 ? 'flex' : 'none';
+            }
+
+            // Tornar o sino clicável para abrir a nova página
+            if (icon && icon.parentElement) {
+                icon.parentElement.style.cursor = 'pointer';
+                icon.parentElement.onclick = () => window.location.href = 'admin-notifications.html';
+                icon.parentElement.title = "Ver todas as notificações";
+            }
+        }
+    } catch (e) { console.error(e); }
 }
 
 // ===== CARREGAR PRODUTOS NA TABELA =====
