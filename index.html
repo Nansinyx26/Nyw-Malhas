@@ -734,33 +734,18 @@
                         <h4><i class="fas fa-palette"></i> Cores Disponíveis</h4>
                         <div class="color-options">
                             <label class="color-option">
-                                <input type="radio" name="dry-fit" value="dry-fit-cinza.jpg" data-color="Cinza">
-                                <span class="color-swatch"
-                                    style="background: linear-gradient(135deg, #a9a9a9 0%, #808080 100%);">
-                                    <span class="color-name">Cinza</span>
-                                </span>
-                            </label>
-                            <label class="color-option">
-                                <input type="radio" name="dry-fit" value="dry-fit-preto.jpg" data-color="Preto">
-                                <span class="color-swatch"
-                                    style="background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);">
-                                    <span class="color-name">Preto</span>
-                                </span>
-                            </label>
-                            <label class="color-option">
-                                <input type="radio" name="dry-fit" value="dry-fit.png" data-color="Azul Royal">
-                                <span class="color-swatch"
-                                    style="background: linear-gradient(135deg, #4169e1 0%, #0047ab 100%);">
-                                    <span class="color-name">Azul Royal</span>
-                                </span>
-                            </label>
-                            <label class="color-option">
-                                <input type="radio" name="dry-fit" value="dry-fit.png" data-color="Branco">
+                                <input type="radio" name="dry-fit" value="dry-fit.png" data-color="Branco" checked>
                                 <span class="color-swatch"
                                     style="background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);">
                                     <span class="color-name">Branco</span>
                                 </span>
                             </label>
+                        </div>
+                        <div class="availability-status mt-3">
+                            <span class="availability available"
+                                style="background: rgba(39, 174, 96, 0.1); color: #27ae60; padding: 8px 16px; border-radius: 25px; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; font-size: 1rem;">
+                                <i class="fas fa-check-circle"></i> Disponível
+                            </span>
                         </div>
                     </div>
                     <div class="specifications">
@@ -771,12 +756,6 @@
                             <li><i class="fas fa-check"></i> Proteção UV</li>
                             <li><i class="fas fa-check"></i> Leveza extrema</li>
                         </ul>
-                    </div>
-                    <div class="order-cta mt-4">
-                        <button class="btn btn-orange w-100 py-3 fw-bold shadow-lg"
-                            onclick="openOrderModal('Dry Fit', document.querySelector('input[name=\'dry-fit\']:checked')?.dataset.color)">
-                            <i class="fas fa-shopping-cart me-2"></i> FAZER PEDIDO AGORA
-                        </button>
                     </div>
                 </div>
             </div>

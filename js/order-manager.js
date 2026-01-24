@@ -208,9 +208,14 @@ document.addEventListener('DOMContentLoaded', function () {
         // Atualizar imagem no modal se estivermos no checkout
         const productImage = document.getElementById('productImage');
         const modalImage = document.getElementById('modalProductImage');
-        if (productImage && modalImage) {
-            modalImage.src = productImage.src;
-            modalImage.alt = productImage.alt;
+        if (modalImage) {
+            // Prioridade: 1. Imagem do Banco (se carregada) 2. Imagem da página
+            if (window.DBProductImage) {
+                modalImage.src = window.DBProductImage;
+            } else if (productImage) {
+                modalImage.src = productImage.src;
+                modalImage.alt = productImage.alt;
+            }
         }
 
         // Resetar campos
