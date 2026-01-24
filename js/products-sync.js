@@ -248,12 +248,20 @@ function syncProductCards(allProducts, productsByCategory) {
                         buyBtn.classList.remove('btn-warning');
                         buyBtn.classList.add('btn-primary-pill');
                         buyBtn.innerHTML = `<i class="fas fa-shopping-cart me-2"></i> Comprar`;
+                    }
 
-                        // Restaura link original (se for <a>)
-                        const originalHref = buyBtn.getAttribute('href');
-                        if (originalHref) {
-                            const newBtn = buyBtn.cloneNode(true);
-                            buyBtn.parentNode.replaceChild(newBtn, buyBtn);
+                    // Dinamicamente anexa o productId se disponível
+                    const originalHref = buyBtn.getAttribute('href');
+                    if (originalHref && product._id) {
+                        try {
+                            const url = new URL(originalHref, window.location.origin);
+                            if (!url.searchParams.has('productId')) {
+                                url.searchParams.set('productId', product._id);
+                                buyBtn.setAttribute('href', url.pathname + url.search);
+                                console.log(`🔗 URL atualizada com productId: ${product._id}`);
+                            }
+                        } catch (e) {
+                            console.error('Erro ao atualizar URL do botão:', e);
                         }
                     }
                 }

@@ -142,44 +142,47 @@ document.addEventListener('DOMContentLoaded', async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const product = urlParams.get('produto');
     const color = urlParams.get('cor');
+    const productId = urlParams.get('productId');
 
-    // Validar se os parâmetros existem
+    // Validar se os parâmetros básicos existem
     if (!product || !color || !productData[product] || !productData[product].colors[color]) {
         alert('Produto ou cor inválidos!');
         window.location.href = 'index.html';
         return;
     }
 
+    let targetProductFromDb = null;
+
     // ===== VERIFICAÇÃO DE DISPONIBILIDADE NO BANCO =====
     try {
         if (window.DBManager) {
             await window.DBManager.init();
             storageAllProducts = await window.DBManager.getAllProducts();
-            const dbProducts = storageAllProducts;
 
-            // Encontra o produto no banco buscando por nome ou categoria + cor
-            // Como o nome no banco pode ser diferente (ex: "Malha PV Preta"), usamos uma busca aproximada
-            // ou verificamos categoria e cor.
+            // Se temos o ID direto, usamos ele como prioridade absoluta
+            if (productId) {
+                targetProductFromDb = await window.DBManager.getProduct(productId);
+                console.log('📦 Produto carregado por ID direto:', targetProductFromDb);
+            }
 
-            const productKey = productData[product].name; // Ex: "Malha PV"
-            const colorKey = color.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '); // Ex: "Preta", "Azul Royal"
+            // Fallback: Busca manual por nome/cor se não houver ID ou se falhar
+            if (!targetProductFromDb) {
+                const productKey = productData[product].name;
+                const colorKey = color.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
-            // Tenta encontrar correspondência
-            const dbProduct = dbProducts.find(p => {
-                // Normaliza strings para comparação segura
-                const pName = p.name.toLowerCase();
-                const pColor = p.color.toLowerCase();
-                const targetName = productKey.toLowerCase();
-                const targetColor = colorKey.toLowerCase();
+                targetProductFromDb = storageAllProducts.find(p => {
+                    const pName = p.name.toLowerCase();
+                    const pColor = p.color.toLowerCase();
+                    const targetName = productKey.toLowerCase();
+                    const targetColor = colorKey.toLowerCase();
+                    return pColor === targetColor && pName.includes(targetName.split(' ')[0].toLowerCase());
+                });
+            }
 
-                // Verifica se a cor bate e se o nome do produto contém a categoria principal
-                return pColor === targetColor && pName.includes(targetName.split(' ')[0].toLowerCase());
-            });
-
-            if (dbProduct) {
-                const stockVal = dbProduct.stock || 0;
-                if (dbProduct.status === 'unavailable' || stockVal <= 0) {
-                    alert(`O produto ${productKey} na cor ${colorKey} está temporariamente indisponível.`);
+            if (targetProductFromDb) {
+                const stockVal = targetProductFromDb.stock || 0;
+                if (targetProductFromDb.status === 'unavailable' || stockVal <= 0) {
+                    alert(`O produto está temporariamente indisponível.`);
                     window.location.href = 'index.html';
                     return;
                 }
@@ -192,43 +195,53 @@ document.addEventListener('DOMContentLoaded', async function () {
                         stockTag = document.createElement('div');
                         stockTag.id = 'productStockTag';
                         stockTag.className = 'product-color-tag ms-2';
-                        stockTag.style.background = 'rgba(46, 204, 113, 0.1)';
-                        stockTag.style.borderColor = 'rgba(46, 204, 113, 0.3)';
-                        stockTag.style.color = '#27ae60';
                         colorTag.parentNode.insertBefore(stockTag, colorTag.nextSibling);
                     }
                     const isAvail = stockVal > 0;
-                    // ✅ Mostrar apenas Disponível/Indisponível SEM quantidade
                     stockTag.innerHTML = `<i class="fas fa-${isAvail ? 'check' : 'times'}-circle me-2"></i><strong>${isAvail ? 'Disponível' : 'Indisponível'}</strong>`;
-                    if (!isAvail) {
-                        stockTag.style.background = 'rgba(231, 76, 60, 0.1)';
-                        stockTag.style.borderColor = 'rgba(231, 76, 60, 0.3)';
-                        stockTag.style.color = '#e74c3c';
-                    } else {
-                        stockTag.style.background = 'rgba(46, 204, 113, 0.1)';
-                        stockTag.style.borderColor = 'rgba(46, 204, 113, 0.3)';
-                        stockTag.style.color = '#27ae60';
-                    }
+
+                    const statusColor = isAvail ? '#27ae60' : '#e74c3c';
+                    const bgColor = isAvail ? 'rgba(46, 204, 113, 0.1)' : 'rgba(231, 76, 60, 0.1)';
+                    const borderColor = isAvail ? 'rgba(46, 204, 113, 0.3)' : 'rgba(231, 76, 60, 0.3)';
+
+                    stockTag.style.background = bgColor;
+                    stockTag.style.borderColor = borderColor;
+                    stockTag.style.color = statusColor;
                 }
             }
         }
     } catch (error) {
         console.error('Erro ao verificar disponibilidade:', error);
-        // Em caso de erro no banco, permite continuar (fail-open) ou bloqueia?
-        // Fail-open: permite a venda. Fail-closed: bloqueia.
-        // Vamos permitir continuar para não travar vendas se o DB falhar.
     }
 
     // Carregar dados do produto
     const productInfo = productData[product];
     const colorDisplay = color.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    const imagePath = findDbImage(productInfo.name, colorDisplay, productInfo.colors[color]);
+
+    // Determinar imagem final: Prioridade para o objeto do banco encontrado
+    let imagePath;
+    if (targetProductFromDb && targetProductFromDb.image) {
+        imagePath = targetProductFromDb.image;
+        if (!imagePath.startsWith('data:') && !imagePath.startsWith('http')) {
+            imagePath = 'img/' + imagePath.replace(/^img\//, '');
+        }
+    } else {
+        imagePath = findDbImage(productInfo.name, colorDisplay, productInfo.colors[color]);
+    }
 
     // Atualizar elementos da página
     document.getElementById('productImage').src = imagePath;
     document.getElementById('productImage').alt = `${productInfo.name} - ${colorDisplay}`;
     document.getElementById('productTitle').textContent = productInfo.name;
     document.getElementById('colorName').textContent = colorDisplay;
+
+    // Sincronizar com o modal de pedido
+    window.DBProductImage = imagePath;
+
+    // Se o banco trouxe um preço diferente, atualiza o resumo do modal (via variáveis globais)
+    if (targetProductFromDb && targetProductFromDb.price) {
+        window.checkoutProductPrice = targetProductFromDb.price;
+    }
 
     // Atualizar especificações
     const specsList = document.getElementById('productSpecs');
@@ -311,6 +324,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 // Atualizar variáveis globais do modal de forma segura
                 window.checkoutColorName = newColorDisplay;
+                window.DBProductImage = newImagePath; // Sincroniza imagem com o modal
+
                 const orderColorInput = document.getElementById('orderColor');
                 if (orderColorInput) orderColorInput.value = newColorDisplay;
 
