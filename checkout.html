@@ -53,12 +53,12 @@
 
         .product-details {
             background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: var(--glass-border);
             border-radius: 24px;
             padding: 50px;
-            box-shadow: var(--glass-shadow);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             height: 100%;
             display: flex;
             flex-direction: column;
@@ -156,11 +156,27 @@
 
         /* Modal Styling Override */
         .glass-modal {
-            background: rgba(20, 20, 25, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(20, 20, 25, 0.98);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            max-height: 95vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .glass-modal .modal-body {
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        /* Prevent footer buttons from sticking out */
+        .glass-modal .modal-footer {
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            padding: 20px 30px;
         }
 
         /* Responsive Modal Width Fix */
@@ -241,7 +257,7 @@
     <!-- Header -->
     <header>
         <div class="header-content">
-            <img src="img/logo3.png" alt="Logo NYW MALHAS" class="logo">
+            <img src="img/logo3.webp" alt="Logo NYW MALHAS" class="logo">
             <p class="tagline">Excelência em Tecidos Técnicos</p>
         </div>
     </header>
@@ -326,46 +342,7 @@
                             <i class="fas fa-shopping-cart me-2"></i> FAZER PEDIDO AGORA
                         </button>
 
-                        <div class="shipping-calculator mt-4 p-3"
-                            style="background: rgba(255,255,255,0.05); border-radius: 15px; border: 1px solid rgba(255,255,255,0.1);">
-                            <h5 class="mb-3 text-dark"><i class="fas fa-truck me-2"></i> Calcular Frete e Prazo</h5>
 
-                            <div class="row g-2 mb-3">
-                                <div class="col-6">
-                                    <input type="text" id="checkoutZip" class="form-control glass-input"
-                                        placeholder="Seu CEP" maxlength="9">
-                                </div>
-                                <div class="col-6">
-                                    <div class="input-group">
-                                        <input type="number" id="checkoutQty" class="form-control glass-input"
-                                            placeholder="Qtd" value="1" min="1">
-                                        <span class="input-group-text glass-input text-dark border-start-0"
-                                            style="font-size: 0.8rem; background: rgba(0,0,0,0.05);">kg/m</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button class="btn btn-primary w-100 mb-3" type="button" id="btnCalculateShipping">
-                                <i class="fas fa-search me-2"></i> Calcular Estimativa
-                            </button>
-
-                            <div id="shippingResult" class="d-none">
-                                <div class="d-flex justify-content-between align-items-center mb-2 p-2 rounded"
-                                    style="background: rgba(0,0,0,0.2);">
-                                    <span><i class="fas fa-shipping-fast text-primary me-2"></i> PAC</span>
-                                    <span class="text-dark fw-bold" id="shippingValue">R$ 0,00</span>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center mb-2 p-2 rounded"
-                                    style="background: rgba(0,0,0,0.2);">
-                                    <span><i class="fas fa-shipping-fast text-warning me-2"></i> SEDEX</span>
-                                    <span class="text-dark fw-bold" id="shippingValueSedex">R$ 0,00</span>
-                                </div>
-                                <small class="text-secondary d-block mt-2" style="font-size: 0.8rem;">
-                                    <i class="fas fa-exclamation-triangle me-1"></i>
-                                    *Valor aproximado. Pode variar conforme peso final e embalagem.
-                                </small>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -376,7 +353,7 @@
             <div class="modal-dialog modal-xl modal-dialog-centered">
                 <div class="modal-content glass-modal">
                     <div class="modal-header border-0">
-                        <h5 class="modal-title" id="orderModalLabel">🧵 Resumo do Pedido</h5>
+                        <h5 class="modal-title" id="orderModalLabel">🧵 Finalizar Pedido</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
@@ -412,25 +389,19 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label">Quantidade</label>
-                                                <div class="input-group">
-                                                    <input type="number" id="orderQuantity"
-                                                        class="form-control glass-input" placeholder="0" min="1"
-                                                        required>
-                                                    <select class="form-select glass-input w-auto" id="orderUnit">
-                                                        <option value="metro(s)">Metro(s)</option>
-                                                        <option value="quilo(s)">Quilo(s)</option>
-                                                    </select>
-                                                </div>
-                                                <small id="weightDisplay" class="text-info mt-1 d-block"></small>
+                                                <input type="number" id="orderQuantity" class="form-control glass-input"
+                                                    placeholder="0" step="0.01" min="0.01" required>
                                             </div>
                                             <div class="col-md-6">
-                                                <label class="form-label">Valor Unitário (p/ Kg)</label>
-                                                <input type="text" id="orderUnitPrice" class="form-control glass-input"
-                                                    placeholder="R$ 30,00" readonly>
+                                                <label class="form-label">Unidade</label>
+                                                <select id="orderUnit" class="form-select glass-input">
+                                                    <option value="Kg">Quilos (Kg)</option>
+                                                    <option value="Metros">Metros (m)</option>
+                                                    <option value="Peças">Peças (un)</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="order-section mb-4">
                                         <h6 class="section-title"><i class="fas fa-user-circle"></i> Dados do Cliente
                                         </h6>
@@ -452,8 +423,7 @@
                                                     placeholder="E-mail" required>
                                                 <div class="form-text text-light opacity-75 mt-2">
                                                     <small><i class="fas fa-info-circle"></i> E-mail para NF,
-                                                        atualizações e
-                                                        rastreio.</small>
+                                                        atualizações e rastreio.</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -493,68 +463,19 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="order-section mb-4">
-                                        <h6 class="section-title"><i class="fas fa-truck"></i> Envio e Pagamento</h6>
-                                        <div class="row g-3">
-                                            <div class="col-md-6">
-                                                <select class="form-select glass-input" id="shippingMethod">
-                                                    <option value="Correios">Correios</option>
-                                                    <option value="Transportadora">Transportadora</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <input type="text" id="shippingCost" class="form-control glass-input"
-                                                    placeholder="Valor do Frete (R$)">
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="d-flex gap-4">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="payment"
-                                                            id="payCC" value="Cartão de crédito" checked>
-                                                        <label class="form-check-label text-light"
-                                                            for="payCC">Cartão</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="payment"
-                                                            id="payPix" value="Pix">
-                                                        <label class="form-check-label text-light"
-                                                            for="payPix">Pix</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="summary-box glass-card p-3 mb-4 text-center">
-                                        <div class="row">
-                                            <div class="col-4 border-end border-secondary">
-                                                <small class="text-secondary d-block">Subtotal</small>
-                                                <span id="labelSubtotal" class="fw-bold">R$ 0,00</span>
-                                            </div>
-                                            <div class="col-4 border-end border-secondary">
-                                                <small class="text-secondary d-block">Frete</small>
-                                                <span id="labelShipping" class="fw-bold">R$ 0,00</span>
-                                            </div>
-                                            <div class="col-4">
-                                                <small class="text-secondary d-block">Total</small>
-                                                <span id="labelTotal" class="fw-bold text-primary fs-5"
-                                                    style="color: #ff6600 !important;">R$ 0,00</span>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </form>
-                            </div>
-                            <div class="modal-footer border-0">
-                                <button type="button" class="btn btn-outline-light"
-                                    data-bs-dismiss="modal">Cancelar</button>
-                                <button type="submit" form="orderForm" class="btn btn-primary px-4 py-2 fw-bold">
-                                    <i class="fab fa-whatsapp me-2"></i> Finalizar no WhatsApp
-                                </button>
                             </div>
                         </div>
                     </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" form="orderForm" class="btn btn-primary px-4 py-2 fw-bold">
+                            <i class="fab fa-whatsapp me-2"></i> Finalizar no WhatsApp
+                        </button>
+                    </div>
                 </div>
+            </div>
+        </div>
     </main>
 
     <!-- Footer -->

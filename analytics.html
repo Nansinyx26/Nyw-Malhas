@@ -72,17 +72,48 @@
     </div>
 
     <script src="js/api-client.js"></script>
+    <script src="js/db-manager-cloud.js"></script>
     <script>
         // KPIs
         async function loadKPIs() {
-            const data = await window.APIClient.get('/analytics/overview');
+            let products = [];
+            try {
+                if (window.DBManager) {
+                    await window.DBManager.init();
+                    products = await window.DBManager.getAllProducts();
+                }
+            } catch (e) { console.warn("DBManager failed", e); }
+
+            // Dados locais iniciais
+            const localData = {
+                products: {
+                    total: products.length,
+                    available: products.filter(p => p.status === 'available').length,
+                    lowStock: products.filter(p => p.stock > 0 && p.stock <= 5).length,
+                    outOfStock: products.filter(p => p.status === 'unavailable' || p.stock <= 0).length
+                },
+                stock: {
+                    total: products.reduce((acc, p) => acc + (p.stock || 0), 0),
+                    inventoryValue: products.reduce((acc, p) => acc + ((p.stock || 0) * (p.price || 30)), 0)
+                }
+            };
+
+            // Tentar dados remotos
+            let displayData = localData;
+            try {
+                const remoteData = await window.APIClient.get('/analytics/overview');
+                if (remoteData && remoteData.success) {
+                    displayData = remoteData.data;
+                }
+            } catch (e) { console.warn("Remote KPIs failed, using local data."); }
+
             const kpis = [
-                { icon: 'box', color: 'primary', label: 'Total Produtos', value: data.products.total },
-                { icon: 'check-circle', color: 'success', label: 'Disponíveis', value: data.products.available },
-                { icon: 'exclamation-circle', color: 'warning', label: 'Estoque Baixo', value: data.products.lowStock },
-                { icon: 'times-circle', color: 'danger', label: 'Sem Estoque', value: data.products.outOfStock },
-                { icon: 'layer-group', color: 'info', label: 'Estoque Total', value: `${data.stock.total} un` },
-                { icon: 'dollar-sign', color: 'success', label: 'Valor Inventário', value: `R$ ${data.stock.inventoryValue.toFixed(2)}` }
+                { icon: 'box', color: 'primary', label: 'Total Produtos', value: displayData.products.total },
+                { icon: 'check-circle', color: 'success', label: 'Disponíveis', value: displayData.products.available },
+                { icon: 'exclamation-circle', color: 'warning', label: 'Estoque Baixo', value: displayData.products.lowStock },
+                { icon: 'times-circle', color: 'danger', label: 'Sem Estoque', value: displayData.products.outOfStock },
+                { icon: 'layer-group', color: 'info', label: 'Estoque Total', value: `${displayData.stock.total} un` },
+                { icon: 'dollar-sign', color: 'success', label: 'Valor Inventário', value: `R$ ${displayData.stock.inventoryValue.toFixed(2)}` }
             ];
 
             document.getElementById('kpiCards').innerHTML = kpis.map(kpi => `
@@ -100,60 +131,92 @@
 
         // Gráfico de Categorias
         async function loadCategoryChart() {
-            const data = await window.APIClient.get('/analytics/by-category');
-            new Chart(document.getElementById('categoryChart'), {
-                type: 'bar',
-                data: {
-                    labels: data.map(d => d._id),
-                    datasets: [{
-                        label: 'Produtos',
-                        data: data.map(d => d.count),
-                        backgroundColor: 'rgba(255, 102, 0, 0.8)'
-                    }]
-                },
-                options: { responsive: true, plugins: { legend: { labels: { color: 'white' } } }, scales: { y: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } }, x: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } } } }
-            });
+            try {
+                const data = await window.APIClient.get('/analytics/by-category');
+                new Chart(document.getElementById('categoryChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: data.map(d => d._id),
+                        datasets: [{
+                            label: 'Produtos',
+                            data: data.map(d => d.count),
+                            backgroundColor: 'rgba(255, 102, 0, 0.8)'
+                        }]
+                    },
+                    options: { responsive: true, plugins: { legend: { labels: { color: 'white' } } }, scales: { y: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } }, x: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } } } }
+                });
+            } catch (e) {
+                console.warn("Category chart failed", e);
+                document.getElementById('categoryChart').parentElement.innerHTML += '<p class="text-muted text-center mt-3">Gráfico remoto indisponível</p>';
+            }
         }
 
         // Gráfico Timeline
         async function loadTimelineChart() {
-            const data = await window.APIClient.get('/analytics/stock-timeline?days=30');
-            new Chart(document.getElementById('timelineChart'), {
-                type: 'line',
-                data: {
-                    labels: data.map(d => `${d._id.day}/${d._id.month}`),
-                    datasets: [{
-                        label: 'Adicionado',
-                        data: data.map(d => d.stockAdded),
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        fill: false
-                    }, {
-                        label: 'Removido',
-                        data: data.map(d => d.stockRemoved),
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        fill: false
-                    }]
-                },
-                options: { responsive: true, plugins: { legend: { labels: { color: 'white' } } }, scales: { y: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } }, x: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } } } }
-            });
+            try {
+                const data = await window.APIClient.get('/analytics/stock-timeline?days=30');
+                new Chart(document.getElementById('timelineChart'), {
+                    type: 'line',
+                    data: {
+                        labels: data.map(d => `${d._id.day}/${d._id.month}`),
+                        datasets: [{
+                            label: 'Adicionado',
+                            data: data.map(d => d.stockAdded),
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            fill: false
+                        }, {
+                            label: 'Removido',
+                            data: data.map(d => d.stockRemoved),
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            fill: false
+                        }]
+                    },
+                    options: { responsive: true, plugins: { legend: { labels: { color: 'white' } } }, scales: { y: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } }, x: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } } } }
+                });
+            } catch (e) {
+                console.warn("Timeline chart failed", e);
+                document.getElementById('timelineChart').parentElement.innerHTML += '<p class="text-muted text-center mt-3">Gráfico remoto indisponível</p>';
+            }
         }
 
         // Listas
         async function loadLists() {
-            const lowStock = await window.APIClient.get('/analytics/low-stock');
-            const outOfStock = await window.APIClient.get('/analytics/out-of-stock');
+            try {
+                const lowStock = await window.APIClient.get('/analytics/low-stock');
+                const outOfStock = await window.APIClient.get('/analytics/out-of-stock');
 
-            document.getElementById('lowStockList').innerHTML = lowStock.length ? lowStock.map(p => `
-                <div class="mb-2 p-2 bg-warning bg-opacity-10 rounded">
-                    <strong>${p.name}</strong> <span class="badge bg-warning">${p.stock} un</span>
-                </div>
-            `).join('') : '<p class="text-muted">Nenhum produto com estoque baixo</p>';
+                document.getElementById('lowStockList').innerHTML = lowStock.length ? lowStock.map(p => `
+                    <div class="mb-2 p-2 bg-warning bg-opacity-10 rounded">
+                        <strong>${p.name}</strong> <span class="badge bg-warning">${p.stock} un</span>
+                    </div>
+                `).join('') : '<p class="text-muted">Nenhum produto com estoque baixo</p>';
 
-            document.getElementById('outOfStockList').innerHTML = outOfStock.length ? outOfStock.map(p => `
-                <div class="mb-2 p-2 bg-danger bg-opacity-10 rounded">
-                    <strong>${p.name}</strong> <span class="badge bg-danger">0 un</span>
-                </div>
-            `).join('') : '<p class="text-muted">Nenhum produto sem estoque</p>';
+                document.getElementById('outOfStockList').innerHTML = outOfStock.length ? outOfStock.map(p => `
+                    <div class="mb-2 p-2 bg-danger bg-opacity-10 rounded">
+                        <strong>${p.name}</strong> <span class="badge bg-danger">0 un</span>
+                    </div>
+                `).join('') : '<p class="text-muted">Nenhum produto sem estoque</p>';
+            } catch (e) {
+                console.warn("Lists failed", e);
+                // Fallback local simples para listas
+                if (window.DBManager) {
+                    const products = await window.DBManager.getAllProducts();
+                    const low = products.filter(p => p.stock > 0 && p.stock <= 5);
+                    const out = products.filter(p => p.status === 'unavailable' || p.stock <= 0);
+
+                    document.getElementById('lowStockList').innerHTML = low.length ? low.map(p => `
+                        <div class="mb-2 p-2 bg-warning bg-opacity-10 rounded">
+                            <strong>${p.name}</strong> <span class="badge bg-warning">${p.stock} un</span>
+                        </div>
+                    `).join('') : '<p class="text-muted">Nenhum produto com estoque baixo</p>';
+
+                    document.getElementById('outOfStockList').innerHTML = out.length ? out.map(p => `
+                        <div class="mb-2 p-2 bg-danger bg-opacity-10 rounded">
+                            <strong>${p.name}</strong> <span class="badge bg-danger">0 un</span>
+                        </div>
+                    `).join('') : '<p class="text-muted">Nenhum produto sem estoque</p>';
+                }
+            }
         }
 
         // Inicializar

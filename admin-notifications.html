@@ -127,12 +127,10 @@
             // Carregar dados
             async function loadNotifications() {
                 try {
-                    // Tenta buscar da API (assumindo que api-client expõe isso ou fetch direto)
-                    // Como api-client.js é genérico, vamos usar fetch direto no endpoint
-                    const response = await fetch('/api/notifications');
-                    const result = await response.json();
+                    if (!window.APIClient) return;
+                    const result = await window.APIClient.get('/notifications');
 
-                    if (result.success) {
+                    if (result && result.success) {
                         allNotifications = result.data;
                         renderNotifications();
                     } else {
@@ -140,7 +138,7 @@
                     }
                 } catch (error) {
                     console.error('Erro:', error);
-                    listEl.innerHTML = '<div class="alert alert-warning">Não foi possível conectar ao servidor.</div>';
+                    listEl.innerHTML = '<div class="alert alert-warning">Não foi possível conectar ao servidor remoto.</div>';
                 }
             }
 
@@ -202,7 +200,8 @@
             // Expor função globalmente para o onclick html
             window.markAsRead = async (id) => {
                 try {
-                    await fetch(`/api/notifications/${id}/read`, { method: 'PUT' });
+                    if (!window.APIClient) return;
+                    await window.APIClient.put(`/notifications/${id}/read`, {});
                     // Atualiza localmente para feedback instantâneo
                     const notif = allNotifications.find(n => n._id === id);
                     if (notif) notif.read = true;
@@ -216,7 +215,8 @@
             markAllBtn.addEventListener('click', async () => {
                 if (confirm('Marcar todas como lidas?')) {
                     try {
-                        await fetch('/api/notifications/read-all', { method: 'PUT' });
+                        if (!window.APIClient) return;
+                        await window.APIClient.put('/notifications/read-all', {});
                         allNotifications.forEach(n => n.read = true);
                         renderNotifications();
                     } catch (e) { alert('Erro ao atualizar'); }

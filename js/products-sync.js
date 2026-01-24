@@ -250,15 +250,14 @@ function syncProductCards(allProducts, productsByCategory) {
                         buyBtn.innerHTML = `<i class="fas fa-shopping-cart me-2"></i> Comprar`;
                     }
 
-                    // Dinamicamente anexa o productId se disponível
+                    // Dinamicamente anexa o productId sem quebrar o caminho relativo
                     const originalHref = buyBtn.getAttribute('href');
                     if (originalHref && product._id) {
                         try {
-                            const url = new URL(originalHref, window.location.origin);
-                            if (!url.searchParams.has('productId')) {
-                                url.searchParams.set('productId', product._id);
-                                buyBtn.setAttribute('href', url.pathname + url.search);
-                                console.log(`🔗 URL atualizada com productId: ${product._id}`);
+                            const separator = originalHref.includes('?') ? '&' : '?';
+                            if (!originalHref.includes('productId=')) {
+                                buyBtn.setAttribute('href', `${originalHref}${separator}productId=${product._id}`);
+                                console.log(`🔗 URL atualizada (relativa): ${buyBtn.getAttribute('href')}`);
                             }
                         } catch (e) {
                             console.error('Erro ao atualizar URL do botão:', e);
@@ -267,19 +266,7 @@ function syncProductCards(allProducts, productsByCategory) {
                 }
             }
 
-            // Atualiza preço no card se disponível
-            if (product.price) {
-                // Procura elemento de preço (geralmente dentro de .alert-dark strong)
-                const priceContainer = card.querySelector('.alert-dark strong, .price-display');
-                if (priceContainer) {
-                    const priceFormatted = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2 }).format(product.price);
-                    // Preserva o ícone se existir
-                    const icon = priceContainer.querySelector('i');
-                    const iconHtml = icon ? icon.outerHTML : '<i class="fas fa-tag me-2 text-orange"></i>';
 
-                    priceContainer.innerHTML = `${iconHtml}R$ ${priceFormatted} / kg`;
-                }
-            }
 
             // Atualiza imagem
             if (product.image && !product.image.includes('placeholder')) {
@@ -377,12 +364,12 @@ function startProductSync() {
         clearInterval(syncInterval);
     }
 
-    // Sincroniza a cada 2 segundos
+    // Sincroniza a cada 10 segundos para economizar bateria e CPU
     syncInterval = setInterval(() => {
         syncProductsFromMongoDB();
-    }, 2000);
+    }, 10000);
 
-    console.log('✅ Sincronização de produtos ativada (2 segundos)');
+    console.log('✅ Sincronização de produtos otimizada (10 segundos)');
 }
 
 function stopProductSync() {

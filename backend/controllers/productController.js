@@ -73,31 +73,32 @@ exports.createProduct = async (req, res) => {
 // @access  Private (Admin only)
 exports.updateProduct = async (req, res) => {
     try {
-        // Buscar produto antes da atualização para comparar estoque
-        const oldProduct = await Product.findById(req.params.id);
+        // 1. Buscar produto antes da atualização
+        const product = await Product.findById(req.params.id);
 
-        if (!oldProduct) {
+        if (!product) {
             return res.status(404).json({
                 success: false,
                 message: 'Produto não encontrado'
             });
         }
 
-        const oldStock = oldProduct.stock;
+        const oldStock = product.stock;
         const newStock = req.body.stock !== undefined ? req.body.stock : oldStock;
 
-        // Atualizar produto
-        const product = await Product.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            {
-                new: true,
-                runValidators: true
+        // 2. Mesclar campos novos (exceto _id)
+        const updates = ['name', 'category', 'color', 'image', 'stock', 'status'];
+        updates.forEach(field => {
+            if (req.body[field] !== undefined) {
+                product[field] = req.body[field];
             }
-        );
+        });
 
-        // Atualiza status baseado no estoque
+        // 3. Salvar usando o documento
+        // A lógica de updateStockStatus agora só força 'unavailable' se estoque for 0
         await product.updateStockStatus();
+        // O .save() final garante que todas as outras mudanças (nome, cor, image) e o status manual persistam
+        await product.save();
 
         // ✅ REGISTRAR HISTÓRICO se o estoque mudou
         if (oldStock !== newStock) {
@@ -117,7 +118,7 @@ exports.updateProduct = async (req, res) => {
                 }
             });
 
-            // ✅ CRIAR NOTIFICAÇÃO baseada no tipo de mudança
+            // ✅ CRIAR NOTIFICAÇÃO
             let notificationType = 'stock_updated';
             let notificationTitle = 'Estoque Atualizado';
             let notificationMessage = `${product.name}: ${oldStock} → ${newStock}`;
@@ -126,10 +127,6 @@ exports.updateProduct = async (req, res) => {
                 notificationType = 'stock_zero';
                 notificationTitle = '⚠️ Estoque Zerado';
                 notificationMessage = `${product.name} ficou SEM ESTOQUE!`;
-            } else if (newStock > 0 && newStock <= 10 && oldStock > 10) {
-                notificationType = 'stock_low';
-                notificationTitle = '⚠️ Esto que Baixo';
-                notificationMessage = `${product.name} está com estoque baixo (${newStock} unidades)`;
             }
 
             await Notification.create({
@@ -137,11 +134,7 @@ exports.updateProduct = async (req, res) => {
                 productId: product._id,
                 title: notificationTitle,
                 message: notificationMessage,
-                data: {
-                    oldStock,
-                    newStock,
-                    productName: product.name
-                }
+                data: { oldStock, newStock, productName: product.name }
             });
 
             console.log(`📊 Histórico registrado: ${product.name} (${oldStock} → ${newStock})`);

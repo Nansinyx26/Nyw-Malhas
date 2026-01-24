@@ -13,17 +13,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // Tabela de Estimativa de Frete por Região (Baseado na UF)
     // Valores base simulados para dar realismo
     const PRODUCT_CATALOG = {
-        'malha-pv': { name: 'Malha PV', price: 30.00, unit: 'Kg', weightFactor: 0.33 },
-        'malha-pp': { name: 'Malha PP', price: 30.00, unit: 'Kg', weightFactor: 0.25 },
-        'malha-piquet': { name: 'Malha Piquet', price: 30.00, unit: 'Kg', weightFactor: 0.35 },
-        'helanca-light': { name: 'Helanca Light', price: 30.00, unit: 'Kg', weightFactor: 0.20 },
-        // NOVOS PRODUTOS (Preço Fixo R$ 30,00/kg)
-        'dry-fit': { name: 'Dry Fit', price: 30.00, unit: 'Kg', weightFactor: 0.25 }, // 1m = 0.25kg
-        'viscose': { name: 'Viscose c/ Elastano', price: 30.00, unit: 'Kg', weightFactor: 0.35 },
-        'moletom': { name: 'Moletom', price: 30.00, unit: 'Kg', weightFactor: 0.60 },
-        'helanca-escolar': { name: 'Helanca Escolar', price: 30.00, unit: 'Kg', weightFactor: 0.40 },
-        'algodao': { name: 'Algodão', price: 30.00, unit: 'Kg', weightFactor: 0.30 },
-        'oxford': { name: 'Oxford', price: 30.00, unit: 'Kg', weightFactor: 0.25 }
+        'malha-pv': { name: 'Malha PV', unit: 'Kg', weightFactor: 0.33 },
+        'malha-pp': { name: 'Malha PP', unit: 'Kg', weightFactor: 0.25 },
+        'malha-piquet': { name: 'Malha Piquet', unit: 'Kg', weightFactor: 0.35 },
+        'helanca-light': { name: 'Helanca Light', unit: 'Kg', weightFactor: 0.20 },
+        'dry-fit': { name: 'Dry Fit', unit: 'Kg', weightFactor: 0.25 },
+        'viscose': { name: 'Viscose c/ Elastano', unit: 'Kg', weightFactor: 0.35 },
+        'moletom': { name: 'Moletom', unit: 'Kg', weightFactor: 0.60 },
+        'helanca-escolar': { name: 'Helanca Escolar', unit: 'Kg', weightFactor: 0.40 },
+        'algodao': { name: 'Algodão', unit: 'Kg', weightFactor: 0.30 },
+        'oxford': { name: 'Oxford', unit: 'Kg', weightFactor: 0.25 }
     };
     const shippingRates = {
         'SP': { base: 25.00, perKg: 1.50 },
@@ -82,9 +81,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('addrCity').value = data.localidade;
                 document.getElementById('addrUF').value = data.uf;
                 document.getElementById('addrNumber').focus();
-
-                // Dispara o cálculo de frete assim que tivermos o UF
-                calculateShipping();
             } else {
                 alert('CEP não encontrado!');
             }
@@ -96,44 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ===== CÁLCULO DE FRETE INTELIGENTE =====
-    function calculateShipping() {
-        const uf = document.getElementById('addrUF').value;
-        const quantity = parseFloat(document.getElementById('orderQuantity').value) || 1;
-        const unit = document.getElementById('orderUnit').value;
-        const method = document.getElementById('shippingMethod').value; // 'Correios' (PAC default in this logic) or specific logic?
 
-        if (!uf) return;
-
-        // Usar a matriz compartilhada
-        const details = calculateShippingDetails(uf, quantity, unit);
-
-        // Lógica de seleção (Simplificada para o Modal: Se Transportadora = Sedex Price * 0.9, se Correios = PAC Price)
-        // O ideal seria ter um rádio button PAC/SEDEX no modal também, mas vou inferir pelo select existente.
-
-        let shippingCost = 0;
-
-        // No HTML atual temos "Correios" e "Transportadora". 
-        // Vamos assumir: Correios = PAC, Transportadora = SEDEX (ou similar premium)
-        // Ou melhor: Vamos tentar detectar se o usuário quer rapidez ou preço.
-        // Como o select box é simples, vamos usar o valor do PAC para "Correios"
-
-        if (method === 'Correios') {
-            shippingCost = details.pac.price;
-        } else {
-            // Transportadora geralmente compete com Sedex em prazo
-            shippingCost = details.sedex.price;
-        }
-
-        // Atualizar campo de frete
-        const shippingInput = document.getElementById('shippingCost');
-        shippingInput.value = formatCurrency(shippingCost);
-
-        updateValues();
-    }
-
-    document.getElementById('orderQuantity').addEventListener('input', calculateShipping);
-    document.getElementById('shippingMethod').addEventListener('change', calculateShipping);
-    document.getElementById('orderUnit').addEventListener('change', calculateShipping);
 
 
     // ===== ABRIR MODAL =====
@@ -154,24 +113,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 const dbProduct = allProducts.find(p => {
                     const pName = p.name.toLowerCase();
                     const pColor = p.color.toLowerCase();
-                    // Matching robusto similar ao products-sync
-                    return pColor === selectedColor.toLowerCase() &&
-                        (pName === product.toLowerCase() || pName.includes(product.split(' ')[0].toLowerCase()));
+                    const searchName = product.toLowerCase();
+
+                    // Matching inteligente: mesma cor E (nome igual OU um contém o outro OU categoria bate)
+                    const colorMatch = pColor === selectedColor.toLowerCase();
+                    const nameMatch = pName.includes(searchName) || searchName.includes(pName);
+
+                    // Fallback para categorias comuns (Ex: Algodão -> Meia Malha)
+                    let catMatch = false;
+                    if (searchName.includes('algodão') || searchName.includes('algodao')) {
+                        catMatch = pName.includes('meia malha');
+                    }
+                    if (searchName.includes('pv')) catMatch = pName.includes('pv');
+                    if (searchName.includes('pp')) catMatch = pName.includes('pp');
+
+                    return colorMatch && (nameMatch || catMatch);
                 });
 
                 if (dbProduct) {
                     stockValue = dbProduct.stock || 0;
-
-                    // ✅ ATUALIZAÇÃO DE PREÇO DINÂMICA
-                    if (dbProduct.price) {
-                        dynamicPrice = dbProduct.price;
-                        // Atualiza visualmente o input de preço unitário
-                        const priceInput = document.getElementById('orderUnitPrice');
-                        if (priceInput) {
-                            priceInput.value = `R$ ${dynamicPrice.toFixed(2).replace('.', ',')}`;
-                            priceInput.dataset.realPrice = dynamicPrice; // Armazena para cálculo
-                        }
-                    }
 
                     // ✅ PREVENÇÃO DE VENDA: Bloquear modal se estoque = 0
                     if (stockValue <= 0) {
@@ -182,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } catch (e) { console.error('Erro ao buscar dados do produto:', e); }
         }
 
-        // Atualizar display de estoque no modal
+        // Atualizar display de estoque no modal com segurança
         let stockDisplay = document.getElementById('modalStockDisplay');
         if (!stockDisplay) {
             const container = document.querySelector('#orderForm .order-section');
@@ -193,35 +153,34 @@ document.addEventListener('DOMContentLoaded', function () {
                 div.style.background = stockValue > 0 ? 'rgba(46, 204, 113, 0.1)' : 'rgba(231, 76, 60, 0.1)';
                 div.style.border = stockValue > 0 ? '1px solid rgba(46, 204, 113, 0.3)' : '1px solid rgba(231, 76, 60, 0.3)';
                 div.style.color = '#fff';
-                div.innerHTML = `<i class="fas fa-boxes"></i> <span>Estoque disponível: <strong id="modalStockValue" style="color: ${stockValue > 0 ? '#2ecc71' : '#e74c3c'}">${stockValue}</strong></span>`;
+                div.innerHTML = `<i class="fas fa-boxes"></i> <span>Situação: <strong id="modalStockValue" style="color: ${stockValue > 0 ? '#2ecc71' : '#e74c3c'}">${stockValue > 0 ? 'Disponível' : 'Indisponível'}</strong></span>`;
                 container.parentNode.insertBefore(div, container);
                 stockDisplay = div;
             }
         } else {
             const valEl = document.getElementById('modalStockValue');
-            valEl.textContent = stockValue;
-            valEl.style.color = stockValue > 0 ? '#2ecc71' : '#e74c3c';
+            if (valEl) {
+                valEl.textContent = stockValue > 0 ? 'Disponível' : 'Indisponível';
+                valEl.style.color = stockValue > 0 ? '#2ecc71' : '#e74c3c';
+            }
             stockDisplay.style.background = stockValue > 0 ? 'rgba(46, 204, 113, 0.1)' : 'rgba(231, 76, 60, 0.1)';
             stockDisplay.style.border = stockValue > 0 ? '1px solid rgba(46, 204, 113, 0.3)' : '1px solid rgba(231, 76, 60, 0.3)';
         }
 
-        // Atualizar imagem no modal se estivermos no checkout
+        // Atualizar imagem no modal
         const productImage = document.getElementById('productImage');
         const modalImage = document.getElementById('modalProductImage');
         if (modalImage) {
-            // Prioridade: 1. Imagem do Banco (se carregada) 2. Imagem da página
             if (window.DBProductImage) {
                 modalImage.src = window.DBProductImage;
             } else if (productImage) {
                 modalImage.src = productImage.src;
-                modalImage.alt = productImage.alt;
             }
         }
 
-        // Resetar campos
-        document.getElementById('orderQuantity').value = '';
-        document.getElementById('shippingCost').value = '';
-        document.getElementById('labelTotal').innerText = 'R$ 0,00';
+        // Resetar campos com segurança
+        const qtyInput = document.getElementById('orderQuantity');
+        if (qtyInput) qtyInput.value = '';
 
         updateValues();
         orderModal.show();
@@ -229,50 +188,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ===== ATUALIZAR VALORES TOTAIS =====
     function updateValues() {
-        const productKey = new URLSearchParams(window.location.search).get('produto');
-        const product = PRODUCT_CATALOG[productKey];
-        if (!product) return;
-
-        const quantity = parseFloat(document.getElementById('orderQuantity').value) || 0;
-        const shippingCost = parseFloat(parseCurrency(document.getElementById('shippingCost').value)) || 0;
-        const unit = document.getElementById('orderUnit').value;
-
-        // Fixar Preço Unitário Visualmente
-        const priceInput = document.getElementById('orderUnitPrice');
-        if (priceInput && !priceInput.dataset.realPrice) {
-            priceInput.value = 'R$ 30,00';
-        }
-
-
-        let finalWeight = quantity;
-        let subtotal = 0;
-        const weightDisplay = document.getElementById('weightDisplay');
-
-        // Lógica de Conversão Metros -> Kg para produtos de R$30
-        if (unit === 'metro(s)' && product.weightFactor) {
-            finalWeight = quantity * product.weightFactor;
-            // Exibir aviso visual de conversão
-            weightDisplay.innerHTML = `<i class="fas fa-balance-scale"></i> ${quantity}m ≈ <strong>${finalWeight.toFixed(3).replace('.', ',')} kg</strong>`;
-        } else {
-            weightDisplay.innerHTML = '';
-        }
-
-        // Cálculo Final Baseado no Peso (Kg)
-        // Se temos preço dinâmico, usamos ele
-        let calcPrice = product.price;
-        if (document.getElementById('orderUnitPrice')?.dataset.realPrice) {
-            calcPrice = parseFloat(document.getElementById('orderUnitPrice').dataset.realPrice);
-        }
-        subtotal = finalWeight * calcPrice;
-
-        document.getElementById('labelSubtotal').innerText = formatCurrency(subtotal);
-        document.getElementById('labelShipping').innerText = formatCurrency(shippingCost);
-        document.getElementById('labelTotal').innerText = formatCurrency(subtotal + shippingCost);
+        // Lógica de cálculo desativada conforme solicitado
     }
 
-    // Listeners manuais
-    document.getElementById('shippingCost').addEventListener('input', updateValues);
-    document.getElementById('orderUnitPrice').addEventListener('input', updateValues);
+    // Listeners manusias com proteção contra nulos
+    const orderQtyInput = document.getElementById('orderQuantity');
+    if (orderQtyInput) {
+        orderQtyInput.addEventListener('input', updateValues);
+    }
 
     // ===== SUBMISSÃO DO PEDAMENTO =====
     orderForm.addEventListener('submit', async function (e) {
@@ -285,10 +208,6 @@ document.addEventListener('DOMContentLoaded', function () {
             color: document.getElementById('orderColor').value,
             quantity: document.getElementById('orderQuantity').value,
             unit: document.getElementById('orderUnit').value,
-            unitPrice: document.getElementById('orderUnitPrice').value,
-            subtotal: document.getElementById('labelSubtotal').innerText,
-            shipping: document.getElementById('labelShipping').innerText,
-            total: document.getElementById('labelTotal').innerText,
 
             clientName: document.getElementById('clientName').value,
             clientTaxId: document.getElementById('clientTaxId').value,
@@ -298,22 +217,18 @@ document.addEventListener('DOMContentLoaded', function () {
             address: {
                 street: document.getElementById('addrStreet').value,
                 number: document.getElementById('addrNumber').value,
-                complement: document.getElementById('addrComplement').value,
+                complement: document.getElementById('addrComplement').value || '',
                 neighborhood: document.getElementById('addrNeighborhood').value,
                 city: document.getElementById('addrCity').value,
                 uf: document.getElementById('addrUF').value,
                 zip: document.getElementById('addrZip').value
-            },
-
-            shippingMethod: document.getElementById('shippingMethod').value,
-            payment: document.querySelector('input[name="payment"]:checked').value
+            }
         };
 
-        // ✅ SALVAR PEDIDO NA API (NOVO SISTEMA)
+        // ✅ Tentar salvar na API, mas não travar se falhar
         let apiOrderNumber = null;
         try {
-            if (window.APIClient) {
-                // Buscar produto do banco para obter ID
+            if (window.APIClient && window.DBManager) {
                 const products = await window.DBManager.getAllProducts();
                 const productMatch = products.find(p =>
                     p.name.toLowerCase().includes(data.product.split(' ')[0].toLowerCase()) &&
@@ -334,47 +249,55 @@ document.addEventListener('DOMContentLoaded', function () {
                             color: data.color,
                             quantity: parseFloat(data.quantity),
                             unit: data.unit,
-                            unitPrice: 30,
-                            subtotal: parseCurrency(data.subtotal)
+                            unitPrice: 0,
+                            subtotal: 0 // Simulado
                         }],
                         shipping: {
-                            method: data.shippingMethod,
-                            cost: parseCurrency(data.shipping),
+                            method: "A combinar",
+                            cost: 0,
                             address: data.address
                         },
-                        payment: {
-                            method: data.payment
-                        },
-                        total: parseCurrency(data.total)
+                        payment: { method: "WhatsApp" },
+                        total: 0
                     };
 
                     const orderResponse = await window.APIClient.post('/orders', orderPayload);
-                    if (orderResponse.success) {
+                    if (orderResponse && orderResponse.success) {
                         apiOrderNumber = orderResponse.data.orderNumber;
                         console.log(`✅ Pedido salvo na API: ${apiOrderNumber}`);
-                        alert(`✅ Pedido #${apiOrderNumber} registrado com sucesso!\n\nEstoque atualizado automaticamente.\nVocê será redirecionado ao WhatsApp.`);
                     }
                 }
             }
         } catch (apiError) {
             console.warn('⚠️ Erro ao salvar pedido na API:', apiError);
-            const continuar = confirm('Não foi possível registrar o pedido no sistema.\n\nDeseja continuar apenas com WhatsApp?');
-            if (!continuar) return;
+            // Prossiga silenciosamente para o WhatsApp
         }
 
         // 2. Formatar mensagem (Modelo Exato)
-        const message = `🧵 *RESUMO DO PEDIDO*
+        const getComposition = (product) => {
+            const p = product.toLowerCase();
+            if (p.includes('pv')) return 'Polyester com Elastano';
+            if (p.includes('pp')) return '100% Polipropileno';
+            if (p.includes('piquet')) return '65% PES / 35% ALG';
+            if (p.includes('dry')) return '100% Poliamida';
+            if (p.includes('viscose')) return '96% Viscose / 4% Elastano';
+            if (p.includes('moletom')) return '50% ALG / 50% PES';
+            if (p.includes('algodão') || p.includes('algodao')) return '100% Algodão Penteado';
+            if (p.includes('helanca')) return '100% Poliéster';
+            if (p.includes('oxford')) return '100% Poliéster';
+            return 'Tecido Técnico';
+        };
+
+        const message = `🧵 *DADOS DO PEDIDO*
 
 Pedido nº: *#${apiOrderNumber || data.orderId}*
 
 *Produto:* ${data.product}
-*Tipo / Composição:* ${data.product === 'Malha PV' ? 'Polyester com Elastano' : (data.product === 'Malha PP' ? '100% Polipropileno' : 'Tecido Técnico')}
+*Tipo / Composição:* ${getComposition(data.product)}
 *Cor / Estampa:* ${data.color}
 
 *Quantidade:*
 ☑ ${data.quantity} ${data.unit}
-
-*Valor do item:* ${data.unitPrice}
 
 👤 *DADOS DO CLIENTE*
 
@@ -400,31 +323,15 @@ Pedido nº: *#${apiOrderNumber || data.orderId}*
 📦 Realizamos entregas para todo o território nacional.
 
 🚚 *ENVIO*
-
-*Forma de envio:* ${data.shippingMethod}
-*Valor estimado:* ${data.shipping}
+Aguardando cotação de frete personalizada.
 
 🧾 *NOTA FISCAL*
-
 *E-mail para NF:* ${data.clientEmail}
-A nota fiscal será emitida após a confirmação do pagamento.
+A nota fiscal será emitida após a confirmação do pedido e pagamento.
 
-💰 *RESUMO DOS VALORES*
-
-*Subtotal:* ${data.subtotal}
-*Frete:* ${data.shipping}
-
-➡️ *TOTAL DO PEDIDO:* *${data.total}*
-
-💳 *PAGAMENTO*
-
-*Forma de pagamento:*
-☑ ${data.payment}
-
-*Status:* ${apiOrderNumber ? 'Registrado no sistema' : 'Aguardando confirmação'}
+*Status:* ${apiOrderNumber ? 'Registrado no sistema' : 'Aguardando conferência'}
 
 📌 *INFORMAÇÕES IMPORTANTES*
-${apiOrderNumber ? 'O pedido já foi registrado e o estoque foi atualizado.' : 'O pedido será preparado após a confirmação do pagamento.'}
 Agradecemos pela confiança! 🧵💙`;
 
         // 3. Gerar link e redirecionar

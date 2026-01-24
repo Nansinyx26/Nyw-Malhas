@@ -7,15 +7,15 @@ window.DBManager = {
 
     async init() {
         try {
-            // Testa conexão com backend
-            const response = await fetch('http://localhost:5000/');
+            // Testa conexão com backend usando o baseURL do APIClient
+            const response = await fetch(`${window.APIClient.baseURL}/products`);
             if (response.ok) {
                 this.ready = true;
                 console.log('✅ MongoDB Backend conectado!');
             }
         } catch (error) {
-            console.warn('⚠️ Backend não disponível, usando IndexedDB como fallback');
-            // TODO: Carregar db-manager.js original como fallback
+            console.warn('⚠️ Backend não disponível ou erro de conexão:', error);
+            // Fallback para IndexedDB é gerenciado pelos métodos que verificam this.ready
         }
         return this.ready;
     },

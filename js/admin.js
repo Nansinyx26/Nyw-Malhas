@@ -99,66 +99,26 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Carrega produtos do IndexedDB
         products = await window.DBManager.getAllProducts();
 
-        // Sincronização: Adiciona produtos novos que não estão no banco
-        if (products.length > 0) {
-            console.log('🔄 Verificando novos produtos...');
-            let newProductsAdded = 0;
+        // 1. Iniciar conexão
+        await window.DBManager.init();
 
-            for (const initialProduct of INITIAL_PRODUCTS) {
-                // Verifica se já existe produto com mesmo nome e cor
-                const exists = products.some(p =>
-                    p.name === initialProduct.name &&
-                    p.color === initialProduct.color
-                );
-
-                if (!exists) {
-                    console.log(`➕ Adicionando novo produto: ${initialProduct.name}`);
-                    await window.DBManager.saveProduct(initialProduct);
-                    newProductsAdded++;
-                }
-            }
-
-            if (newProductsAdded > 0) {
-                console.log(`✅ ${newProductsAdded} novos produtos adicionados.`);
-                products = await window.DBManager.getAllProducts();
-            }
-        } else {
-            // Se não há produtos, faz seed inicial completo
-            console.log('📦 Iniciando banco com produtos padrão...');
-            for (const product of INITIAL_PRODUCTS) {
-                await window.DBManager.saveProduct(product);
-            }
-            products = await window.DBManager.getAllProducts();
+        // Atualizar indicador visual de servidor
+        const badge = document.getElementById('serverStatusBadge');
+        if (badge) {
+            const isLocal = window.APIClient.baseURL.includes('localhost');
+            const serverName = isLocal ? 'Servidor Local' : 'Nuvem (MongoDB Atlas)';
+            badge.querySelector('span').textContent = serverName;
+            badge.querySelector('i').style.color = '#2ecc71';
+            badge.title = `API: ${window.APIClient.baseURL}`;
         }
 
-        // Carrega informações de contato
+        // 2. Carrega produtos e contato direto do servidor
+        products = await window.DBManager.getAllProducts();
         contactInfo = await window.DBManager.getContact();
+
         if (!contactInfo) {
-            console.log('📞 Iniciando contato padrão...');
             await window.DBManager.saveContact(INITIAL_CONTACT);
             contactInfo = await window.DBManager.getContact();
-        }
-
-        // Migração: Corrige categorias incorretas no banco
-        let migrationFixed = 0;
-        for (let p of products) {
-            let needsUpdate = false;
-            if (p.category === 'dry-fit') {
-                p.category = 'dryfit';
-                needsUpdate = true;
-            }
-            if (!p.price || p.price === undefined) {
-                p.price = 30.00;
-                needsUpdate = true;
-            }
-            if (needsUpdate) {
-                await window.DBManager.saveProduct(p);
-                migrationFixed++;
-            }
-        }
-        if (migrationFixed > 0) {
-            console.log(`🔧 Migração: ${migrationFixed} produtos corrigidos.`);
-            products = await window.DBManager.getAllProducts();
         }
 
         initializeApp();
@@ -234,37 +194,67 @@ async function showAdminPanel() {
     await loadProducts();
     loadContactInfo();
     await updateStats();
+
+    // Auto-refresh estatísticas a cada 30 segundos
+    if (!window.adminStatsInterval) {
+        window.adminStatsInterval = setInterval(async () => {
+            if (document.getElementById('adminPanel').classList.contains('active')) {
+                await updateStats();
+            }
+        }, 30000);
+    }
 }
 
 // ===== ATUALIZAR ESTATÍSTICAS E DASHBOARD =====
 async function updateStats() {
+    // 1. Sempre carregar produtos antes de calcular estatísticas se o array estiver vazio
+    if (!products || products.length === 0) {
+        products = await window.DBManager.getAllProducts();
+    }
+
+    // 2. Calcular estatísticas locais (Estado atual) como base garantida
+    const total = products.length;
+    const available = products.filter(p => p.status === 'available').length;
+    const unavailable = products.filter(p => p.status === 'unavailable' || (p.stock !== undefined && p.stock <= 0)).length;
+
+    // Atualizar UI imediatamente com dados locais
+    const totalEl = document.getElementById('totalProducts');
+    const availableEl = document.getElementById('availableProducts');
+    const unavailableEl = document.getElementById('unavailableProducts');
+
+    if (totalEl) totalEl.textContent = total;
+    if (availableEl) availableEl.textContent = available;
+    if (unavailableEl) unavailableEl.textContent = unavailable;
+
     try {
-        // Busca estatísticas reais da API
-        const response = await fetch('/api/analytics/overview');
-        const analytics = await response.json();
+        // 3. Tentar buscar dados consolidados da API (Analytics)
+        if (window.APIClient) {
+            const analytics = await window.APIClient.get('/analytics/overview');
 
-        if (analytics.success) {
-            const data = analytics.data;
+            if (analytics && analytics.success) {
+                const data = analytics.data;
 
-            // Cards Superiores
-            document.getElementById('totalProducts').textContent = data.products.total;
-            document.getElementById('availableProducts').textContent = data.products.available;
-            document.getElementById('unavailableProducts').textContent = data.products.outOfStock;
+                // Se a API trouxer números maiores/diferentes (ex: outros admins logados), atualiza
+                if (data.products.total >= total) {
+                    if (totalEl) totalEl.textContent = data.products.total;
+                    if (availableEl) availableEl.textContent = data.products.available;
+                    if (unavailableEl) unavailableEl.textContent = data.products.outOfStock;
+                }
 
-            // Cards Financeiros / Pedidos (se existirem no HTML)
-            // Vamos injetar/atualizar se existirem elementos com esses IDs, ou criar lógica para dashboard
-            const revenueEl = document.getElementById('totalRevenue');
-            if (revenueEl) revenueEl.textContent = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(data.stock.inventoryValue); // Valor em estoque
+                // Cards Financeiros Desativados
+                const revenueEl = document.getElementById('totalRevenue');
+                if (revenueEl) revenueEl.style.display = 'none';
 
-            // Atualizar Gráficos com Dados Reais
-            updateCharts(data);
+                // Atualizar Gráficos se houver dados
+                if (data.products.total > 0) updateCharts(data);
+            }
         }
 
         // Atualizar Notificações (Sino)
         updateNotificationsBadge();
 
     } catch (error) {
-        console.error('Erro ao buscar analytics:', error);
+        console.warn('⚠️ Server Analytics indisponível. Usando contagem local.');
     }
 }
 
@@ -310,8 +300,8 @@ function updateCharts(data) {
 
 async function fetchStockTimeline(canvas) {
     try {
-        const resp = await fetch('/api/analytics/stock-timeline?days=7');
-        const json = await resp.json();
+        if (!window.APIClient) return;
+        const json = await window.APIClient.get('/analytics/stock-timeline?days=7');
 
         if (json.success) {
             const labels = json.data.map(d => `${d._id.day}/${d._id.month}`);
@@ -352,12 +342,12 @@ async function fetchStockTimeline(canvas) {
 // ===== NOTIFICAÇÕES (Sino) =====
 async function updateNotificationsBadge() {
     try {
-        const res = await fetch('/api/notifications'); // Assume endpoint lista todas, ideal seria ?unread=true
-        const json = await res.json();
+        if (!window.APIClient) return;
+        const json = await window.APIClient.get('/notifications');
 
-        if (json.success) {
+        if (json && json.success) {
             const unreadCount = json.data.filter(n => !n.read).length;
-            const badge = document.querySelector('.notification-badge'); // Adicionar essa classe no HTML do admin
+            const badge = document.getElementById('notification-badge'); // Corrigido selector para ID
             const icon = document.querySelector('.fa-bell');
 
             if (badge) {
@@ -375,47 +365,55 @@ async function updateNotificationsBadge() {
     } catch (e) { console.error(e); }
 }
 
+// ===== RENDERIZAR LINHA DE PRODUTO (MODULAR) =====
+function renderProductRow(product) {
+    const productId = product._id || product.id;
+    return `
+        <td>
+            <img src="${product.image}" alt="${product.name}" class="product-image" 
+                 onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22%3ESem Imagem%3C/text%3E%3C/svg%3E'">
+        </td>
+        <td>${product.name}</td>
+        <td>${getCategoryName(product.category)}</td>
+        <td>${product.color}</td>
+        <td style="font-weight: 600;">${product.stock || 0}</td>
+        <td>
+            <span class="status-badge ${product.status}">
+                ${product.status === 'available' ? 'Disponível' : 'Indisponível'}
+            </span>
+        </td>
+        <td>
+            <div class="action-buttons">
+                <button class="btn-toggle" onclick="toggleStatus('${productId}')">
+                    <i class="fas fa-exchange-alt"></i> Status
+                </button>
+                <button class="btn-edit" onclick="editProduct('${productId}')">
+                    <i class="fas fa-edit"></i> Editar
+                </button>
+                <button class="btn-delete" onclick="deleteProduct('${productId}')">
+                    <i class="fas fa-trash"></i> Excluir
+                </button>
+            </div>
+        </td>
+    `;
+}
+
 // ===== CARREGAR PRODUTOS NA TABELA =====
 async function loadProducts() {
     products = await window.DBManager.getAllProducts();
 
     const tbody = document.getElementById('productsTableBody');
-    tbody.innerHTML = '';
+    const fragment = document.createDocumentFragment();
 
     products.forEach(product => {
         const row = document.createElement('tr');
-        const productId = product._id || product.id; // Suporte para MongoDB e IndexedDB
-        row.innerHTML = `
-            <td>
-                <img src="${product.image}" alt="${product.name}" class="product-image" 
-                     onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22%3ESem Imagem%3C/text%3E%3C/svg%3E'">
-            </td>
-            <td>${product.name}</td>
-            <td>${getCategoryName(product.category)}</td>
-            <td>${product.color}</td>
-            <td style="color: var(--success); font-weight: 600;">R$ ${(product.price || 30).toFixed(2)}</td>
-            <td style="font-weight: 600;">${product.stock || 0}</td>
-            <td>
-                <span class="status-badge ${product.status}">
-                    ${product.status === 'available' ? 'Disponível' : 'Indisponível'}
-                </span>
-            </td>
-            <td>
-                <div class="action-buttons">
-                    <button class="btn-toggle" onclick="toggleStatus('${productId}')">
-                        <i class="fas fa-exchange-alt"></i> Status
-                    </button>
-                    <button class="btn-edit" onclick="editProduct('${productId}')">
-                        <i class="fas fa-edit"></i> Editar
-                    </button>
-                    <button class="btn-delete" onclick="deleteProduct('${productId}')">
-                        <i class="fas fa-trash"></i> Excluir
-                    </button>
-                </div>
-            </td>
-        `;
-        tbody.appendChild(row);
+        row.id = `row-${product._id || product.id}`;
+        row.innerHTML = renderProductRow(product);
+        fragment.appendChild(row);
     });
+
+    tbody.innerHTML = '';
+    tbody.appendChild(fragment);
 }
 
 // ===== NOME DA CATEGORIA =====
@@ -438,20 +436,40 @@ function getCategoryName(category) {
 // ===== TOGGLE STATUS =====
 async function toggleStatus(id) {
     try {
-        // Busca o produto na lista carregada
-        const product = products.find(p => (p._id || p.id) === id);
+        // Busca o produto na lista carregada (referência direta)
+        const index = products.findIndex(p => (p._id || p.id) === id);
+        const product = products[index];
+
         if (product) {
-            product.status = product.status === 'available' ? 'unavailable' : 'available';
-            await window.DBManager.saveProduct(product);
-            await loadProducts();
-            await updateStats();
-            showNotification('Status atualizado com sucesso!', 'success');
+            // 1. Mudança Otimista (UI local primeiro)
+            const oldStatus = product.status;
+            product.status = oldStatus === 'available' ? 'unavailable' : 'available';
+
+            // Atualiza apenas a linha específica imediatamente
+            const row = document.getElementById(`row-${id}`);
+            if (row) {
+                row.innerHTML = renderProductRow(product);
+            }
+
+            // 2. Salva no banco em background
+            // Atualizamos a referência no array com o que voltar do servidor
+            const updatedProduct = await window.DBManager.saveProduct(product);
+            if (updatedProduct) {
+                products[index] = updatedProduct;
+            }
+
+            // 3. Atualiza estatísticas
+            updateStats();
+
+            showNotification('Status atualizado!', 'success');
         } else {
             showNotification('Produto não encontrado!', 'error');
         }
     } catch (error) {
         console.error('Erro ao atualizar status:', error);
-        showNotification('Erro ao atualizar status: ' + error.message, 'error');
+        showNotification('Erro ao salvar. Verificando conexão...', 'error');
+        // Recarrega tudo se houver erro crítico de persistência
+        await loadProducts();
     }
 }
 
@@ -464,7 +482,6 @@ async function editProduct(id) {
         document.getElementById('productName').value = product.name;
         document.getElementById('productCategory').value = product.category;
         document.getElementById('productColor').value = product.color;
-        document.getElementById('productPrice').value = product.price || 30.00;
         document.getElementById('productStock').value = product.stock || 0;
         document.getElementById('productStatus').value = product.status;
 
@@ -552,11 +569,15 @@ async function handleProductSubmit() {
     const name = document.getElementById('productName').value;
     const category = document.getElementById('productCategory').value;
     const color = document.getElementById('productColor').value;
-    const price = parseFloat(document.getElementById('productPrice').value) || 30.00;
     const stock = parseInt(document.getElementById('productStock').value) || 0;
 
-    // Automatizar status baseado no estoque
-    const status = stock > 0 ? 'available' : 'unavailable';
+    // Pegar status do dropdown
+    let status = document.getElementById('productStatus').value;
+
+    // Regra de segurança: se estoque for 0, forçar indisponível
+    if (stock <= 0) {
+        status = 'unavailable';
+    }
 
     const imageFile = document.getElementById('productImage').files[0];
     const loadingOverlay = document.getElementById('loadingOverlay');
@@ -568,49 +589,49 @@ async function handleProductSubmit() {
         }
 
         if (currentEditId) {
-            // Atualizar produto existente
-            const product = await window.DBManager.getProduct(currentEditId);
-            if (product) {
+            // Atualizar produto existente na lista e no banco
+            const index = products.findIndex(p => (p._id || p.id) === currentEditId);
+            if (index !== -1) {
+                const product = products[index];
                 product.name = name;
                 product.category = category;
                 product.color = color;
-                product.price = price;
                 product.stock = stock;
                 product.status = status;
 
-                // Se nova imagem foi selecionada, usa compressão do DBManager
-                await window.DBManager.saveProduct(product, imageFile);
+                // Salva e atualiza com o retorno do servidor
+                const updated = await window.DBManager.saveProduct(product, imageFile);
+                if (updated) {
+                    products[index] = updated;
+                }
 
-                showNotification('Produto atualizado com sucesso!', 'success');
+                // Atualiza a linha local imediatamente com os dados finais
+                const row = document.getElementById(`row-${currentEditId}`);
+                if (row) {
+                    row.innerHTML = renderProductRow(products[index]);
+                }
+
+                showNotification('Produto atualizado!', 'success');
             }
         } else {
             // Adicionar novo produto
             const newProduct = {
-                name: name,
-                category: category,
-                color: color,
-                price: price,
-                stock: stock,
-                status: status,
+                name, category, color, stock, status,
                 image: 'img/placeholder.webp'
             };
 
-            // Salva com compressão automática de imagem
             await window.DBManager.saveProduct(newProduct, imageFile);
-            showNotification('Produto adicionado com sucesso!', 'success');
+            await loadProducts(); // Recarrega tudo para novos itens
+            showNotification('Produto adicionado!', 'success');
         }
 
-        await loadProducts();
-        await updateStats();
+        updateStats();
         document.getElementById('productModal').classList.remove('active');
     } catch (error) {
         console.error('Erro ao salvar produto:', error);
-        showNotification('Erro ao salvar produto: ' + error.message, 'error');
+        showNotification('Erro ao salvar: ' + error.message, 'error');
     } finally {
-        // Esconder animação
-        if (loadingOverlay) {
-            loadingOverlay.classList.remove('active');
-        }
+        if (loadingOverlay) loadingOverlay.classList.remove('active');
     }
 }
 
@@ -750,53 +771,3 @@ async function handleContactSubmit() {
     }
 }
 
-// ===== ALTERAR PREÇOS EM MASSA =====
-async function handleMassPriceUpdate() {
-    const category = document.getElementById('massPriceCategory').value;
-    const newPrice = parseFloat(document.getElementById('massPriceValue').value);
-
-    if (!category) {
-        showNotification('Por favor, selecione uma categoria!', 'error');
-        return;
-    }
-
-    if (!newPrice || newPrice <= 0) {
-        showNotification('Por favor, insira um preço válido!', 'error');
-        return;
-    }
-
-    if (!confirm(`Tem certeza que deseja alterar o preço de TODOS os produtos da categoria ${getCategoryName(category)} para R$ ${newPrice.toFixed(2)}/kg?`)) {
-        return;
-    }
-
-    try {
-        let updatedCount = 0;
-
-        for (let product of products) {
-            if (product.category === category) {
-                product.price = newPrice;
-                await window.DBManager.saveProduct(product);
-                updatedCount++;
-            }
-        }
-
-        await loadProducts();
-        await updateStats();
-
-        document.getElementById('massPriceCategory').value = '';
-        document.getElementById('massPriceValue').value = '';
-
-        showNotification(`✅ Preço atualizado para ${updatedCount} produtos!`, 'success');
-    } catch (error) {
-        console.error('Erro ao atualizar preços:', error);
-        showNotification('Erro ao atualizar preços: ' + error.message, 'error');
-    }
-}
-
-// Setup Mass Price Update Button
-document.addEventListener('DOMContentLoaded', function () {
-    const massPriceBtn = document.getElementById('applyMassPriceBtn');
-    if (massPriceBtn) {
-        massPriceBtn.addEventListener('click', handleMassPriceUpdate);
-    }
-});

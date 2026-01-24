@@ -46,11 +46,12 @@ productSchema.index({ status: 1 });
 
 // Método para verificar e atualizar status baseado no estoque
 productSchema.methods.updateStockStatus = function () {
+    // Regra rígida: sem estoque sempre é indisponível
     if (this.stock <= 0) {
         this.status = 'unavailable';
-    } else if (this.status === 'unavailable' && this.stock > 0) {
-        this.status = 'available';
     }
+    // NOTA: Se houver estoque, permitimos que o status seja manipulado manualmente (admin)
+    // Então removemos o 'else if' que forçava a volta para 'available'
     return this.save();
 };
 
