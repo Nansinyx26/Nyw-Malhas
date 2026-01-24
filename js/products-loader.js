@@ -313,50 +313,50 @@ function getColorGradient(color) {
 function getDefaultProducts(category) {
     const defaults = {
         pv: [
-            { id: 1, name: 'Malha PV Preta', category: 'pv', color: 'Preta', image: '../img/malha-pv-preta.jpg', status: 'available' },
-            { id: 2, name: 'Malha PV Bege', category: 'pv', color: 'Bege', image: '../img/malha-pv-bege.jpg', status: 'available' },
-            { id: 3, name: 'Malha PV Azul Royal', category: 'pv', color: 'Azul Royal', image: '../img/malha-pv-azul-royal.jpg', status: 'available' },
-            { id: 4, name: 'Malha PV Verde Musgo', category: 'pv', color: 'Verde Musgo', image: '../img/malha-pv-verde-musgo.jpg', status: 'available' }
+            { id: 1, name: 'Malha PV Preta', category: 'pv', color: 'Preta', image: '../img/malha-pv-preta.webp', status: 'available' },
+            { id: 2, name: 'Malha PV Bege', category: 'pv', color: 'Bege', image: '../img/malha-pv-bege.webp', status: 'available' },
+            { id: 3, name: 'Malha PV Azul Royal', category: 'pv', color: 'Azul Royal', image: '../img/malha-pv-azul-royal.webp', status: 'available' },
+            { id: 4, name: 'Malha PV Verde Musgo', category: 'pv', color: 'Verde Musgo', image: '../img/malha-pv-verde-musgo.webp', status: 'available' }
         ],
         pp: [
-            { id: 6, name: 'Malha PP Preta', category: 'pp', color: 'Preta', image: '../img/malha-pp-preta.jpg', status: 'available' },
-            { id: 7, name: 'Malha PP Vinho', category: 'pp', color: 'Vinho', image: '../img/malha-pp-vinho.jpg', status: 'available' },
-            { id: 71, name: 'Malha PP Branca', category: 'pp', color: 'Branca', image: '../img/malha-pp-branca.png', status: 'available' },
-            { id: 72, name: 'Malha PP Azul Marinho', category: 'pp', color: 'Azul Marinho', image: '../img/malha-pp-azul-marinho.jpg', status: 'available' }
+            { id: 6, name: 'Malha PP Preta', category: 'pp', color: 'Preta', image: '../img/malha-pp-preta.webp', status: 'available' },
+            { id: 7, name: 'Malha PP Vinho', category: 'pp', color: 'Vinho', image: '../img/malha-pp-vinho.webp', status: 'available' },
+            { id: 71, name: 'Malha PP Branca', category: 'pp', color: 'Branca', image: '../img/malha-pp-branca.webp', status: 'available' },
+            { id: 72, name: 'Malha PP Azul Marinho', category: 'pp', color: 'Azul Marinho', image: '../img/malha-pp-azul-marinho.webp', status: 'available' }
         ],
         piquet: [
-            { id: 8, name: 'Piquet PA Bandeira', category: 'piquet', color: 'Bandeira', image: '../img/malha-piquet-pa-bandeira.jpg', status: 'available' },
-            { id: 9, name: 'Piquet PA Cinza Chumbo', category: 'piquet', color: 'Cinza Chumbo', image: '../img/malha-piquet-pa-cinza-chumbo.jpg', status: 'available' },
-            { id: 10, name: 'Piquet PA Preta', category: 'piquet', color: 'Preta', image: '../img/malha-piquet-preta.png', status: 'available' },
-            { id: 101, name: 'Piquet PA Branco', category: 'piquet', color: 'Branco', image: '../img/malha-piquet-branca.jpg', status: 'available' }
+            { id: 8, name: 'Piquet PA Bandeira', category: 'piquet', color: 'Bandeira', image: '../img/malha-piquet-pa-bandeira.webp', status: 'available' },
+            { id: 9, name: 'Piquet PA Cinza Chumbo', category: 'piquet', color: 'Cinza Chumbo', image: '../img/malha-piquet-pa-cinza-chumbo.webp', status: 'available' },
+            { id: 10, name: 'Piquet PA Preta', category: 'piquet', color: 'Preta', image: '../img/malha-piquet-preta.webp', status: 'available' },
+            { id: 101, name: 'Piquet PA Branco', category: 'piquet', color: 'Branco', image: '../img/malha-piquet-branca.webp', status: 'available' }
         ],
         helanca: [
-            { id: 12, name: 'Helanca Light Preto', category: 'helanca', color: 'Preto', image: '../img/helanca-light-preto.jpg', status: 'available' },
-            { id: 13, name: 'Helanca Light Bordô', category: 'helanca', color: 'Bordô', image: '../img/helanca-light-bordo.jpg', status: 'available' },
-            { id: 14, name: 'Helanca Light Rosa Pink', category: 'helanca', color: 'Rosa Pink', image: '../img/helanca-light-rosa-pink.png', status: 'available' },
-            { id: 15, name: 'Helanca Light Azul Royal', category: 'helanca', color: 'Azul Royal', image: '../img/helanca-light-azul-royal.png', status: 'available' },
-            { id: 16, name: 'Helanca Escolar Verde Bandeira', category: 'helanca', color: 'Verde Bandeira', image: '../img/helanca-escolar-verde-bandeira.png', status: 'available' },
-            { id: 17, name: 'Helanca Escolar Cinza', category: 'helanca', color: 'Cinza', image: '../img/helanca-escolar-cinza.png', status: 'available' }
+            { id: 12, name: 'Helanca Light Preto', category: 'helanca', color: 'Preto', image: '../img/helanca-light-preto.webp', status: 'available' },
+            { id: 13, name: 'Helanca Light Bordô', category: 'helanca', color: 'Bordô', image: '../img/helanca-light-bordo.webp', status: 'available' },
+            { id: 14, name: 'Helanca Light Rosa Pink', category: 'helanca', color: 'Rosa Pink', image: '../img/helanca-light-rosa-pink.webp', status: 'available' },
+            { id: 15, name: 'Helanca Light Azul Royal', category: 'helanca', color: 'Azul Royal', image: '../img/helanca-light-azul-royal.webp', status: 'available' },
+            { id: 16, name: 'Helanca Escolar Verde Bandeira', category: 'helanca', color: 'Verde Bandeira', image: '../img/helanca-escolar-verde-bandeira.webp', status: 'available' },
+            { id: 17, name: 'Helanca Escolar Cinza', category: 'helanca', color: 'Cinza', image: '../img/helanca-escolar-cinza.webp', status: 'available' }
         ],
         dryfit: [
-            { id: 18, name: 'Dry Fit Branco', category: 'dryfit', color: 'Branco', image: '../img/dry-fit.png', status: 'available' },
-            { id: 19, name: 'Dry Fit Preto', category: 'dryfit', color: 'Preto', image: '../img/dry-fit-preto.jpg', status: 'available' }
+            { id: 18, name: 'Dry Fit Branco', category: 'dryfit', color: 'Branco', image: '../img/dry-fit.webp', status: 'available' },
+            { id: 19, name: 'Dry Fit Preto', category: 'dryfit', color: 'Preto', image: '../img/dry-fit-preto.webp', status: 'available' }
         ],
         viscose: [
-            { id: 20, name: 'Viscose Cinza Mescla', category: 'viscose', color: 'Cinza Mescla', image: '../img/viscose-cinza-mescla.png', status: 'available' },
-            { id: 21, name: 'Viscose Vinho', category: 'viscose', color: 'Vinho', image: '../img/viscose-vinho.jpg', status: 'available' }
+            { id: 20, name: 'Viscose Cinza Mescla', category: 'viscose', color: 'Cinza Mescla', image: '../img/viscose-cinza-mescla.webp', status: 'available' },
+            { id: 21, name: 'Viscose Vinho', category: 'viscose', color: 'Vinho', image: '../img/viscose-vinho.webp', status: 'available' }
         ],
         moletom: [
-            { id: 22, name: 'Moletom Azul Marinho', category: 'moletom', color: 'Azul Marinho', image: '../img/moletom-azul-marinho.png', status: 'available' },
-            { id: 23, name: 'Moletom Bordô', category: 'moletom', color: 'Bordô', image: '../img/moletom-bordo.jpg', status: 'available' }
+            { id: 22, name: 'Moletom Azul Marinho', category: 'moletom', color: 'Azul Marinho', image: '../img/moletom-azul-marinho.webp', status: 'available' },
+            { id: 23, name: 'Moletom Bordô', category: 'moletom', color: 'Bordô', image: '../img/moletom-bordo.webp', status: 'available' }
         ],
         algodao: [
-            { id: 24, name: 'Meia Malha 30.1 Azul Marinho', category: 'algodao', color: 'Azul Marinho', image: '../img/algodao-azul-marinho.png', status: 'available' },
-            { id: 25, name: 'Meia Malha 30.1 Vermelho', category: 'algodao', color: 'Vermelho', image: '../img/algodao-vermelho.png', status: 'available' }
+            { id: 24, name: 'Meia Malha 30.1 Azul Marinho', category: 'algodao', color: 'Azul Marinho', image: '../img/algodao-azul-marinho.webp', status: 'available' },
+            { id: 25, name: 'Meia Malha 30.1 Vermelho', category: 'algodao', color: 'Vermelho', image: '../img/algodao-vermelho.webp', status: 'available' }
         ],
         oxford: [
-            { id: 26, name: 'Oxford Azul Marinho', category: 'oxford', color: 'Azul Marinho', image: '../img/oxford-azul-marinho.png', status: 'available' },
-            { id: 27, name: 'Oxford Vermelho', category: 'oxford', color: 'Vermelho', image: '../img/oxford-vermelho.jpg', status: 'available' }
+            { id: 26, name: 'Oxford Azul Marinho', category: 'oxford', color: 'Azul Marinho', image: '../img/oxford-azul-marinho.webp', status: 'available' },
+            { id: 27, name: 'Oxford Vermelho', category: 'oxford', color: 'Vermelho', image: '../img/oxford-vermelho.webp', status: 'available' }
         ]
     };
 

@@ -8,105 +8,105 @@ document.addEventListener('DOMContentLoaded', async function () {
             name: 'Malha PV',
             specs: ['Alta durabilidade', 'Secagem rápida', 'Conforto térmico', 'Fácil manutenção'],
             colors: {
-                'preta': 'malha-pv-preta.jpg',
-                'bege': 'malha-pv-bege.jpg',
-                'azul-royal': 'malha-pv-azul-royal.jpg',
-                'verde-musgo': 'malha-pv-verde-musgo.jpg',
-                'cinza-mescla': 'malha-pv-cinza-mescla.png',
-                'vermelha': 'malha-pv-vermelha.png'
+                'preta': 'malha-pv-preta.webp',
+                'bege': 'malha-pv-bege.webp',
+                'azul-royal': 'malha-pv-azul-royal.webp',
+                'verde-musgo': 'malha-pv-verde-musgo.webp',
+                'cinza-mescla': 'malha-pv-cinza-mescla.webp',
+                'vermelha': 'malha-pv-vermelha.webp'
             }
         },
         'malha-pp': {
             name: 'Malha PP',
             specs: ['Ultraleve', 'Resistente à abrasão', 'Não absorve umidade', 'Hipoalergênico'],
             colors: {
-                'preta': 'malha-pp-preta.jpg',
-                'vinho': 'malha-pp-vinho.jpg',
-                'branca': 'malha-pp-branca.png',
-                'azul-marinho': 'malha-pp-azul-marinho.png'
+                'preta': 'malha-pp-preta.webp',
+                'vinho': 'malha-pp-vinho.webp',
+                'branca': 'malha-pp-branca.webp',
+                'azul-marinho': 'malha-pp-azul-marinho.webp'
             }
         },
         'malha-piquet': {
             name: 'Malha Piquet',
             specs: ['Textura diferenciada', 'Respirabilidade superior', 'Elegância casual', 'Versatilidade'],
             colors: {
-                'azul-marinho': 'azul-marinho-piquet.png',
-                'vermelho': 'vermelho-piquet.jpg',
-                'cinza-chumbo': 'malha-piquet-pa-cinza-chumbo.jpg',
-                'verde-bandeira': 'malha-piquet-pa-bandeira.jpg',
-                'branco': 'malha-piquet-branca.jpg',
-                'preto': 'malha-piquet-preta.png'
+                'azul-marinho': 'azul-marinho-piquet.webp',
+                'vermelho': 'vermelho-piquet.webp',
+                'cinza-chumbo': 'malha-piquet-pa-cinza-chumbo.webp',
+                'verde-bandeira': 'malha-piquet-pa-bandeira.webp',
+                'branco': 'malha-piquet-branca.webp',
+                'preto': 'malha-piquet-preta.webp'
             }
         },
         'helanca-light': {
             name: 'Helanca Light',
             specs: ['Alta elasticidade', 'Ajuste perfeito', 'Leve e respirável', 'Ideal para fitness'],
             colors: {
-                'preto': 'helanca-light-preto.jpg',
-                'bordo': 'helanca-light-bordo.jpg',
-                'azul-royal': 'helanca-light-azul-royal.png',
-                'rosa-pink': 'helanca-light-rosa-pink.png'
+                'preto': 'helanca-light-preto.webp',
+                'bordo': 'helanca-light-bordo.webp',
+                'azul-royal': 'helanca-light-azul-royal.webp',
+                'rosa-pink': 'helanca-light-rosa-pink.webp'
             }
         },
         'algodao': {
             name: 'Algodão 30.1',
             specs: ['100% Algodão', 'Fio Penteado', 'Hipoalergênico', 'Toque Macio'],
             colors: {
-                'variadas': 'algodao.png',
-                'branco': 'algodao-branco.png',
-                'azul-marinho': 'algodao-azul-marinho.png',
-                'vermelho': 'algodao-vermelho.png'
+                'variadas': 'algodao.webp',
+                'branco': 'algodao-branco.webp',
+                'azul-marinho': 'algodao-azul-marinho.webp',
+                'vermelho': 'algodao-vermelho.webp'
             }
         },
         'dry-fit': {
             name: 'Malha Dry Fit',
             specs: ['Secagem Rápida', '100% Poliamida', 'Ideal para Esportes', 'Leve (130g)'],
             colors: {
-                'variadas': 'dry-fit.png',
-                'azul': 'dry-fit.png',
-                'azul-royal': 'dry-fit-azul-royal.png',
-                'branco': 'dry-fit-branco.png',
-                'preto': 'dry-fit-preto.jpg'
+                'variadas': 'dry-fit.webp',
+                'azul': 'dry-fit.webp',
+                'azul-royal': 'dry-fit-azul-royal.webp',
+                'branco': 'dry-fit-branco.webp',
+                'preto': 'dry-fit-preto.webp'
             }
         },
         'viscose': {
             name: 'Viscose c/ Elastano',
             specs: ['Caimento Fluido', 'Toque Gelado', 'Conforto', '96% Viscose'],
             colors: {
-                'variadas': 'viscose.png',
-                'vermelha': 'viscose-vermelha.png',
-                'cinza-mescla': 'viscose-cinza-mescla.png',
-                'vinho': 'viscose-vinho.jpg'
+                'variadas': 'viscose.webp',
+                'vermelha': 'viscose-vermelha.webp',
+                'cinza-mescla': 'viscose-cinza-mescla.webp',
+                'vinho': 'viscose-vinho.webp'
             }
         },
         'moletom': {
             name: 'Moletom 3 Cabos',
             specs: ['Felpado/Inverno', '320 g/m² (Pesado)', 'Alta Resistência', '50% Alg / 50% Pol'],
             colors: {
-                'variadas': 'moletom.png',
-                'cinza-mescla': 'moletom.png',
-                'azul-marinho': 'moletom-azul-marinho.png',
-                'bordo': 'moletom-bordo.jpg'
+                'variadas': 'moletom.webp',
+                'cinza-mescla': 'moletom.webp',
+                'azul-marinho': 'moletom-azul-marinho.webp',
+                'bordo': 'moletom-bordo.webp'
             }
         },
         'helanca-escolar': {
             name: 'Helanca Escolar',
             specs: ['Indestrutível', 'Não Desbota', '100% Poliéster', 'Uso Diário'],
             colors: {
-                'azul-marinho': 'helanca-escolar-marinho.png',
-                'verde-bandeira': 'helanca-escolar-verde-bandeira.png',
-                'cinza': 'helanca-escolar-cinza.png',
-                'variadas': 'helanca-escolar.png'
+                'azul-marinho': 'helanca-escolar-marinho.webp',
+                'verde-bandeira': 'helanca-escolar-verde-bandeira.webp',
+                'cinza': 'helanca-escolar-cinza.webp',
+                'variadas': 'helanca-escolar.webp'
             }
         },
         'oxford': {
             name: 'Tecido Oxford',
             specs: ['Nobre e Prático', 'Não Amarrota', '100% Poliéster', 'Camisaria/Avental'],
             colors: {
-                'variadas': 'oxford.png',
-                'cinza': 'oxford-cinza.png',
-                'azul-marinho': 'oxford.png',
-                'vermelho': 'oxford-vermelho.jpg'
+                'variadas': 'oxford.webp',
+                'cinza': 'oxford-cinza.webp',
+                'azul-marinho': 'oxford.webp',
+                'vermelho': 'oxford-vermelho.webp'
             }
         }
     };
