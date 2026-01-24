@@ -279,8 +279,16 @@ function syncProductCards(allProducts, productsByCategory) {
                 // Validação extra: Só troca se for base64 válido ou caminho real diferente
                 const isValidImage = product.image.startsWith('data:image') || product.image.length > 20;
 
-                if (imgEl && isValidImage && imgEl.getAttribute('src') !== product.image) {
-                    imgEl.src = product.image;
+                if (imgEl && isValidImage) {
+                    let finalSrc = product.image;
+                    // Correção para subpáginas: Adicionar '../' se for caminho relativo simples
+                    if (window.location.pathname.includes('/paginas/') && !finalSrc.startsWith('data:') && !finalSrc.startsWith('http') && !finalSrc.startsWith('../')) {
+                        finalSrc = '../' + finalSrc;
+                    }
+
+                    if (imgEl.getAttribute('src') !== finalSrc) {
+                        imgEl.src = finalSrc;
+                    }
                 }
             }
         }
