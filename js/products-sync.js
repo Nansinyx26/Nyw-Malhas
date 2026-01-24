@@ -176,11 +176,22 @@ function syncProductCards(allProducts, productsByCategory) {
         const productName = titleEl.textContent.trim();
 
         // Busca o produto correspondente no banco
-        // 1. Tenta pelo nome exato ou contendo o nome
-        let product = allProducts.find(p =>
-            p.name.toLowerCase() === productName.toLowerCase() ||
-            productName.toLowerCase().includes(p.name.toLowerCase())
-        );
+        // 1. Tenta pelo nome exato, parcial ou fuzzy
+        let product = allProducts.find(p => {
+            const dbName = p.name.toLowerCase().trim();
+            const cardName = productName.toLowerCase().trim();
+
+            // Match exato
+            if (dbName === cardName) return true;
+
+            // Match parcial direto
+            if (dbName.includes(cardName) || cardName.includes(dbName)) return true;
+
+            // Match normalizado (ignora prefixos comuns)
+            const cleanDb = dbName.replace(/malha |tecido |meia /g, '');
+            const cleanCard = cardName.replace(/malha |tecido |meia /g, '');
+            return cleanDb.includes(cleanCard) || cleanCard.includes(cleanDb);
+        });
 
         // 2. Tenta encontrar pela cor/imagem se o nome for genérico
         if (!product) {
