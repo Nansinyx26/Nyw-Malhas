@@ -258,6 +258,20 @@ function syncProductCards(allProducts, productsByCategory) {
                     }
                 }
             }
+
+            // Atualiza preço no card se disponível
+            if (product.price) {
+                // Procura elemento de preço (geralmente dentro de .alert-dark strong)
+                const priceContainer = card.querySelector('.alert-dark strong, .price-display');
+                if (priceContainer) {
+                    const priceFormatted = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2 }).format(product.price);
+                    // Preserva o ícone se existir
+                    const icon = priceContainer.querySelector('i');
+                    const iconHtml = icon ? icon.outerHTML : '<i class="fas fa-tag me-2 text-orange"></i>';
+
+                    priceContainer.innerHTML = `${iconHtml}R$ ${priceFormatted} / kg`;
+                }
+            }
         }
     });
 }

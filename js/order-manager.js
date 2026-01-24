@@ -144,25 +144,42 @@ document.addEventListener('DOMContentLoaded', function () {
         const selectedColor = color || window.checkoutColorName || 'Selecione abaixo';
         document.getElementById('orderColor').value = selectedColor;
 
-        // Buscar estoque do banco se disponível
+        // Buscar estoque e PREÇO do banco se disponível
         let stockValue = '...';
+        let dynamicPrice = null;
+
         if (window.DBManager) {
             try {
                 const allProducts = await window.DBManager.getAllProducts();
                 const dbProduct = allProducts.find(p => {
                     const pName = p.name.toLowerCase();
                     const pColor = p.color.toLowerCase();
-                    return pColor === selectedColor.toLowerCase() && pName.includes(product.split(' ')[0].toLowerCase());
+                    // Matching robusto similar ao products-sync
+                    return pColor === selectedColor.toLowerCase() &&
+                        (pName === product.toLowerCase() || pName.includes(product.split(' ')[0].toLowerCase()));
                 });
+
                 if (dbProduct) {
                     stockValue = dbProduct.stock || 0;
+
+                    // ✅ ATUALIZAÇÃO DE PREÇO DINÂMICA
+                    if (dbProduct.price) {
+                        dynamicPrice = dbProduct.price;
+                        // Atualiza visualmente o input de preço unitário
+                        const priceInput = document.getElementById('orderUnitPrice');
+                        if (priceInput) {
+                            priceInput.value = `R$ ${dynamicPrice.toFixed(2).replace('.', ',')}`;
+                            priceInput.dataset.realPrice = dynamicPrice; // Armazena para cálculo
+                        }
+                    }
+
                     // ✅ PREVENÇÃO DE VENDA: Bloquear modal se estoque = 0
                     if (stockValue <= 0) {
                         alert('Produto indisponível no momento.\n\nEste item não está disponível para venda.');
                         return; // Bloqueia a abertura do modal
                     }
                 }
-            } catch (e) { console.error('Erro ao buscar estoque:', e); }
+            } catch (e) { console.error('Erro ao buscar dados do produto:', e); }
         }
 
         // Atualizar display de estoque no modal
@@ -216,7 +233,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const unit = document.getElementById('orderUnit').value;
 
         // Fixar Preço Unitário Visualmente
-        document.getElementById('orderUnitPrice').value = 'R$ 30,00';
+        const priceInput = document.getElementById('orderUnitPrice');
+        if (priceInput && !priceInput.dataset.realPrice) {
+            priceInput.value = 'R$ 30,00';
+        }
+
 
         let finalWeight = quantity;
         let subtotal = 0;
@@ -231,7 +252,13 @@ document.addEventListener('DOMContentLoaded', function () {
             weightDisplay.innerHTML = '';
         }
 
-        subtotal = finalWeight * product.price;
+        // Cálculo Final Baseado no Peso (Kg)
+        // Se temos preço dinâmico, usamos ele
+        let calcPrice = product.price;
+        if (document.getElementById('orderUnitPrice')?.dataset.realPrice) {
+            calcPrice = parseFloat(document.getElementById('orderUnitPrice').dataset.realPrice);
+        }
+        subtotal = finalWeight * calcPrice;
 
         document.getElementById('labelSubtotal').innerText = formatCurrency(subtotal);
         document.getElementById('labelShipping').innerText = formatCurrency(shippingCost);
