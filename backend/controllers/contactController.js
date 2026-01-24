@@ -12,9 +12,9 @@ exports.getContact = async (req, res) => {
         if (!contact) {
             contact = await Contact.create({
                 email: 'contato@nywmalhas.com.br',
-                phone: '(XX) XXXX-XXXX',
-                whatsapp: '+55 XX XXXXX-XXXX',
-                address: '[Seu endereço completo]',
+                phone: '',
+                whatsapp: '',
+                address: 'Americana - SP',
                 hours: 'Segunda a Sexta, 08:00 às 18:00',
                 facebook: 'https://facebook.com/nywmalhas',
                 instagram: '@nywmalhas'

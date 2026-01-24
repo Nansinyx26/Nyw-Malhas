@@ -21,7 +21,7 @@ async function loadContactFromAdmin() {
         }
 
         const contactInfo = await window.DBManager.getContact();
-        
+
         if (!contactInfo) {
             return;
         }
@@ -44,7 +44,7 @@ async function loadContactFromAdmin() {
  */
 function updateContactInfoSmooth(info) {
     const elementsToUpdate = [];
-    
+
     // Coleta todos os elementos que precisam ser atualizados
     checkAndCollect('[data-contact="email"]', info.email, elementsToUpdate, (el, value) => {
         if (el.tagName === 'A') {
@@ -84,7 +84,7 @@ function checkAndCollect(selector, newValue, collection, formatter) {
     document.querySelectorAll(selector).forEach(el => {
         const cacheKey = getCacheKey(el, 'text');
         const cachedValue = elementCache.get(cacheKey);
-        
+
         if (cachedValue !== newValue) {
             const updates = formatter(el, newValue);
             collection.push({ element: el, updates });
@@ -105,12 +105,12 @@ function applyFadeTransition(elements, callback) {
     // Fase 2: Atualiza conteúdo (após fade out)
     setTimeout(() => {
         callback();
-        
+
         // Fase 3: Fade in (opacity 1)
         setTimeout(() => {
             elements.forEach(({ element }) => {
                 element.style.opacity = '1';
-                
+
                 // Remove transition inline após animação
                 setTimeout(() => {
                     element.style.transition = '';
@@ -136,7 +136,7 @@ function getCacheKey(element, property) {
 function updateElementSafe(element, property, newValue) {
     const cacheKey = getCacheKey(element, property);
     const cachedValue = elementCache.get(cacheKey);
-    
+
     if (cachedValue !== newValue) {
         if (property === 'textContent') {
             element.textContent = newValue;
@@ -157,8 +157,13 @@ function updateContactInfo(info) {
     document.querySelectorAll('[data-contact="email"]').forEach(el => {
         if (el.tagName === 'A') {
             updateElementSafe(el, 'href', `mailto:${info.email}`);
+            // Só atualiza texto se não tiver ícone (previne apagar ícones no rodapé)
+            if (!el.querySelector('i')) {
+                updateElementSafe(el, 'textContent', info.email);
+            }
+        } else {
+            updateElementSafe(el, 'textContent', info.email);
         }
-        updateElementSafe(el, 'textContent', info.email);
     });
 
     // Telefones
@@ -166,8 +171,12 @@ function updateContactInfo(info) {
         if (el.tagName === 'A') {
             const phoneClean = info.phone.replace(/\D/g, '');
             updateElementSafe(el, 'href', `tel:+55${phoneClean}`);
+            if (!el.querySelector('i')) {
+                updateElementSafe(el, 'textContent', info.phone);
+            }
+        } else {
+            updateElementSafe(el, 'textContent', info.phone);
         }
-        updateElementSafe(el, 'textContent', info.phone);
     });
 
     // WhatsApp (texto)
@@ -175,8 +184,13 @@ function updateContactInfo(info) {
         if (el.tagName === 'A') {
             const phoneClean = info.whatsapp.replace(/\D/g, '');
             updateElementSafe(el, 'href', `https://wa.me/${phoneClean}`);
+            // IMPORTANTE: Se for um link de ícone no rodapé, NÃO sobrescrever com texto
+            if (!el.querySelector('i')) {
+                updateElementSafe(el, 'textContent', info.whatsapp);
+            }
+        } else {
+            updateElementSafe(el, 'textContent', info.whatsapp);
         }
-        updateElementSafe(el, 'textContent', info.whatsapp);
     });
 
     // Botões WhatsApp
@@ -184,13 +198,13 @@ function updateContactInfo(info) {
         const phoneClean = info.whatsapp.replace(/\D/g, '');
         const message = encodeURIComponent('Olá! Gostaria de saber mais sobre os produtos NYW MALHAS.');
         const newHref = `https://wa.me/${phoneClean}?text=${message}`;
-        
+
         if (btn.tagName === 'A') {
             updateElementSafe(btn, 'href', newHref);
         } else {
             const cacheKey = getCacheKey(btn, 'onclick');
             const cachedHref = elementCache.get(cacheKey);
-            
+
             if (cachedHref !== newHref) {
                 btn.onclick = (e) => {
                     e.preventDefault();
@@ -232,8 +246,8 @@ function updateContactInfo(info) {
 
     // Instagram
     document.querySelectorAll('[data-contact="instagram"]').forEach(el => {
-        const instagramUrl = info.instagram.startsWith('@') 
-            ? `https://instagram.com/${info.instagram.substring(1)}` 
+        const instagramUrl = info.instagram.startsWith('@')
+            ? `https://instagram.com/${info.instagram.substring(1)}`
             : `https://instagram.com/${info.instagram}`;
 
         if (el.tagName === 'A') {
@@ -256,12 +270,12 @@ function updateSocialLinks(info) {
         if (!icon) return;
 
         let newHref = '';
-        
+
         if (icon.classList.contains('fa-facebook')) {
             newHref = info.facebook || '#';
         } else if (icon.classList.contains('fa-instagram')) {
-            newHref = info.instagram.startsWith('@') 
-                ? `https://instagram.com/${info.instagram.substring(1)}` 
+            newHref = info.instagram.startsWith('@')
+                ? `https://instagram.com/${info.instagram.substring(1)}`
                 : `https://instagram.com/${info.instagram}`;
         } else if (icon.classList.contains('fa-whatsapp')) {
             const phoneClean = info.whatsapp.replace(/\D/g, '');
