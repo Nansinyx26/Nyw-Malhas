@@ -126,10 +126,11 @@ window.DBManager = {
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    // Converter para Base64 (JPEG comprimido)
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+                    // Converter para Base64 (WebP comprimido)
+                    // Se o navegador não suportar webp (raro hoje), toDataURL retornará png ou jpeg por padrão
+                    const compressedBase64 = canvas.toDataURL('image/webp', quality);
 
-                    console.log(`📸 Imagem otimizada: De ${(file.size / 1024).toFixed(2)}KB para ${(compressedBase64.length / 1024).toFixed(2)}KB`);
+                    console.log(`📸 Imagem otimizada (WebP): De ${(file.size / 1024).toFixed(2)}KB para ${(compressedBase64.length / 1024).toFixed(2)}KB`);
                     resolve(compressedBase64);
                 };
             };
