@@ -272,6 +272,17 @@ function syncProductCards(allProducts, productsByCategory) {
                     priceContainer.innerHTML = `${iconHtml}R$ ${priceFormatted} / kg`;
                 }
             }
+
+            // Atualiza imagem
+            if (product.image && !product.image.includes('placeholder')) {
+                const imgEl = card.querySelector('img.card-img-top');
+                // Validação extra: Só troca se for base64 válido ou caminho real diferente
+                const isValidImage = product.image.startsWith('data:image') || product.image.length > 20;
+
+                if (imgEl && isValidImage && imgEl.getAttribute('src') !== product.image) {
+                    imgEl.src = product.image;
+                }
+            }
         }
     });
 }
