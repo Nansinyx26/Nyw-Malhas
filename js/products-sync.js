@@ -157,6 +157,98 @@ function syncProductSections(allProducts, productsByCategory, productsByCatColor
 
     // Sincroniza também os cards de cores individuais se existirem
     syncColorOptions(allProducts, productsByCatColor);
+
+    // Sincroniza cards de produto individuais (usados nas subpáginas)
+    syncProductCards(allProducts, productsByCategory);
+}
+
+/**
+ * Sincroniza cards de produtos individuais (usados em subpáginas como malha-pv.html)
+ */
+function syncProductCards(allProducts, productsByCategory) {
+    const cards = document.querySelectorAll('.card-dark, .card, .product-card');
+
+    cards.forEach(card => {
+        // Tenta encontrar o nome do produto no card
+        const titleEl = card.querySelector('.card-title, .card-title-dark, h5');
+        if (!titleEl) return;
+
+        const productName = titleEl.textContent.trim();
+
+        // Busca o produto correspondente no banco
+        // 1. Tenta pelo nome exato ou contendo o nome
+        let product = allProducts.find(p =>
+            p.name.toLowerCase() === productName.toLowerCase() ||
+            productName.toLowerCase().includes(p.name.toLowerCase())
+        );
+
+        // 2. Tenta encontrar pela cor/imagem se o nome for genérico
+        if (!product) {
+            const imgEl = card.querySelector('img');
+            if (imgEl) {
+                const src = imgEl.getAttribute('src'); // Pega o atributo direto para evitar caminho completo
+                product = allProducts.find(p => p.image && (src.includes(p.image) || p.image.includes(src)));
+            }
+        }
+
+        if (product) {
+            const isAvailable = (product.stock || 0) > 0;
+            const statusText = isAvailable ? 'Disponível' : 'Indisponível';
+            const statusIcon = isAvailable ? 'fa-check-circle' : 'fa-times-circle';
+
+            // Atualiza badge de status existente
+            const statusBtn = card.querySelector('.btn-success-pill, .btn-danger-pill, .status-badge');
+            if (statusBtn) {
+                // Remove classes antigas
+                statusBtn.classList.remove('btn-success-pill', 'btn-danger-pill');
+
+                // Adiciona nova classe
+                statusBtn.classList.add(isAvailable ? 'btn-success-pill' : 'btn-danger-pill');
+
+                // Atualiza texto e ícone
+                statusBtn.innerHTML = `<i class="fas ${statusIcon} me-1"></i> ${statusText}`;
+
+                // Garante que pareça um badge, não um botão clicável se não for para sê-lo
+                statusBtn.disabled = true;
+                statusBtn.style.opacity = '1';
+            }
+
+            // Atualiza botão de compra do card
+            const buyBtn = card.querySelector('.btn-primary-pill, .btn-outline-primary, .cta-button');
+            if (buyBtn) {
+                if (!isAvailable) {
+                    // Estilo de aviso
+                    buyBtn.classList.remove('btn-primary-pill', 'btn-outline-primary');
+                    buyBtn.classList.add('btn-warning');
+                    buyBtn.innerHTML = `<i class="fas fa-exclamation-triangle me-2"></i> Sem Estoque`;
+
+                    // Comportamento de clique (Alerta)
+                    // Remove listeners antigos (clone) para evitar múltiplos alertas
+                    const newBtn = buyBtn.cloneNode(true);
+                    buyBtn.parentNode.replaceChild(newBtn, buyBtn);
+
+                    newBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        alert('Produto indisponível no momento.\n\nEste item não está disponível para venda.');
+                    });
+                } else {
+                    // Restaura botão normal se estiver disponível
+                    if (buyBtn.classList.contains('btn-warning')) {
+                        buyBtn.classList.remove('btn-warning');
+                        buyBtn.classList.add('btn-primary-pill');
+                        buyBtn.innerHTML = `<i class="fas fa-shopping-cart me-2"></i> Comprar`;
+
+                        // Restaura link original (se for <a>)
+                        const originalHref = buyBtn.getAttribute('href');
+                        if (originalHref) {
+                            const newBtn = buyBtn.cloneNode(true);
+                            buyBtn.parentNode.replaceChild(newBtn, buyBtn);
+                        }
+                    }
+                }
+            }
+        }
+    });
 }
 
 /**
