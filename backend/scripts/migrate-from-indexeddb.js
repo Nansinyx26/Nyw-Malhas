@@ -17,7 +17,7 @@ const INITIAL_PRODUCTS = [
     { name: 'Malha PP Preta', category: 'pp', color: 'Preta', image: 'img/malha-pp-preta.jpg', status: 'available', price: 30.00, stock: 100 },
     { name: 'Malha PP Vinho', category: 'pp', color: 'Vinho', image: 'img/malha-pp-vinho.jpg', status: 'available', price: 30.00, stock: 100 },
     { name: 'Malha PP Branca', category: 'pp', color: 'Branca', image: 'img/malha-pp-branca.png', status: 'available', price: 30.00, stock: 100 },
-    { name: 'Malha PP Azul Marinho', category: 'pp', color: 'Azul Marinho', image: 'img/malha-pp-azul-marinho.jpg', status: 'available', price: 30.00, stock: 100 },
+    { name: 'Malha PP Azul Marinho', category: 'pp', color: 'Azul Marinho', image: 'img/malha-pp-azul-marinho.png', status: 'available', price: 30.00, stock: 100 },
 
     // Piquet
     { name: 'Piquet Azul Marinho', category: 'piquet', color: 'Azul Marinho', image: 'img/azul-marinho-piquet.png', status: 'available', price: 30.00, stock: 100 },

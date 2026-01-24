@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 'preta': 'malha-pp-preta.jpg',
                 'vinho': 'malha-pp-vinho.jpg',
                 'branca': 'malha-pp-branca.png',
-                'azul-marinho': 'malha-pp-azul-marinho.jpg'
+                'azul-marinho': 'malha-pp-azul-marinho.png'
             }
         },
         'malha-piquet': {
