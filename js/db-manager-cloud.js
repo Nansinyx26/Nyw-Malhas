@@ -29,6 +29,28 @@ window.DBManager = {
         }
     },
 
+    // ✅ Novo método para compatibilidade com products-loader.js
+    async getProductsByCategory(category) {
+        try {
+            const allProducts = await this.getAllProducts();
+            if (!category) return allProducts;
+
+            // Normaliza a categoria para busca
+            const catNormalized = category.toLowerCase().trim();
+
+            return allProducts.filter(p => {
+                const pCat = p.category ? p.category.toLowerCase() : '';
+                // Mapeamentos específicos
+                if (catNormalized === 'helanca' && pCat.includes('helanca')) return true;
+                if (catNormalized === 'algodao' && (pCat === 'algodao' || pCat === 'meia-malha')) return true;
+                return pCat === catNormalized;
+            });
+        } catch (error) {
+            console.error(`Erro ao buscar produtos da categoria ${category}:`, error);
+            return [];
+        }
+    },
+
     async getProduct(id) {
         try {
             return await window.APIClient.getProduct(id);
