@@ -352,7 +352,9 @@ function getDefaultProducts(category) {
         ],
         algodao: [
             { id: 24, name: 'Meia Malha 30.1 Azul Marinho', category: 'algodao', color: 'Azul Marinho', image: '../img/algodao-azul-marinho.webp', status: 'available' },
-            { id: 25, name: 'Meia Malha 30.1 Vermelho', category: 'algodao', color: 'Vermelho', image: '../img/algodao-vermelho.webp', status: 'available' }
+            { id: 25, name: 'Meia Malha 30.1 Vermelho', category: 'algodao', color: 'Vermelho', image: '../img/algodao-vermelho.webp', status: 'available' },
+            { id: 251, name: 'Meia Malha 30.1 Preto', category: 'algodao', color: 'Preto', image: '../img/algodao-preto.webp', status: 'available' },
+            { id: 252, name: 'Meia Malha 30.1 Cinza Claro', category: 'algodao', color: 'Cinza Claro', image: '../img/algodao-cinza-claro.webp', status: 'available' }
         ],
         oxford: [
             { id: 26, name: 'Oxford Azul Marinho', category: 'oxford', color: 'Azul Marinho', image: '../img/oxford-azul-marinho.webp', status: 'available' },

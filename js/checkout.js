@@ -53,14 +53,16 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         },
         'algodao': {
-            name: 'Algodão 30.1',
+            name: 'Meia Malha 30.1',
             category: 'algodao',
             specs: ['100% Algodão', 'Fio Penteado', 'Hipoalergênico', 'Toque Macio'],
             colors: {
                 'variadas': 'algodao.webp',
                 'branco': 'algodao-branco.webp',
                 'azul-marinho': 'algodao-azul-marinho.webp',
-                'vermelho': 'algodao-vermelho.webp'
+                'vermelho': 'algodao-vermelho.webp',
+                'preto': 'algodao-preto.webp',
+                'cinza-claro': 'algodao-cinza-claro.webp'
             }
         },
         'dry-fit': {
