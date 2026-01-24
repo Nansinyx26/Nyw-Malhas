@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const productData = {
         'malha-pv': {
             name: 'Malha PV',
+            category: 'pv',
             specs: ['Alta durabilidade', 'Secagem rápida', 'Conforto térmico', 'Fácil manutenção'],
             colors: {
                 'preta': 'malha-pv-preta.webp',
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         },
         'malha-pp': {
             name: 'Malha PP',
+            category: 'pp',
             specs: ['Ultraleve', 'Resistente à abrasão', 'Não absorve umidade', 'Hipoalergênico'],
             colors: {
                 'preta': 'malha-pp-preta.webp',
@@ -28,6 +30,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         },
         'malha-piquet': {
             name: 'Malha Piquet',
+            category: 'piquet',
             specs: ['Textura diferenciada', 'Respirabilidade superior', 'Elegância casual', 'Versatilidade'],
             colors: {
                 'azul-marinho': 'azul-marinho-piquet.webp',
@@ -40,6 +43,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         },
         'helanca-light': {
             name: 'Helanca Light',
+            category: 'helanca',
             specs: ['Alta elasticidade', 'Ajuste perfeito', 'Leve e respirável', 'Ideal para fitness'],
             colors: {
                 'preto': 'helanca-light-preto.webp',
@@ -50,6 +54,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         },
         'algodao': {
             name: 'Algodão 30.1',
+            category: 'algodao',
             specs: ['100% Algodão', 'Fio Penteado', 'Hipoalergênico', 'Toque Macio'],
             colors: {
                 'variadas': 'algodao.webp',
@@ -60,6 +65,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         },
         'dry-fit': {
             name: 'Malha Dry Fit',
+            category: 'dryfit',
             specs: ['Secagem Rápida', '100% Poliamida', 'Ideal para Esportes', 'Leve (130g)'],
             colors: {
                 'variadas': 'dry-fit.webp',
@@ -71,6 +77,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         },
         'viscose': {
             name: 'Viscose c/ Elastano',
+            category: 'viscose',
             specs: ['Caimento Fluido', 'Toque Gelado', 'Conforto', '96% Viscose'],
             colors: {
                 'variadas': 'viscose.webp',
@@ -81,6 +88,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         },
         'moletom': {
             name: 'Moletom 3 Cabos',
+            category: 'moletom',
             specs: ['Felpado/Inverno', '320 g/m² (Pesado)', 'Alta Resistência', '50% Alg / 50% Pol'],
             colors: {
                 'variadas': 'moletom.webp',
@@ -91,6 +99,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         },
         'helanca-escolar': {
             name: 'Helanca Escolar',
+            category: 'helanca-escolar',
             specs: ['Indestrutível', 'Não Desbota', '100% Poliéster', 'Uso Diário'],
             colors: {
                 'azul-marinho': 'helanca-escolar-marinho.webp',
@@ -101,6 +110,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         },
         'oxford': {
             name: 'Tecido Oxford',
+            category: 'oxford',
             specs: ['Nobre e Prático', 'Não Amarrota', '100% Poliéster', 'Camisaria/Avental'],
             colors: {
                 'variadas': 'oxford.webp',
@@ -117,13 +127,16 @@ document.addEventListener('DOMContentLoaded', async function () {
     function findDbImage(productKey, colorKey, fallbackImage) {
         if (!storageAllProducts || storageAllProducts.length === 0) return 'img/' + fallbackImage;
 
+        const targetInfo = productData[productKey];
+
         const dbProduct = storageAllProducts.find(p => {
-            const pName = p.name.toLowerCase();
-            const pColor = p.color.toLowerCase();
-            const targetName = productKey.toLowerCase();
-            const targetColor = colorKey.toLowerCase();
-            // Busca por categoria (parte do nome) e cor exata
-            return pColor === targetColor && pName.includes(targetName.split(' ')[0].toLowerCase());
+            const pCategory = p.category ? p.category.toLowerCase().trim() : '';
+            const pColor = p.color ? p.color.toLowerCase().trim() : '';
+            const targetCategory = targetInfo.category.toLowerCase().trim();
+            const targetColor = colorKey.toLowerCase().trim();
+
+            // Busca por categoria exata e cor exata
+            return pColor === targetColor && pCategory === targetCategory;
         });
 
         if (dbProduct && dbProduct.image) {
@@ -140,12 +153,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Pegar parâmetros da URL
     const urlParams = new URLSearchParams(window.location.search);
-    const product = urlParams.get('produto');
+    const productSlug = urlParams.get('produto');
     const color = urlParams.get('cor');
     const productId = urlParams.get('productId');
 
     // Validar se os parâmetros básicos existem
-    if (!product || !color || !productData[product] || !productData[product].colors[color]) {
+    if (!productSlug || !color || !productData[productSlug] || !productData[productSlug].colors[color]) {
         alert('Produto ou cor inválidos!');
         window.location.href = 'index.html';
         return;
@@ -165,17 +178,16 @@ document.addEventListener('DOMContentLoaded', async function () {
                 console.log('📦 Produto carregado por ID direto:', targetProductFromDb);
             }
 
-            // Fallback: Busca manual por nome/cor se não houver ID ou se falhar
+            // Fallback: Busca manual por categoria/cor se não houver ID ou se falhar
             if (!targetProductFromDb) {
-                const productKey = productData[product].name;
-                const colorKey = color.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                const targetInfo = productData[productSlug];
+                const targetCategory = targetInfo.category.toLowerCase().trim();
+                const targetColor = color.replace(/-/g, ' ').toLowerCase().trim();
 
                 targetProductFromDb = storageAllProducts.find(p => {
-                    const pName = p.name.toLowerCase();
-                    const pColor = p.color.toLowerCase();
-                    const targetName = productKey.toLowerCase();
-                    const targetColor = colorKey.toLowerCase();
-                    return pColor === targetColor && pName.includes(targetName.split(' ')[0].toLowerCase());
+                    const pCategory = p.category ? p.category.toLowerCase().trim() : '';
+                    const pColor = p.color ? p.color.toLowerCase().trim() : '';
+                    return pColor === targetColor && pCategory === targetCategory;
                 });
             }
 
@@ -215,8 +227,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // Carregar dados do produto
-    const productInfo = productData[product];
-    const colorDisplay = color.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    const productInfo = productData[productSlug];
+    const colorDisplay = color.replace(/-/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
     // Determinar imagem final: Prioridade para o objeto do banco encontrado
     let imagePath;
@@ -226,7 +238,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             imagePath = 'img/' + imagePath.replace(/^img\//, '');
         }
     } else {
-        imagePath = findDbImage(productInfo.name, colorDisplay, productInfo.colors[color]);
+        imagePath = findDbImage(productSlug, colorDisplay, productInfo.colors[color]);
     }
 
     // Atualizar elementos da página
@@ -236,6 +248,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById('colorName').textContent = colorDisplay;
 
     // Sincronizar com o modal de pedido
+    window.DBProductImage = imagePath;
     window.DBProductImage = imagePath;
 
     // Se o banco trouxe um preço diferente, atualiza o resumo do modal (via variáveis globais)

@@ -23,8 +23,8 @@ const INITIAL_PRODUCTS = [
     { name: 'Malha PP Azul Marinho', category: 'pp', color: 'Azul Marinho', image: 'img/malha-pp-azul-marinho.webp', status: 'available', price: 30.00, stock: 100 },
 
     // Piquet (Malha Piquet)
-    { name: 'Piquet Azul Marinho', category: 'piquet', color: 'Azul Marinho', image: 'img/azul-marinho-piquet-pv.webp', status: 'available', price: 30.00, stock: 100 },
-    { name: 'Piquet Vermelho', category: 'piquet', color: 'Vermelho', image: 'img/vermelho-piquet-pv.webp', status: 'available', price: 30.00, stock: 100 },
+    { name: 'Piquet Azul Marinho', category: 'piquet', color: 'Azul Marinho', image: 'img/azul-marinho-piquet.webp', status: 'available', price: 30.00, stock: 100 },
+    { name: 'Piquet Vermelho', category: 'piquet', color: 'Vermelho', image: 'img/vermelho-piquet.webp', status: 'available', price: 30.00, stock: 100 },
     { name: 'Piquet Cinza Chumbo', category: 'piquet', color: 'Cinza Chumbo', image: 'img/malha-piquet-pa-cinza-chumbo.webp', status: 'available', price: 30.00, stock: 100 },
     { name: 'Piquet Verde Bandeira', category: 'piquet', color: 'Verde Bandeira', image: 'img/malha-piquet-pa-bandeira.webp', status: 'available', price: 30.00, stock: 100 },
     { name: 'Piquet Branco', category: 'piquet', color: 'Branco', image: 'img/malha-piquet-branca.webp', status: 'available', price: 30.00, stock: 100 },
@@ -46,7 +46,7 @@ const INITIAL_PRODUCTS = [
     // Dry Fit
     { name: 'Dry Fit Preto', category: 'dryfit', color: 'Preto', image: 'img/dry-fit-preto.webp', status: 'available', price: 30.00, stock: 100 },
     { name: 'Dry Fit Branco', category: 'dryfit', color: 'Branco', image: 'img/dry-fit-branco.webp', status: 'available', price: 30.00, stock: 100 },
-    { name: 'Dry Fit Azul Royal', category: 'dryfit', color: 'Azul Royal', image: 'img/dry-fit.webp', status: 'available', price: 30.00, stock: 100 },
+    { name: 'Dry Fit Azul Royal', category: 'dryfit', color: 'Azul Royal', image: 'img/dry-fit-azul-royal.webp', status: 'available', price: 30.00, stock: 100 },
 
     // Viscose
     { name: 'Viscose-Elastano Vermelha', category: 'viscose', color: 'Vermelha', image: 'img/viscose-vermelha.webp', status: 'available', price: 30.00, stock: 100 },
@@ -61,7 +61,7 @@ const INITIAL_PRODUCTS = [
     // Helanca Escolar
     { name: 'Helanca Escolar Verde Bandeira', category: 'helanca-escolar', color: 'Verde Bandeira', image: 'img/helanca-escolar-verde-bandeira.webp', status: 'available', price: 30.00, stock: 100 },
     { name: 'Helanca Escolar Cinza', category: 'helanca-escolar', color: 'Cinza', image: 'img/helanca-escolar-cinza.webp', status: 'available', price: 30.00, stock: 100 },
-    { name: 'Helanca Escolar Azul Marinho', category: 'helanca-escolar', color: 'Azul Marinho', image: 'img/helanca-escolar.webp', status: 'available', price: 30.00, stock: 100 },
+    { name: 'Helanca Escolar Azul Marinho', category: 'helanca-escolar', color: 'Azul Marinho', image: 'img/helanca-escolar-marinho.webp', status: 'available', price: 30.00, stock: 100 },
 
     // Oxford
     { name: 'Oxford Cinza', category: 'oxford', color: 'Cinza', image: 'img/oxford-cinza.webp', status: 'available', price: 30.00, stock: 100 },
