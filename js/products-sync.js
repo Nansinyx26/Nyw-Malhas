@@ -55,13 +55,16 @@ async function syncProductsFromMongoDB() {
 function syncProductSections(allProducts, productsByCategory, productsByCatColor) {
     // Mapeamento de seções
     const sections = {
-        'helanca': ['helanca', 'helanca-escolar'],
+        'helanca': ['helanca', 'helanca-light'],
         'algodao': ['algodao', 'meia-malha'],
         'helanca-escolar': ['helanca-escolar'],
         'dry-fit': ['dryfit'],
         'viscose': ['viscose'],
         'moletom': ['moletom'],
-        'oxford': ['oxford']
+        'oxford': ['oxford'],
+        'pv': ['pv'],
+        'pp': ['pp'],
+        'piquet': ['piquet']
     };
 
     Object.keys(sections).forEach(sectionId => {
