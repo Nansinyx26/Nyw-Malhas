@@ -30,8 +30,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             name: 'Malha Piquet',
             specs: ['Textura diferenciada', 'Respirabilidade superior', 'Elegância casual', 'Versatilidade'],
             colors: {
-                'azul-marinho': 'azul-marinho-piquet-pv.jpg',
-                'vermelho': 'vermelho-piquet-pv.jpg',
+                'azul-marinho': 'azul-marinho-piquet.png',
+                'vermelho': 'vermelho-piquet.jpg',
                 'cinza-chumbo': 'malha-piquet-pa-cinza-chumbo.jpg',
                 'verde-bandeira': 'malha-piquet-pa-bandeira.jpg',
                 'branco': 'malha-piquet-branca.jpg',
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             colors: {
                 'variadas': 'dry-fit.png',
                 'azul': 'dry-fit.png',
-                'azul-royal': 'dry-fit.png',
+                'azul-royal': 'dry-fit-azul-royal.png',
                 'branco': 'dry-fit-branco.png',
                 'preto': 'dry-fit-preto.jpg'
             }
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             specs: ['Caimento Fluido', 'Toque Gelado', 'Conforto', '96% Viscose'],
             colors: {
                 'variadas': 'viscose.png',
-                'vermelha': 'viscose.png',
+                'vermelha': 'viscose-vermelha.png',
                 'cinza-mescla': 'viscose-cinza-mescla.png',
                 'vinho': 'viscose-vinho.jpg'
             }
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             name: 'Helanca Escolar',
             specs: ['Indestrutível', 'Não Desbota', '100% Poliéster', 'Uso Diário'],
             colors: {
-                'azul-marinho': 'helanca-escolar.png',
+                'azul-marinho': 'helanca-escolar-marinho.png',
                 'verde-bandeira': 'helanca-escolar-verde-bandeira.png',
                 'cinza': 'helanca-escolar-cinza.png',
                 'variadas': 'helanca-escolar.png'
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             specs: ['Nobre e Prático', 'Não Amarrota', '100% Poliéster', 'Camisaria/Avental'],
             colors: {
                 'variadas': 'oxford.png',
-                'cinza': 'oxford.png',
+                'cinza': 'oxford-cinza.png',
                 'azul-marinho': 'oxford.png',
                 'vermelho': 'oxford-vermelho.jpg'
             }
