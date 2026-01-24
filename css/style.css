@@ -2192,3 +2192,103 @@ footer {
         padding: 1rem;
     }
 }
+
+/* ===== INDICADORES DE DISPONIBILIDADE (MONGODB SYNC) ===== */
+
+.product-status-indicator {
+    margin-bottom: 1.5rem;
+    animation: fadeIn 0.5s ease;
+}
+
+.availability-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.availability-badge.available {
+    background: rgba(39, 174, 96, 0.15);
+    border: 2px solid #27ae60;
+    color: #27ae60;
+}
+
+.availability-badge.unavailable {
+    background: rgba(231, 76, 60, 0.15);
+    border: 2px solid #e74c3c;
+    color: #e74c3c;
+}
+
+.availability-badge i {
+    font-size: 1.3rem;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.availability-badge.available i {
+    color: #27ae60;
+}
+
+.availability-badge.unavailable i {
+    color: #e74c3c;
+}
+
+/* Badge de estoque nas opções de cor */
+.color-stock-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 8px;
+    font-weight: 600;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease;
+}
+
+/* Animação de pulso para ícones */
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Estado desabilitado para opções sem estoque */
+.color-option.disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+    pointer-events: none;
+}
+
+.color-option.disabled .color-swatch {
+    filter: grayscale(50%);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .availability-badge {
+        font-size: 0.95rem;
+        padding: 0.6rem 1.2rem;
+    }
+
+    .availability-badge i {
+        font-size: 1.1rem;
+    }
+
+    .product-status-indicator {
+        text-align: center;
+    }
+}
