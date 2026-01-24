@@ -156,10 +156,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
                 if (dbProduct) {
                     stockValue = dbProduct.stock || 0;
-                    // ✅ PREVENÇÃO DE VENDA: Bloquear modal se estoque = 0
+                    // ✅ AVISO DE ESTOQUE: Apenas alerta, mas permite continuar
                     if (stockValue <= 0) {
-                        alert('⚠️ Produto sem estoque! Este item não está disponível para venda no momento.');
-                        return;
+                        const confirmPurchase = confirm('⚠️ Atenção: Este produto está INDISPONÍVEL no estoque.\n\nDeseja realizar o pedido mesmo assim? (Sujeito a disponibilidade futura)');
+                        if (!confirmPurchase) return;
                     }
                 }
             } catch (e) { console.error('Erro ao buscar estoque:', e); }

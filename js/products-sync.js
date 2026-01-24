@@ -129,20 +129,23 @@ function syncProductSections(allProducts, productsByCategory, productsByCatColor
             </div>
         `;
 
-        // Desabilita botão se não disponível
+        // Botão de ação (Comprar) - SEMPRE HABILITADO AGORA
         const orderButton = section.querySelector('.order-cta button, .btn-orange');
         if (orderButton) {
+            // Mantém sempre habilitado, mas adiciona aviso visual se indisponível
+            orderButton.disabled = false;
+            orderButton.style.opacity = '1';
+            orderButton.style.cursor = 'pointer';
+
             if (!isAvailable) {
-                orderButton.disabled = true;
-                orderButton.style.opacity = '0.5';
-                orderButton.style.cursor = 'not-allowed';
-                orderButton.innerHTML = '<i class="fas fa-times-circle me-2"></i> PRODUTO INDISPONÍVEL';
+                // Adiciona um estilo leve de aviso, mas mantém funcional
+                orderButton.innerHTML = `<i class="fas fa-exclamation-triangle me-2"></i> FAZER PEDIDO (Sem Estoque)`;
+                orderButton.classList.add('btn-warning');
+                orderButton.classList.remove('btn-orange');
             } else {
-                orderButton.disabled = false;
-                orderButton.style.opacity = '1';
-                orderButton.style.cursor = 'pointer';
-                const productName = section.querySelector('.section-header h1')?.textContent || 'Produto';
                 orderButton.innerHTML = `<i class="fas fa-shopping-cart me-2"></i> FAZER PEDIDO AGORA`;
+                orderButton.classList.add('btn-orange');
+                orderButton.classList.remove('btn-warning');
             }
         }
 
