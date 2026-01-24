@@ -43,7 +43,7 @@ const INITIAL_PRODUCTS = [
     // Dry Fit
     { name: 'Dry Fit Preto', category: 'dryfit', color: 'Preto', image: 'img/dry-fit-preto.jpg', status: 'available', price: 30.00, stock: 100 },
     { name: 'Dry Fit Branco', category: 'dryfit', color: 'Branco', image: 'img/dry-fit-branco.png', status: 'available', price: 30.00, stock: 100 },
-    { name: 'Dry Fit Azul Royal', category: 'dryfit', color: 'Azul Royal', image: 'img/dry-fit.png', status: 'available', price: 30.00, stock: 100 },
+    { name: 'Dry Fit Azul Royal', category: 'dryfit', color: 'Azul Royal', image: 'img/dry-fit-azul-royal.png', status: 'available', price: 30.00, stock: 100 },
 
     // Viscose
     { name: 'Viscose-Elastano Vermelha', category: 'viscose', color: 'Vermelha', image: 'img/viscose.png', status: 'available', price: 30.00, stock: 100 },
