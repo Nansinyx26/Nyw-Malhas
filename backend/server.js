@@ -38,6 +38,7 @@ app.use('/api/contact', require('./routes/contact'));
 app.use('/api/orders', require('./routes/orders'));
 app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/notifications', require('./routes/notifications'));
+app.use('/api/migrate', require('./routes/migrate'));
 
 // Rota raiz - serve o site
 app.get('/', (req, res) => {
