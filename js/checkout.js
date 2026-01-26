@@ -201,31 +201,44 @@ document.addEventListener('DOMContentLoaded', async function () {
                     return;
                 }
 
-                // Mostrar estoque na página
-                const colorTag = document.getElementById('productColorTag');
-                if (colorTag) {
-                    let stockTag = document.getElementById('productStockTag');
-                    if (!stockTag) {
-                        stockTag = document.createElement('div');
-                        stockTag.id = 'productStockTag';
-                        stockTag.className = 'product-color-tag ms-2';
-                        colorTag.parentNode.insertBefore(stockTag, colorTag.nextSibling);
-                    }
-                    const isAvail = stockVal > 0;
-                    stockTag.innerHTML = `<i class="fas fa-${isAvail ? 'check' : 'times'}-circle me-2"></i><strong>${isAvail ? 'Disponível' : 'Indisponível'}</strong>`;
-
-                    const statusColor = isAvail ? '#27ae60' : '#e74c3c';
-                    const bgColor = isAvail ? 'rgba(46, 204, 113, 0.1)' : 'rgba(231, 76, 60, 0.1)';
-                    const borderColor = isAvail ? 'rgba(46, 204, 113, 0.3)' : 'rgba(231, 76, 60, 0.3)';
-
-                    stockTag.style.background = bgColor;
-                    stockTag.style.borderColor = borderColor;
-                    stockTag.style.color = statusColor;
-                }
+                // (Lógica de exibição movida para garantir visualização padrão)
             }
         }
     } catch (error) {
         console.error('Erro ao verificar disponibilidade:', error);
+    }
+
+    // ===== EXIBIÇÃO DE ESTOQUE (Sempre visível) =====
+    const stockVal = targetProductFromDb ? (targetProductFromDb.stock !== undefined ? targetProductFromDb.stock : 100) : 100;
+    const isAvail = stockVal > 0;
+
+    const colorTag = document.getElementById('productColorTag');
+    if (colorTag) {
+        let stockTag = document.getElementById('productStockTag');
+        if (!stockTag) {
+            stockTag = document.createElement('div');
+            stockTag.id = 'productStockTag';
+            stockTag.className = 'product-color-tag mb-3';
+
+            // Inserir ANTES do container do seletor (uma linha acima)
+            const colorSelector = document.getElementById('colorSelectorContainer');
+            if (colorSelector && colorSelector.parentNode) {
+                // Inserir antes da div pai do seletor (.mb-4)
+                colorSelector.parentNode.parentNode.insertBefore(stockTag, colorSelector.parentNode);
+            } else {
+                colorTag.parentNode.insertBefore(stockTag, colorTag.nextSibling);
+            }
+        }
+
+        stockTag.innerHTML = `<i class="fas fa-${isAvail ? 'check' : 'times'}-circle me-2"></i><strong>${isAvail ? 'Disponível' : 'Indisponível'}</strong>`;
+
+        const statusColor = isAvail ? '#27ae60' : '#e74c3c';
+        const bgColor = isAvail ? 'rgba(46, 204, 113, 0.1)' : 'rgba(231, 76, 60, 0.1)';
+        const borderColor = isAvail ? 'rgba(46, 204, 113, 0.3)' : 'rgba(231, 76, 60, 0.3)';
+
+        stockTag.style.background = bgColor;
+        stockTag.style.borderColor = borderColor;
+        stockTag.style.color = statusColor;
     }
 
     // Carregar dados do produto

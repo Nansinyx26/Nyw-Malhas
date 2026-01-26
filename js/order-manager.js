@@ -143,29 +143,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Atualizar display de estoque no modal com segurança
-        let stockDisplay = document.getElementById('modalStockDisplay');
-        if (!stockDisplay) {
-            const container = document.querySelector('#orderForm .order-section');
-            if (container) {
-                const div = document.createElement('div');
-                div.id = 'modalStockDisplay';
-                div.className = 'alert alert-info py-2 px-3 mb-3 d-flex align-items-center gap-2';
-                div.style.background = stockValue > 0 ? 'rgba(46, 204, 113, 0.1)' : 'rgba(231, 76, 60, 0.1)';
-                div.style.border = stockValue > 0 ? '1px solid rgba(46, 204, 113, 0.3)' : '1px solid rgba(231, 76, 60, 0.3)';
-                div.style.color = '#fff';
-                div.innerHTML = `<i class="fas fa-boxes"></i> <span>Situação: <strong id="modalStockValue" style="color: ${stockValue > 0 ? '#2ecc71' : '#e74c3c'}">${stockValue > 0 ? 'Disponível' : 'Indisponível'}</strong></span>`;
-                container.parentNode.insertBefore(div, container);
-                stockDisplay = div;
-            }
-        } else {
-            const valEl = document.getElementById('modalStockValue');
-            if (valEl) {
-                valEl.textContent = stockValue > 0 ? 'Disponível' : 'Indisponível';
-                valEl.style.color = stockValue > 0 ? '#2ecc71' : '#e74c3c';
-            }
-            stockDisplay.style.background = stockValue > 0 ? 'rgba(46, 204, 113, 0.1)' : 'rgba(231, 76, 60, 0.1)';
-            stockDisplay.style.border = stockValue > 0 ? '1px solid rgba(46, 204, 113, 0.3)' : '1px solid rgba(231, 76, 60, 0.3)';
-        }
+        // (Visualização de status removida conforme solicitação)
 
         // Atualizar imagem no modal
         const productImage = document.getElementById('productImage');
