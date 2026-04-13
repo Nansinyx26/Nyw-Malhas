@@ -1,0 +1,568 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Finalizar Compra - NYW MALHAS</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff6600 0%, #ff8533 100%);
+            /* Modern Light Glass Logic */
+            --glass-bg: rgba(245, 245, 247, 0.85);
+            /* High opacity white/gray for readability but still glassy */
+            --glass-border: 1px solid rgba(255, 255, 255, 0.4);
+            /* Subtle white border */
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            /* Slightly stronger shadow for depth */
+        }
+
+        body {
+            background-color: #0f0f13;
+            /* Ensure dark background matches theme */
+            color: #fff;
+        }
+
+        .checkout-container {
+            min-height: 85vh;
+            padding: 40px 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .product-image-large {
+            width: 100%;
+            height: 550px;
+            object-fit: cover;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            transition: transform 0.4s ease;
+        }
+
+        .product-image-large:hover {
+            transform: scale(1.02);
+        }
+
+        .product-details {
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: var(--glass-border);
+            border-radius: 24px;
+            padding: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #333;
+            /* Dark text for light background */
+        }
+
+        .product-title {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+        }
+
+        .product-color-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            background: rgba(0, 198, 255, 0.1);
+            border: 1px solid rgba(0, 198, 255, 0.3);
+            border-radius: 100px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            background: rgba(255, 102, 0, 0.1);
+            border: 1px solid rgba(255, 102, 0, 0.3);
+            border-radius: 100px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #d35400;
+            margin-bottom: 20px;
+        }
+
+        .product-specs h4 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .product-specs ul li {
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            color: #555;
+            display: flex;
+            align-items: center;
+        }
+
+        .product-specs ul li i {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .order-button {
+            font-size: 1.4rem;
+            padding: 22px;
+            border-radius: 16px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(255, 102, 0, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+        }
+
+        .order-button:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(255, 102, 0, 0.5);
+        }
+
+        .shipping-calculator {
+            background: rgba(0, 0, 0, 0.05) !important;
+            border-radius: 20px !important;
+            border: 1px solid rgba(0, 0, 0, 0.05) !important;
+            margin-top: 30px;
+            padding: 25px !important;
+        }
+
+        /* Modal Styling Override */
+        .glass-modal {
+            background: rgba(20, 20, 25, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            max-height: 95vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .glass-modal .modal-body {
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        /* Prevent footer buttons from sticking out */
+        .glass-modal .modal-footer {
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            padding: 20px 30px;
+        }
+
+        /* Responsive Modal Width Fix */
+        @media (min-width: 1200px) {
+            .modal-xl {
+                max-width: 1600px;
+            }
+        }
+
+        .modal-product-preview {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header .btn-close-white {
+            opacity: 0.8;
+        }
+
+        .glass-input,
+        .form-select.glass-input {
+            background: #fff !important;
+            border: 1px solid rgba(0, 0, 0, 0.1) !important;
+            color: #333 !important;
+            border-radius: 12px;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .glass-input:focus,
+        .form-select.glass-input:focus {
+            background: #fff !important;
+            border-color: #ff6600 !important;
+            box-shadow: 0 0 0 4px rgba(255, 102, 0, 0.1) !important;
+        }
+
+        .glass-input::placeholder {
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        .section-title {
+            color: #ff6600;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .summary-box {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+        }
+
+        .back-button {
+            border-radius: 100px;
+            padding: 10px 25px;
+            border-color: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-color: #fff;
+        }
+    </style>
+    <link rel="stylesheet" href="css/nandev-watermark.css">
+
+    <!-- Favicon / Logo do Site -->
+    <link rel="icon" type="image/png" sizes="512x512" href="/img/favicon-512.png">
+    <link rel="apple-touch-icon" href="/img/favicon-512.png">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <img src="img/logo3.webp" alt="Logo NYW MALHAS" class="logo">
+            <p class="tagline">Malhas e Tecidos de Qualidade</p>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container-fluid nav-container">
+            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav mx-auto d-flex flex-wrap justify-content-center gap-2">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i> <span>Início</span>
+                    </a>
+
+                    <a href="paginas/malha-pv.html" class="nav-link"><i class="fas fa-tshirt"></i> <span>Malha
+                            PV</span></a>
+                    <a href="paginas/malha-pp.html" class="nav-link"><i class="fas fa-layer-group"></i> <span>Malha
+                            PP</span></a>
+                    <a href="paginas/malha-piquet.html" class="nav-link"><i class="fas fa-chess-board"></i>
+                        <span>Piquet</span></a>
+                    <a href="paginas/helanca-light.html" class="nav-link"><i class="fas fa-wind"></i> <span>Helanca
+                            Light</span></a>
+                    <a href="paginas/helanca-escolar.html" class="nav-link"><i class="fas fa-child"></i> <span>Helanca
+                            Escolar</span></a>
+                    <a href="paginas/dry-fit.html" class="nav-link"><i class="fas fa-running"></i> <span>Dry
+                            Fit</span></a>
+                    <a href="paginas/viscose.html" class="nav-link"><i class="fas fa-feather-alt"></i>
+                        <span>Viscose</span></a>
+                    <a href="paginas/moletom.html" class="nav-link"><i class="fas fa-snowflake"></i>
+                        <span>Moletom</span></a>
+                    <a href="paginas/algodao.html" class="nav-link"><i class="fas fa-leaf"></i> <span>Algodão</span></a>
+                    <a href="paginas/oxford.html" class="nav-link"><i class="fas fa-briefcase"></i>
+                        <span>Oxford</span></a>
+
+                    <a href="paginas/contato.html" class="nav-link">
+                        <i class="fas fa-phone"></i> <span>Contato</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="checkout-container container-fluid">
+            <button class="btn btn-outline-light back-button" onclick="history.back()">
+                <i class="fas fa-arrow-left me-2"></i> Voltar
+            </button>
+
+            <div class="row g-5">
+                <!-- Imagem do Produto -->
+                <div class="col-lg-6">
+                    <img id="productImage" src="" alt="Produto" class="product-image-large">
+                </div>
+
+                <!-- Detalhes do Produto -->
+                <div class="col-lg-6">
+                    <div class="product-details">
+                        <h1 id="productTitle" class="product-title">Nome do Produto</h1>
+                        <div id="productColorTag" class="product-color-tag">
+                            <i class="fas fa-palette me-2"></i> <span id="colorName">Cor</span>
+                        </div>
+
+                        <!-- Color Selector -->
+                        <div class="mb-4">
+                            <h5 style="color: #666; font-size: 1rem; margin-bottom: 10px;">Escolha a cor:</h5>
+                            <div id="colorSelectorContainer" class="d-flex flex-wrap gap-2">
+                                <!-- Colors will be injected here by JS -->
+                            </div>
+                        </div>
+
+                        <div class="product-specs mb-4">
+                            <h4><i class="fas fa-info-circle me-2"></i> Características</h4>
+                            <ul class="list-unstyled" id="productSpecs">
+                                <li><i class="fas fa-check text-primary me-2"></i> Carregando...</li>
+                            </ul>
+                        </div>
+
+                        <button class="btn btn-primary w-100 order-button" onclick="openOrderModalFromCheckout()">
+                            <i class="fas fa-shopping-cart me-2"></i> FAZER PEDIDO AGORA
+                        </button>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Pedido -->
+        <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content glass-modal">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title" id="orderModalLabel">🧵 Finalizar Pedido</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <!-- Coluna da Imagem (Visual Feedback) -->
+                            <div class="col-lg-4 mb-4 mb-lg-0">
+                                <img id="modalProductImage" src="img/logo3.png" alt="Produto"
+                                    class="modal-product-preview img-fluid">
+                                <div class="alert alert-dark border-orange p-2 text-center" style="font-size: 0.85rem;">
+                                    <i class="fas fa-info-circle text-orange"></i> Verifique se a cor na imagem é a que
+                                    você deseja.
+                                </div>
+                            </div>
+
+                            <!-- Coluna do Formulário -->
+                            <div class="col-lg-8">
+                                <form id="orderForm">
+                                    <div class="order-section mb-4">
+                                        <h6 class="section-title"><i class="fas fa-shopping-basket"></i> Produto
+                                            Selecionado
+                                        </h6>
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Produto</label>
+                                                <input type="text" id="orderProduct" class="form-control glass-input"
+                                                    readonly>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Cor / Estampa</label>
+                                                <input type="text" id="orderColor" class="form-control glass-input"
+                                                    readonly>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Quantidade</label>
+                                                <input type="number" id="orderQuantity" class="form-control glass-input"
+                                                    placeholder="0" step="0.01" min="0.01" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Unidade</label>
+                                                <select id="orderUnit" class="form-select glass-input">
+                                                    <option value="Kg">Quilos (Kg)</option>
+                                                    <option value="Metros">Metros (m)</option>
+                                                    <option value="Peças">Peças (un)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="order-section mb-4">
+                                        <h6 class="section-title"><i class="fas fa-user-circle"></i> Dados do Cliente
+                                        </h6>
+                                        <div class="row g-3">
+                                            <div class="col-md-12">
+                                                <input type="text" id="clientName" class="form-control glass-input"
+                                                    placeholder="Nome completo / Razão Social" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" id="clientTaxId" class="form-control glass-input"
+                                                    placeholder="CPF / CNPJ" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="tel" id="clientPhone" class="form-control glass-input"
+                                                    placeholder="Telefone / WhatsApp" required>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <input type="email" id="clientEmail" class="form-control glass-input"
+                                                    placeholder="E-mail" required>
+                                                <div class="form-text text-light opacity-75 mt-2">
+                                                    <small><i class="fas fa-info-circle"></i> E-mail para NF,
+                                                        atualizações e rastreio.</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="order-section mb-4">
+                                        <h6 class="section-title"><i class="fas fa-map-marker-alt"></i> Endereço de
+                                            Entrega</h6>
+                                        <div class="row g-3">
+                                            <div class="col-md-9">
+                                                <input type="text" id="addrStreet" class="form-control glass-input"
+                                                    placeholder="Endereço" required>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" id="addrNumber" class="form-control glass-input"
+                                                    placeholder="Nº" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" id="addrComplement" class="form-control glass-input"
+                                                    placeholder="Complemento">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" id="addrNeighborhood"
+                                                    class="form-control glass-input" placeholder="Bairro" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" id="addrCity" class="form-control glass-input"
+                                                    placeholder="Cidade" required>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="text" id="addrUF" class="form-control glass-input"
+                                                    placeholder="UF" maxlength="2" required>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" id="addrZip" class="form-control glass-input"
+                                                    placeholder="CEP" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" form="orderForm" class="btn btn-primary px-4 py-2 fw-bold">
+                            <i class="fab fa-whatsapp me-2"></i> Finalizar no WhatsApp
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 NYW MALHAS. Todos os direitos reservados.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-whatsapp"></i></a>
+            </div>
+
+            <!-- MARCA D'ÁGUA NANDEV -->
+            <a href="https://www.linkedin.com/in/renan-de-oliveira-farias-66a9b412b/" target="_blank"
+                rel="noopener noreferrer" class="nandev-watermark">
+                <div class="holographic-overlay"></div>
+                <div class="geometric-particles" id="particles">
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                </div>
+
+                <div class="cube-container">
+                    <div class="wireframe-cube">
+                        <div class="cube-face front">
+                            <div class="wireframe-lines">
+                                <div class="inner-line horizontal-line line-1"></div>
+                                <div class="inner-line horizontal-line line-2"></div>
+                                <div class="inner-line horizontal-line line-3"></div>
+                            </div>
+                        </div>
+                        <div class="cube-face back">
+                            <div class="wireframe-lines">
+                                <div class="inner-line vertical-line v-line-1"></div>
+                                <div class="inner-line vertical-line v-line-2"></div>
+                                <div class="inner-line vertical-line v-line-3"></div>
+                            </div>
+                        </div>
+                        <div class="cube-face right">
+                            <div class="wireframe-lines">
+                                <div class="inner-line horizontal-line line-1"></div>
+                                <div class="inner-line horizontal-line line-3"></div>
+                            </div>
+                        </div>
+                        <div class="cube-face left">
+                            <div class="wireframe-lines">
+                                <div class="inner-line vertical-line v-line-1"></div>
+                                <div class="inner-line vertical-line v-line-3"></div>
+                            </div>
+                        </div>
+                        <div class="cube-face top">
+                            <div class="wireframe-lines">
+                                <div class="inner-line horizontal-line line-2"></div>
+                            </div>
+                        </div>
+                        <div class="cube-face bottom">
+                            <div class="wireframe-lines">
+                                <div class="inner-line vertical-line v-line-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <span class="watermark-text">
+                    Desenvolvido por <span class="watermark-highlight">Nan</span>dev
+                </span>
+                <span class="code-symbol">&lt;/&gt;</span>
+            </a>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/shipping-rates.js"></script>
+    <script src="js/api-client.js"></script>
+    <script src="js/db-manager-cloud.js"></script>
+    <script src="js/order-manager.js"></script>
+    <script src="js/checkout.js"></script>
+
+</body>
+
+</html>

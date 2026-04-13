@@ -1,0 +1,182 @@
+// ===== DB-MANAGER-CLOUD.JS - Adaptador para MongoDB Atlas =====
+// Este arquivo substitui a lógica de IndexedDB por chamadas HTTP ao backend
+
+// Compatibilidade com código antigo
+window.DBManager = {
+    ready: false,
+
+    async init() {
+        try {
+            // Testa conexão com backend usando o baseURL do APIClient
+            const response = await fetch(`${window.APIClient.baseURL}/products`);
+            if (response.ok) {
+                this.ready = true;
+                console.log('✅ MongoDB Backend conectado!');
+            }
+        } catch (error) {
+            console.warn('⚠️ Backend não disponível ou erro de conexão:', error);
+            // Fallback para IndexedDB é gerenciado pelos métodos que verificam this.ready
+        }
+        return this.ready;
+    },
+
+    async getAllProducts() {
+        try {
+            return await window.APIClient.getAllProducts();
+        } catch (error) {
+            console.error('Erro ao buscar produtos:', error);
+            return [];
+        }
+    },
+
+    // ✅ Novo método para compatibilidade com products-loader.js
+    async getProductsByCategory(category) {
+        try {
+            const allProducts = await this.getAllProducts();
+            if (!category) return allProducts;
+
+            // Normaliza a categoria para busca
+            const catNormalized = category.toLowerCase().trim();
+
+            return allProducts.filter(p => {
+                const pCat = p.category ? p.category.toLowerCase() : '';
+                // Mapeamentos específicos
+                if (catNormalized === 'helanca' && pCat.includes('helanca')) return true;
+                if (catNormalized === 'algodao' && (pCat === 'algodao' || pCat === 'meia-malha')) return true;
+                return pCat === catNormalized;
+            });
+        } catch (error) {
+            console.error(`Erro ao buscar produtos da categoria ${category}:`, error);
+            return [];
+        }
+    },
+
+    async getProduct(id) {
+        try {
+            return await window.APIClient.getProduct(id);
+        } catch (error) {
+            console.error('Erro ao buscar produto:', error);
+            return null;
+        }
+    },
+
+    async saveProduct(product, imageFile = null) {
+        try {
+            // Se há arquivo de imagem, converter para Base64
+            if (imageFile) {
+                try {
+                    const base64Image = await this.convertFileToBase64(imageFile);
+                    product.image = base64Image;
+                } catch (imgError) {
+                    console.error("Erro ao converter imagem:", imgError);
+                    alert("Erro ao processar imagem. Tente um arquivo menor.");
+                    return;
+                }
+            }
+
+            if (product._id) {
+                // Atualizar existente
+                const { _id, ...productData } = product;
+                return await window.APIClient.updateProduct(_id, productData);
+            } else {
+                // Criar novo
+                return await window.APIClient.createProduct(product);
+            }
+        } catch (error) {
+            console.error('Erro ao salvar produto:', error);
+            throw error;
+        }
+    },
+
+    // Função auxiliar para converter arquivo para Base64 com COMPRESSÃO
+    convertFileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const maxWidth = 800; // Largura máxima (HD)
+            const maxHeight = 800;
+            const quality = 0.7;  // 70% de qualidade (bom equilíbrio)
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    // Criar Canvas para redimensionar
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    // Calcular novas dimensões mantendo proporção
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height *= maxWidth / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width *= maxHeight / height;
+                            height = maxHeight;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    // Desenhar imagem redimensionada no canvas
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Converter para Base64 (WebP comprimido)
+                    // Se o navegador não suportar webp (raro hoje), toDataURL retornará png ou jpeg por padrão
+                    const compressedBase64 = canvas.toDataURL('image/webp', quality);
+
+                    console.log(`📸 Imagem otimizada (WebP): De ${(file.size / 1024).toFixed(2)}KB para ${(compressedBase64.length / 1024).toFixed(2)}KB`);
+                    resolve(compressedBase64);
+                };
+            };
+            reader.onerror = error => reject(error);
+        });
+    },
+
+    async deleteProduct(id) {
+        try {
+            return await window.APIClient.deleteProduct(id);
+        } catch (error) {
+            console.error('Erro ao deletar produto:', error);
+            throw error;
+        }
+    },
+
+    async getContact() {
+        try {
+            return await window.APIClient.getContact();
+        } catch (error) {
+            console.error('Erro ao buscar contato:', error);
+            return null;
+        }
+    },
+
+    async saveContact(contactData) {
+        try {
+            return await window.APIClient.updateContact(contactData);
+        } catch (error) {
+            console.error('Erro ao salvar contato:', error);
+            throw error;
+        }
+    },
+
+    async getStats() {
+        try {
+            return await window.APIClient.getStats();
+        } catch (error) {
+            console.error('Erro ao buscar estatísticas:', error);
+            return {
+                totalProducts: 0,
+                availableProducts: 0,
+                unavailableProducts: 0
+            };
+        }
+    }
+};
+
+console.log('📦 DB Manager (MongoDB Cloud) carregado');

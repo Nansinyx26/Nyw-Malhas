@@ -1,0 +1,8 @@
+﻿User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /admin-notifications.html
+Disallow: /analytics.html
+Disallow: /checkout.html
+
+Sitemap: https://nyw-malhas.vercel.app/sitemap.xml

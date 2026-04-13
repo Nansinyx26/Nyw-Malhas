@@ -1,0 +1,414 @@
+// ===== CHECKOUT.JS - Controle da Página de Finalização de Compra =====
+
+document.addEventListener('DOMContentLoaded', async function () {
+
+    // Mapeamento de produtos para fotos e especificações
+    const productData = {
+        'malha-pv': {
+            name: 'Malha PV',
+            category: 'pv',
+            specs: ['Alta durabilidade', 'Secagem rápida', 'Conforto térmico', 'Fácil manutenção'],
+            colors: {
+                'preta': 'malha-pv-preta.webp',
+                'bege': 'malha-pv-bege.webp',
+                'azul-royal': 'malha-pv-azul-royal.webp',
+                'verde-musgo': 'malha-pv-verde-musgo.webp',
+                'cinza-mescla': 'malha-pv-cinza-mescla.webp',
+                'vermelha': 'malha-pv-vermelha.webp'
+            }
+        },
+        'malha-pp': {
+            name: 'Malha PP',
+            category: 'pp',
+            specs: ['Ultraleve', 'Resistente à abrasão', 'Não absorve umidade', 'Hipoalergênico'],
+            colors: {
+                'preta': 'malha-pp-preta.webp',
+                'vinho': 'malha-pp-vinho.webp',
+                'branca': 'malha-pp-branca.webp',
+                'azul-marinho': 'malha-pp-azul-marinho.webp'
+            }
+        },
+        'malha-piquet': {
+            name: 'Malha Piquet',
+            category: 'piquet',
+            specs: ['Textura diferenciada', 'Respirabilidade superior', 'Elegância casual', 'Versatilidade'],
+            colors: {
+                'azul-marinho': 'azul-marinho-piquet.webp',
+                'vermelho': 'vermelho-piquet.webp',
+                'cinza-chumbo': 'malha-piquet-pa-cinza-chumbo.webp',
+                'verde-bandeira': 'malha-piquet-pa-bandeira.webp',
+                'branco': 'malha-piquet-branca.webp',
+                'preto': 'malha-piquet-preta.webp'
+            }
+        },
+        'helanca-light': {
+            name: 'Helanca Light',
+            category: 'helanca',
+            specs: ['Alta elasticidade', 'Ajuste perfeito', 'Leve e respirável', 'Ideal para fitness'],
+            colors: {
+                'preto': 'helanca-light-preto.webp',
+                'bordo': 'helanca-light-bordo.webp',
+                'azul-royal': 'helanca-light-azul-royal.webp',
+                'rosa-pink': 'helanca-light-rosa-pink.webp'
+            }
+        },
+        'algodao': {
+            name: 'Meia Malha 30.1',
+            category: 'algodao',
+            specs: ['100% Algodão', 'Fio Penteado', 'Hipoalergênico', 'Toque Macio'],
+            colors: {
+                'variadas': 'algodao.webp',
+                'branco': 'algodao-branco.webp',
+                'azul-marinho': 'algodao-azul-marinho.webp',
+                'vermelho': 'algodao-vermelho.webp',
+                'preto': 'algodao-preto.webp',
+                'cinza-claro': 'algodao-cinza-claro.webp'
+            }
+        },
+        'dry-fit': {
+            name: 'Malha Dry Fit',
+            category: 'dryfit',
+            specs: ['Secagem Rápida', '100% Poliamida', 'Ideal para Esportes', 'Leve (130g)'],
+            colors: {
+                'variadas': 'dry-fit.webp',
+                'azul': 'dry-fit.webp',
+                'azul-royal': 'dry-fit-azul-royal.webp',
+                'branco': 'dry-fit-branco.webp',
+                'preto': 'dry-fit-preto.webp'
+            }
+        },
+        'viscose': {
+            name: 'Viscose c/ Elastano',
+            category: 'viscose',
+            specs: ['Caimento Fluido', 'Toque Gelado', 'Conforto', '96% Viscose'],
+            colors: {
+                'variadas': 'viscose.webp',
+                'vermelha': 'viscose-vermelha.webp',
+                'cinza-mescla': 'viscose-cinza-mescla.webp',
+                'vinho': 'viscose-vinho.webp'
+            }
+        },
+        'moletom': {
+            name: 'Moletom 3 Cabos',
+            category: 'moletom',
+            specs: ['Felpado/Inverno', '320 g/m² (Pesado)', 'Alta Resistência', '50% Alg / 50% Pol'],
+            colors: {
+                'variadas': 'moletom.webp',
+                'cinza-mescla': 'moletom.webp',
+                'azul-marinho': 'moletom-azul-marinho.webp',
+                'bordo': 'moletom-bordo.webp'
+            }
+        },
+        'helanca-escolar': {
+            name: 'Helanca Escolar',
+            category: 'helanca-escolar',
+            specs: ['Indestrutível', 'Não Desbota', '100% Poliéster', 'Uso Diário'],
+            colors: {
+                'azul-marinho': 'helanca-escolar-marinho.webp',
+                'verde-bandeira': 'helanca-escolar-verde-bandeira.webp',
+                'cinza': 'helanca-escolar-cinza.webp',
+                'variadas': 'helanca-escolar.webp'
+            }
+        },
+        'oxford': {
+            name: 'Tecido Oxford',
+            category: 'oxford',
+            specs: ['Nobre e Prático', 'Não Amarrota', '100% Poliéster', 'Camisaria/Avental'],
+            colors: {
+                'variadas': 'oxford.webp',
+                'cinza': 'oxford-cinza.webp',
+                'azul-marinho': 'oxford.webp',
+                'vermelho': 'oxford-vermelho.webp'
+            }
+        }
+    };
+
+    let storageAllProducts = [];
+
+    // Função para buscar imagem do banco com fallback para estático
+    function findDbImage(productKey, colorKey, fallbackImage) {
+        if (!storageAllProducts || storageAllProducts.length === 0) return 'img/' + fallbackImage;
+
+        const targetInfo = productData[productKey];
+
+        const dbProduct = storageAllProducts.find(p => {
+            const pCategory = p.category ? p.category.toLowerCase().trim() : '';
+            const pColor = p.color ? p.color.toLowerCase().trim() : '';
+            const targetCategory = targetInfo.category.toLowerCase().trim();
+            const targetColor = colorKey.toLowerCase().trim();
+
+            // Busca por categoria exata e cor exata
+            return pColor === targetColor && pCategory === targetCategory;
+        });
+
+        if (dbProduct && dbProduct.image) {
+            // Se a imagem for Base64 ou URL completa, retorna direto
+            if (dbProduct.image.startsWith('data:') || dbProduct.image.startsWith('http')) {
+                return dbProduct.image;
+            }
+            // Se for apenas o nome do arquivo, adiciona o prefixo img/
+            return 'img/' + dbProduct.image.replace(/^img\//, '');
+        }
+
+        return 'img/' + fallbackImage;
+    }
+
+    // Pegar parâmetros da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const productSlug = urlParams.get('produto');
+    const color = urlParams.get('cor');
+    const productId = urlParams.get('productId');
+
+    // Validar se os parâmetros básicos existem
+    if (!productSlug || !color || !productData[productSlug] || !productData[productSlug].colors[color]) {
+        alert('Produto ou cor inválidos!');
+        window.location.href = 'index.html';
+        return;
+    }
+
+    let targetProductFromDb = null;
+
+    // ===== VERIFICAÇÃO DE DISPONIBILIDADE NO BANCO =====
+    try {
+        if (window.DBManager) {
+            await window.DBManager.init();
+            storageAllProducts = await window.DBManager.getAllProducts();
+
+            // Se temos o ID direto, usamos ele como prioridade absoluta
+            if (productId) {
+                targetProductFromDb = await window.DBManager.getProduct(productId);
+                console.log('📦 Produto carregado por ID direto:', targetProductFromDb);
+            }
+
+            // Fallback: Busca manual por categoria/cor se não houver ID ou se falhar
+            if (!targetProductFromDb) {
+                const targetInfo = productData[productSlug];
+                const targetCategory = targetInfo.category.toLowerCase().trim();
+                const targetColor = color.replace(/-/g, ' ').toLowerCase().trim();
+
+                targetProductFromDb = storageAllProducts.find(p => {
+                    const pCategory = p.category ? p.category.toLowerCase().trim() : '';
+                    const pColor = p.color ? p.color.toLowerCase().trim() : '';
+                    return pColor === targetColor && pCategory === targetCategory;
+                });
+            }
+
+            if (targetProductFromDb) {
+                const stockVal = targetProductFromDb.stock || 0;
+                if (targetProductFromDb.status === 'unavailable' || stockVal <= 0) {
+                    alert(`O produto está temporariamente indisponível.`);
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                // (Lógica de exibição movida para garantir visualização padrão)
+            }
+        }
+    } catch (error) {
+        console.error('Erro ao verificar disponibilidade:', error);
+    }
+
+    // ===== EXIBIÇÃO DE ESTOQUE (Sempre visível) =====
+    const stockVal = targetProductFromDb ? (targetProductFromDb.stock !== undefined ? targetProductFromDb.stock : 100) : 100;
+    const isAvail = stockVal > 0;
+
+    const colorTag = document.getElementById('productColorTag');
+    if (colorTag) {
+        let stockTag = document.getElementById('productStockTag');
+        if (!stockTag) {
+            stockTag = document.createElement('div');
+            stockTag.id = 'productStockTag';
+            stockTag.className = 'product-color-tag mb-3';
+
+            // Inserir ANTES do container do seletor (uma linha acima)
+            const colorSelector = document.getElementById('colorSelectorContainer');
+            if (colorSelector && colorSelector.parentNode) {
+                // Inserir antes da div pai do seletor (.mb-4)
+                colorSelector.parentNode.parentNode.insertBefore(stockTag, colorSelector.parentNode);
+            } else {
+                colorTag.parentNode.insertBefore(stockTag, colorTag.nextSibling);
+            }
+        }
+
+        stockTag.innerHTML = `<i class="fas fa-${isAvail ? 'check' : 'times'}-circle me-2"></i><strong>${isAvail ? 'Disponível' : 'Indisponível'}</strong>`;
+
+        const statusColor = isAvail ? '#27ae60' : '#e74c3c';
+        const bgColor = isAvail ? 'rgba(46, 204, 113, 0.1)' : 'rgba(231, 76, 60, 0.1)';
+        const borderColor = isAvail ? 'rgba(46, 204, 113, 0.3)' : 'rgba(231, 76, 60, 0.3)';
+
+        stockTag.style.background = bgColor;
+        stockTag.style.borderColor = borderColor;
+        stockTag.style.color = statusColor;
+    }
+
+    // Carregar dados do produto
+    const productInfo = productData[productSlug];
+    const colorDisplay = color.replace(/-/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
+    // Determinar imagem final: Prioridade para o objeto do banco encontrado
+    let imagePath;
+    if (targetProductFromDb && targetProductFromDb.image) {
+        imagePath = targetProductFromDb.image;
+        if (!imagePath.startsWith('data:') && !imagePath.startsWith('http')) {
+            imagePath = 'img/' + imagePath.replace(/^img\//, '');
+        }
+    } else {
+        imagePath = findDbImage(productSlug, colorDisplay, productInfo.colors[color]);
+    }
+
+    // Atualizar elementos da página
+    document.getElementById('productImage').src = imagePath;
+    document.getElementById('productImage').alt = `${productInfo.name} - ${colorDisplay}`;
+    document.getElementById('productTitle').textContent = productInfo.name;
+    document.getElementById('colorName').textContent = colorDisplay;
+
+    // Sincronizar com o modal de pedido
+    window.DBProductImage = imagePath;
+    window.DBProductImage = imagePath;
+
+
+
+    // Atualizar especificações
+    const specsList = document.getElementById('productSpecs');
+    specsList.innerHTML = productInfo.specs.map(spec =>
+        `<li><i class="fas fa-check text-primary me-2"></i> ${spec}</li>`
+    ).join('');
+
+    // ===== SELETOR DE CORES =====
+    const colorContainer = document.getElementById('colorSelectorContainer');
+    if (colorContainer) {
+        colorContainer.innerHTML = ''; // Limpar container
+        const colors = productInfo.colors;
+
+        for (const [key, value] of Object.entries(colors)) {
+            const colorDiv = document.createElement('div');
+            const colorDisplayName = key.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
+            // Estilizar o botão de cor
+            colorDiv.className = 'color-option-btn';
+            colorDiv.style.width = '30px';
+            colorDiv.style.height = '30px';
+            colorDiv.style.borderRadius = '50%';
+            colorDiv.style.cursor = 'pointer';
+            colorDiv.style.border = '2px solid rgba(0,0,0,0.1)';
+            colorDiv.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+            colorDiv.title = colorDisplayName;
+
+            // Tentar inferir a cor visualmente para o background (simplificado)
+            // Mapeamento básico para cores comuns
+            const colorMap = {
+                'preta': '#000', 'preto': '#000',
+                'branca': '#fff', 'branco': '#fff',
+                'azul-royal': '#4169E1', 'azul-marinho': '#000080', 'azul': '#0000FF',
+                'vermelha': '#FF0000', 'vermelho': '#FF0000',
+                'vinho': '#800000', 'bordo': '#800000', 'bordô': '#800000',
+                'verde-musgo': '#556B2F', 'verde-bandeira': '#006400', 'verde': '#008000',
+                'cinza-mescla': '#808080', 'cinza-chumbo': '#696969', 'cinza': '#808080', 'chumbo': '#2F4F4F',
+                'bege': '#F5F5DC',
+                'rosa-pink': '#FF1493', 'rosa': '#FFC0CB',
+                'amarelo': '#FFFF00', 'laranja': '#FF8C00',
+                'variadas': 'linear-gradient(45deg, red, blue, green, yellow)'
+            };
+
+            // Se for gradiente (variadas), usa background, senão backgroundColor
+            if (colorMap[key] && colorMap[key].includes('gradient')) {
+                colorDiv.style.background = colorMap[key];
+            } else {
+                colorDiv.style.backgroundColor = colorMap[key] || '#ccc'; // Fallback cinza
+            }
+
+            // Marcar o selecionado
+            if (key === color) {
+                colorDiv.style.border = '3px solid #ff6600';
+                colorDiv.style.transform = 'scale(1.2)';
+                colorDiv.style.boxShadow = '0 0 15px rgba(255, 102, 0, 0.5)';
+            }
+
+            // Hover effects via JS para garantir feedback imediato
+            colorDiv.onmouseover = function () {
+                if (window.checkoutColorName !== colorDisplayName) {
+                    this.style.transform = 'scale(1.1)';
+                    this.style.boxShadow = '0 0 10px rgba(0,0,0,0.2)';
+                }
+            };
+            colorDiv.onmouseout = function () {
+                if (window.checkoutColorName !== colorDisplayName) {
+                    this.style.transform = 'scale(1)';
+                    this.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+                }
+            };
+
+            colorDiv.onclick = function () {
+                // Atualizar imagens e textos
+                const newColorDisplay = colorDisplayName;
+                const newImagePath = findDbImage(productSlug, newColorDisplay, value);
+
+                document.getElementById('productImage').src = newImagePath;
+                document.getElementById('productImage').alt = `${productInfo.name} - ${newColorDisplay}`;
+                document.getElementById('colorName').textContent = newColorDisplay;
+
+                // Atualizar variáveis globais do modal de forma segura
+                window.checkoutColorName = newColorDisplay;
+                window.DBProductImage = newImagePath; // Sincroniza imagem com o modal
+
+                const orderColorInput = document.getElementById('orderColor');
+                if (orderColorInput) orderColorInput.value = newColorDisplay;
+
+                // Atualizar visual da seleção
+                Array.from(colorContainer.children).forEach(c => {
+                    c.style.border = '2px solid rgba(0,0,0,0.1)';
+                    c.style.transform = 'scale(1)';
+                    c.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+                });
+                colorDiv.style.border = '3px solid #ff6600';
+                colorDiv.style.transform = 'scale(1.2)';
+                colorDiv.style.boxShadow = '0 0 15px rgba(255, 102, 0, 0.5)';
+
+                // Atualizar URL sem recarregar
+                const newUrl = new URL(window.location);
+                newUrl.searchParams.set('cor', key);
+                window.history.replaceState(null, '', newUrl);
+
+                // Atualizar estoque para a nova cor
+                if (storageAllProducts) {
+                    const dbProduct = storageAllProducts.find(p => {
+                        const pName = p.name.toLowerCase();
+                        const pColor = p.color.toLowerCase();
+                        return pColor === newColorDisplay.toLowerCase() && pName.includes(productInfo.name.split(' ')[0].toLowerCase());
+                    });
+
+                    const stockTag = document.getElementById('productStockTag');
+                    if (dbProduct && stockTag) {
+                        const stockVal = dbProduct.stock || 0;
+                        const isAvail = stockVal > 0;
+                        // ✅ Mostrar apenas Disponível/Indisponível SEM quantidade
+                        stockTag.innerHTML = `<i class="fas fa-${isAvail ? 'check' : 'times'}-circle me-2"></i><strong>${isAvail ? 'Disponível' : 'Indisponível'}</strong>`;
+                        if (stockVal <= 0) {
+                            stockTag.style.background = 'rgba(231, 76, 60, 0.1)';
+                            stockTag.style.borderColor = 'rgba(231, 76, 60, 0.3)';
+                            stockTag.style.color = '#e74c3c';
+                        } else {
+                            stockTag.style.background = 'rgba(46, 204, 113, 0.1)';
+                            stockTag.style.borderColor = 'rgba(46, 204, 113, 0.3)';
+                            stockTag.style.color = '#27ae60';
+                        }
+                    }
+                }
+
+                console.log(`Cor alterada para: ${newColorDisplay}`);
+            };
+
+            colorContainer.appendChild(colorDiv);
+        }
+    }
+
+    // Salvar dados para o modal
+    window.checkoutProductName = productInfo.name;
+    window.checkoutColorName = colorDisplay;
+
+});
+
+// Função para abrir o modal a partir da página de checkout
+window.openOrderModalFromCheckout = function () {
+    openOrderModal(window.checkoutProductName, window.checkoutColorName);
+};
