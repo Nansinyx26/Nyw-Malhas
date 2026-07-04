@@ -19,18 +19,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const scrollY = window.scrollY;
         const scrollPercent = scrollY / (document.documentElement.scrollHeight - window.innerHeight);
 
-        // Parallax no header
-        if (parallaxElements.header) {
-            const headerSpeed = 0.5;
-            parallaxElements.header.style.transform = `translateY(${scrollY * headerSpeed}px)`;
-        }
-
-        // Parallax no logo (efeito flutuante baseado no scroll)
-        if (parallaxElements.logo) {
-            const logoSpeed = 0.3;
-            const logoRotation = scrollPercent * 5; // Rotação sutil
-            parallaxElements.logo.style.transform = `translateY(${scrollY * logoSpeed}px) rotate(${logoRotation}deg)`;
-        }
+        // ⚠️ Parallax do BOX da header/logo DESATIVADO.
+        // O translateY(scrollY * 0.5) empurrava a header (e o mascote do herói)
+        // para baixo, sobrepondo a seção "Nossos Produtos". O flutuar do logo já
+        // é feito por CSS (.logo { animation: float }). Mantemos apenas os efeitos
+        // sutis de profundidade nas seções/cards abaixo, que não deslocam layout.
 
         // Parallax nas seções (efeito de profundidade)
         parallaxElements.sections.forEach((section, index) => {
