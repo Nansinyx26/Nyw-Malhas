@@ -40,8 +40,13 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Google Fonts: Sora (títulos) + Inter (corpo) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+
     <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css?v=20260124h">
+    <link rel="stylesheet" href="css/style.css?v=20260704b">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/nandev-watermark.css">
 
@@ -56,10 +61,41 @@
 
         <!-- Front Content Layer -->
         <div class="header-content parallax-front">
-            <div class="logo-container glass-effect">
-                <img src="img/logo3.webp" alt="Logo NYW MALHAS" class="logo">
+            <div class="hero-grid">
+                <div class="hero-copy">
+                    <div class="logo-container glass-effect">
+                        <img src="img/logo3.webp" alt="Logo NYW MALHAS" class="logo">
+                    </div>
+                    <p class="tagline glass-text hero-title">
+                        Malhas e Tecidos de <span class="text-gradient">Qualidade</span>
+                    </p>
+                    <p class="hero-subtitle">
+                        Atacado e varejo para a sua confecção — algodão, dry fit,
+                        helanca, piquet, viscose, moletom e muito mais.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#section-home" class="btn-hero btn-hero-primary">
+                            <i class="fas fa-shopping-bag" aria-hidden="true"></i> Ver produtos
+                        </a>
+                        <a href="https://wa.me/5519981600429?text=Ol%C3%A1!%20Quero%20fazer%20um%20pedido%20de%20malha."
+                            target="_blank" rel="noopener noreferrer" class="btn-hero btn-hero-ghost">
+                            <i class="fab fa-whatsapp" aria-hidden="true"></i> Falar no WhatsApp
+                        </a>
+                    </div>
+                    <ul class="hero-badges" aria-label="Diferenciais">
+                        <li><i class="fas fa-truck" aria-hidden="true"></i> Entrega em todo o Brasil</li>
+                        <li><i class="fas fa-tags" aria-hidden="true"></i> Atacado e varejo</li>
+                        <li><i class="fas fa-medal" aria-hidden="true"></i> Qualidade garantida</li>
+                    </ul>
+                </div>
+
+                <!-- Mascote de boas-vindas com flutuação idle -->
+                <div class="hero-mascote" aria-hidden="true">
+                    <img src="img/mascote-nyw.png" alt="" class="hero-mascote-img"
+                        onerror="this.onerror=null;this.parentElement.style.display='none';">
+                    <span class="hero-mascote-shadow"></span>
+                </div>
             </div>
-            <p class="tagline glass-text">Malhas e Tecidos de Qualidade</p>
         </div>
     </header>
 
@@ -107,12 +143,12 @@
     <main>
         <!-- ✅ SEÇÃO INICIAL (VITRINE) -->
         <section id="section-home" class="product-section active">
-            <div class="section-header">
+            <div class="section-header" data-reveal>
                 <h1>Nossos Produtos</h1>
                 <p>Qualidade e variedade para sua confecção</p>
             </div>
 
-            <div class="row g-4">
+            <div class="row g-4" data-reveal data-reveal-delay="1">
                 <!-- Card: Malha PV -->
                 <div class="col-6 col-md-4 col-lg-3">
                     <a href="paginas/malha-pv.html" class="text-decoration-none">
@@ -1067,82 +1103,18 @@
             </div>
         </section>
 
-        <!-- WhatsApp Floating Button -->
-        <style>
-            .whatsapp-btn {
-                position: fixed;
-                right: 20px;
-                bottom: 20px;
-                z-index: 9999;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                background: #25D366;
-                color: white;
-                padding: 12px 14px;
-                border-radius: 50px;
-                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-                text-decoration: none;
-                font-weight: 600;
-                font-family: sans-serif;
-            }
-
-            .whatsapp-btn svg {
-                width: 24px;
-                height: 24px;
-                display: block;
-                flex-shrink: 0;
-            }
-
-            .whatsapp-label {
-                display: none;
-                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-                letter-spacing: 0.5px;
-            }
-
-            @media(min-width:600px) {
-                .whatsapp-label {
-                    display: inline-block;
-                }
-            }
-        </style>
-
-        <a class="whatsapp-btn" id="whatsappLink" target="_blank" rel="noopener noreferrer">
-            <!-- ícone WhatsApp (SVG) -->
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path
-                    d="M20.52 3.48A11.86 11.86 0 0012 .5C6.21.5 1.56 4.92 1.08 10.4c-.48 5.48 3.09 10.66 8.15 12.03l.01.01 1.09.29.44-1.04c.34-.8.86-1.9 1.26-2.54.33-.52.67-.38 1.12-.22.86.33 2.37.86 3.25 1.09.84.22 1.59.3 2.13.11 4.11-1.47 6.97-6.1 6.77-10.87a11.86 11.86 0 00-3.63-7.28zM12 21.5c-2.02 0-3.9-.6-5.46-1.63l-.39-.23-2.59.68.69-2.52-.25-.41A9.6 9.6 0 012.5 10.4 9.5 9.5 0 1112 21.5z">
-                </path>
-                <path
-                    d="M17.6 14.38c-.3-.15-1.77-.87-2.05-.97-.28-.10-.48-.15-.68.15-.2.29-.78.97-.95 1.17-.17.2-.34.22-.63.07-.3-.15-1.27-.47-2.42-1.48-.9-.8-1.51-1.79-1.69-2.09-.17-.31-.02-.48.13-.63.13-.13.3-.34.45-.51.15-.17.2-.29.3-.48.1-.2.05-.37-.02-.52-.07-.15-.68-1.64-.93-2.25-.24-.59-.48-.51-.66-.52-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.29-1.03 1.01-1.03 2.46 0 1.44 1.06 2.83 1.2 3.03.14.2 2.07 3.34 5.02 4.68 2.95 1.34 2.95.9 3.48.84.53-.06 1.72-.7 1.97-1.38.25-.69.25-1.28.18-1.39-.07-.11-.26-.17-.56-.32z">
-                </path>
-            </svg>
-            <span class="whatsapp-label">Entrar em Contato via WhatsApp</span>
-        </a>
-
-        <script>
-            (function () {
-                const phone = '5519981600429'; // coloque seu número aqui (formato internacional sem +)
-                const message = 'Olá!%20Quero%20mais%20informações%20sobre%20Malhas%20e%20Tecidos.'; // já codificada ou use encodeURIComponent
-                const ua = navigator.userAgent || '';
-                const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(ua);
-                const base = isMobile ? 'https://wa.me/' : 'https://web.whatsapp.com/send';
-                const href = `${base}/${phone}?text=${message}`;
-                document.getElementById('whatsappLink').setAttribute('href', href);
-            })();
-        </script>
-
+        <!-- (Botão verde antigo removido — o mascote FAB é o CTA de WhatsApp) -->
 
         <!-- ✅ SEÇÃO DE CONTATO COM data-contact -->
         <section id="section-contato" class="product-section contact-section">
-            <div class="section-header">
+            <div class="section-header" data-reveal>
                 <h1>Entre em Contato</h1>
                 <p>Estamos prontos para atender você</p>
             </div>
             <div class="contact-container">
                 <div class="contact-card">
                     <div class="qr-code">
-                        <img src="seu-qrcode.webp" data-contact="qrcode" alt="QR Code WhatsApp">
+                        <img src="img/seu-qrcode.webp" data-contact="qrcode" alt="QR Code WhatsApp">
                         <p>Escaneie para WhatsApp</p>
                     </div>
                 </div>
@@ -1202,6 +1174,19 @@
                                     <div class="col-md-6">
                                         <label class="form-label">Cor / Estampa</label>
                                         <input type="text" id="orderColor" class="form-control glass-input" readonly>
+                                    </div>
+                                    <div class="col-8 col-md-8">
+                                        <label class="form-label">Quantidade</label>
+                                        <input type="number" id="orderQuantity" class="form-control glass-input"
+                                            min="1" step="1" inputmode="numeric" placeholder="Ex.: 10" required>
+                                    </div>
+                                    <div class="col-4 col-md-4">
+                                        <label class="form-label">Unidade</label>
+                                        <select id="orderUnit" class="form-select glass-input">
+                                            <option value="Kg" selected>Kg</option>
+                                            <option value="Metros">Metros</option>
+                                            <option value="Peças">Peças</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -1310,8 +1295,9 @@
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" form="orderForm" class="btn btn-success px-4 py-2 fw-bold">
-                        <i class="fab fa-whatsapp me-2"></i> Finalizar no WhatsApp
+                    <button type="submit" form="orderForm" id="orderSubmitBtn"
+                        class="btn btn-success px-4 py-2 fw-bold">
+                        <span class="btn-label"><i class="fab fa-whatsapp me-2"></i> Finalizar no WhatsApp</span>
                     </button>
                 </div>
             </div>
@@ -1391,6 +1377,16 @@
         </div>
     </footer>
 
+    <!-- ✅ Botão flutuante de WhatsApp com o mascote -->
+    <a href="https://wa.me/5519981600429?text=Ol%C3%A1!%20Quero%20fazer%20um%20pedido%20de%20malha."
+        id="mascoteWhats" class="mascote-fab" target="_blank" rel="noopener noreferrer"
+        aria-label="Fale no WhatsApp com a NYW Malhas">
+        <span class="mascote-balao">Bora fechar pedido?</span>
+        <img src="img/mascote-nyw.png" alt="" class="mascote-img"
+            onerror="this.onerror=null;this.src='img/logo3.webp';">
+        <i class="fab fa-whatsapp mascote-badge" aria-hidden="true"></i>
+    </a>
+
     <!-- ✅ SCRIPTS -->
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -1402,6 +1398,7 @@
     <script src="js/script.js"></script>
     <script src="js/contact-loader.js"></script>
     <script src="js/shipping-rates.js"></script>
+    <script src="js/mascote.js"></script>
     <script src="js/order-manager.js"></script>
     <script src="js/products-sync.js"></script>
 

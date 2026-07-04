@@ -62,13 +62,22 @@ async function loadProducts(forceReload = false) {
             productsGrid.innerHTML = '';
 
             if (allProducts.length === 0) {
-                productsGrid.innerHTML = `
-                    <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 4rem;">
-                        <i class="fas fa-box-open" style="font-size: 4rem; color: var(--primary); opacity: 0.5; margin-bottom: 1rem;"></i>
-                        <h3 style="color: var(--text-primary);">Nenhum produto cadastrado</h3>
-                        <p style="color: var(--text-secondary);">Em breve teremos novidades!</p>
-                    </div>
-                `;
+                // Estado vazio com o mascote (fallback para markup simples)
+                if (window.NYWMascote && typeof window.NYWMascote.emptyStateHTML === 'function') {
+                    const base = location.pathname.includes('/paginas/') ? '../' : '';
+                    productsGrid.innerHTML =
+                        '<div class="empty-state" style="grid-column: 1/-1;">' +
+                        window.NYWMascote.emptyStateHTML('Ops, não achei essa malha… Em breve teremos novidades!', base) +
+                        '</div>';
+                } else {
+                    productsGrid.innerHTML = `
+                        <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 4rem;">
+                            <i class="fas fa-box-open" style="font-size: 4rem; color: var(--primary); opacity: 0.5; margin-bottom: 1rem;"></i>
+                            <h3 style="color: var(--text-primary);">Nenhum produto cadastrado</h3>
+                            <p style="color: var(--text-secondary);">Em breve teremos novidades!</p>
+                        </div>
+                    `;
+                }
                 return;
             }
 

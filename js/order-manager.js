@@ -91,9 +91,148 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // ===== CÁLCULO DE FRETE INTELIGENTE =====
+    // ===== MÁSCARAS DE ENTRADA =====
+    const taxIdInput = document.getElementById('clientTaxId');
+    const phoneInput = document.getElementById('clientPhone');
 
+    function maskTaxId(value) {
+        const d = value.replace(/\D/g, '').slice(0, 14);
+        if (d.length <= 11) {
+            // CPF: 000.000.000-00
+            return d
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        }
+        // CNPJ: 00.000.000/0000-00
+        return d
+            .replace(/(\d{2})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1/$2')
+            .replace(/(\d{4})(\d{1,2})$/, '$1-$2');
+    }
 
+    function maskPhone(value) {
+        const d = value.replace(/\D/g, '').slice(0, 11);
+        if (d.length <= 10) {
+            return d
+                .replace(/(\d{2})(\d)/, '($1) $2')
+                .replace(/(\d{4})(\d{1,4})$/, '$1-$2');
+        }
+        return d
+            .replace(/(\d{2})(\d)/, '($1) $2')
+            .replace(/(\d{5})(\d{1,4})$/, '$1-$2');
+    }
+
+    if (taxIdInput) {
+        taxIdInput.addEventListener('input', (e) => { e.target.value = maskTaxId(e.target.value); });
+    }
+    if (phoneInput) {
+        phoneInput.addEventListener('input', (e) => { e.target.value = maskPhone(e.target.value); });
+    }
+
+    // ===== VALIDAÇÃO AMIGÁVEL EM TEMPO REAL =====
+    function isValidCPF(cpf) {
+        cpf = cpf.replace(/\D/g, '');
+        if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+        let sum = 0;
+        for (let i = 0; i < 9; i++) sum += parseInt(cpf[i]) * (10 - i);
+        let d1 = (sum * 10) % 11; if (d1 === 10) d1 = 0;
+        if (d1 !== parseInt(cpf[9])) return false;
+        sum = 0;
+        for (let i = 0; i < 10; i++) sum += parseInt(cpf[i]) * (11 - i);
+        let d2 = (sum * 10) % 11; if (d2 === 10) d2 = 0;
+        return d2 === parseInt(cpf[10]);
+    }
+
+    function isValidCNPJ(cnpj) {
+        cnpj = cnpj.replace(/\D/g, '');
+        if (cnpj.length !== 14 || /^(\d)\1{13}$/.test(cnpj)) return false;
+        const calc = (len) => {
+            let sum = 0, pos = len - 7;
+            for (let i = len; i >= 1; i--) {
+                sum += parseInt(cnpj[len - i]) * pos--;
+                if (pos < 2) pos = 9;
+            }
+            const r = sum % 11;
+            return r < 2 ? 0 : 11 - r;
+        };
+        return calc(12) === parseInt(cnpj[12]) && calc(13) === parseInt(cnpj[13]);
+    }
+
+    function setError(input, msg) {
+        if (!input) return;
+        input.classList.add('is-invalid');
+        let err = input.parentElement.querySelector('.field-error');
+        if (!err) {
+            err = document.createElement('span');
+            err.className = 'field-error';
+            input.parentElement.appendChild(err);
+        }
+        err.textContent = msg;
+    }
+
+    function clearError(input) {
+        if (!input) return;
+        input.classList.remove('is-invalid');
+        const err = input.parentElement.querySelector('.field-error');
+        if (err) err.textContent = '';
+    }
+
+    // Regras por campo. Retorna mensagem de erro ou '' se válido.
+    const validators = {
+        clientName: (v) => v.trim().length >= 3 ? '' : 'Informe o nome completo.',
+        clientTaxId: (v) => {
+            const d = v.replace(/\D/g, '');
+            if (d.length === 11) return isValidCPF(v) ? '' : 'CPF inválido.';
+            if (d.length === 14) return isValidCNPJ(v) ? '' : 'CNPJ inválido.';
+            return 'Informe um CPF ou CNPJ válido.';
+        },
+        clientPhone: (v) => {
+            const d = v.replace(/\D/g, '');
+            return (d.length === 10 || d.length === 11) ? '' : 'Telefone inválido (com DDD).';
+        },
+        clientEmail: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) ? '' : 'E-mail inválido.',
+        orderQuantity: (v) => (parseFloat(v) > 0) ? '' : 'Informe a quantidade.',
+        addrStreet: (v) => v.trim() ? '' : 'Informe o endereço.',
+        addrNumber: (v) => v.trim() ? '' : 'Nº',
+        addrNeighborhood: (v) => v.trim() ? '' : 'Informe o bairro.',
+        addrCity: (v) => v.trim() ? '' : 'Informe a cidade.',
+        addrUF: (v) => /^[A-Za-z]{2}$/.test(v.trim()) ? '' : 'UF',
+        addrZip: (v) => v.replace(/\D/g, '').length === 8 ? '' : 'CEP inválido.'
+    };
+
+    function validateField(id) {
+        const input = document.getElementById(id);
+        if (!input || !validators[id]) return true;
+        const msg = validators[id](input.value);
+        if (msg) { setError(input, msg); return false; }
+        clearError(input);
+        return true;
+    }
+
+    // Feedback em tempo real (ao sair do campo e ao digitar depois de um erro)
+    Object.keys(validators).forEach((id) => {
+        const input = document.getElementById(id);
+        if (!input) return;
+        input.addEventListener('blur', () => validateField(id));
+        input.addEventListener('input', () => {
+            if (input.classList.contains('is-invalid')) validateField(id);
+        });
+    });
+
+    function validateAll() {
+        let firstInvalid = null;
+        Object.keys(validators).forEach((id) => {
+            const ok = validateField(id);
+            if (!ok && !firstInvalid) firstInvalid = document.getElementById(id);
+        });
+        if (firstInvalid) {
+            firstInvalid.focus();
+            firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return !firstInvalid;
+    }
 
     // ===== ABRIR MODAL =====
     window.openOrderModal = async function (product, color) {
@@ -178,6 +317,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // ===== SUBMISSÃO DO PEDAMENTO =====
     orderForm.addEventListener('submit', async function (e) {
         e.preventDefault();
+
+        // 0. Validar antes de prosseguir
+        if (!validateAll()) return;
+
+        // Estado de loading no botão de finalizar
+        const submitBtn = document.getElementById('orderSubmitBtn');
+        if (submitBtn) submitBtn.classList.add('is-loading');
 
         // 1. Coletar dados
         const data = {
@@ -316,7 +462,14 @@ Agradecemos pela confiança! 🧵💙`;
         const encodedMessage = encodeURIComponent(message);
         const whatsappUrl = `https://wa.me/${companyConfig.phone}?text=${encodedMessage}`;
 
-        window.open(whatsappUrl, '_blank');
+        // Encerrar loading e fechar o modal
+        if (submitBtn) submitBtn.classList.remove('is-loading');
         orderModal.hide();
+
+        // Abre o WhatsApp e mostra a confirmação com o mascote 👍
+        window.open(whatsappUrl, '_blank');
+        if (window.NYWMascote && typeof window.NYWMascote.celebrate === 'function') {
+            window.NYWMascote.celebrate();
+        }
     });
 });

@@ -2,20 +2,19 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ===== OCULTAR TODAS AS SEÇÕES DE PRODUTOS NA PÁGINA INICIAL =====
-    const productSections = document.querySelectorAll('.product-section');
-    productSections.forEach(section => {
-        section.style.display = 'none';
-    });
+    // ✅ A vitrine (#section-home) fica visível: o CSS já esconde as demais
+    // seções via .product-section { display:none } / .active { display:block }.
+    // (O antigo style.display='none' inline escondia a vitrine e quebrava o
+    //  scroll do botão "Ver produtos".)
 
-    // ===== CRIAR SEÇÃO DE BOAS-VINDAS =====
+    // ===== SEÇÃO DE CONFIANÇA + CTA (inserida APÓS a vitrine) =====
     const main = document.querySelector('main');
 
     const welcomeSection = document.createElement('section');
     welcomeSection.className = 'welcome-section';
     welcomeSection.innerHTML = `
-        <div class="welcome-hero">
-            <h1 class="welcome-title">Bem-vindo à NYW MALHAS</h1>
+        <div class="welcome-hero" data-reveal>
+            <h2 class="welcome-title">Por que escolher a NYW MALHAS?</h2>
             <p class="welcome-subtitle">Fornecedora de tecidos técnicos de alta qualidade</p>
             <div class="welcome-features">
                 <div class="feature-card">
@@ -35,64 +34,33 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             </div>
         </div>
-        
-        <div class="products-overview">
-            <h2>Nossos Produtos</h2>
-            <div class="products-grid-home">
-                <a href="paginas/malha-pv.html" class="product-card-home">
-                    <div class="card-icon">
-                        <i class="fas fa-tshirt"></i>
-                    </div>
-                    <h3>Malha PV</h3>
-                    <p>67% Poliéster / 33% Viscose</p>
-                    <span class="card-link">Comprar <i class="fas fa-arrow-right"></i></span>
-                </a>
-                
-                <a href="paginas/malha-pp.html" class="product-card-home">
-                    <div class="card-icon">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-                    <h3>Malha PP</h3>
-                    <p>100% Poliéster</p>
-                    <span class="card-link">Comprar <i class="fas fa-arrow-right"></i></span>
-                </a>
-                
-                <a href="paginas/malha-piquet.html" class="product-card-home">
-                    <div class="card-icon">
-                        <i class="fas fa-chess-board"></i>
-                    </div>
-                    <h3>Malha Piquet</h3>
-                    <p>PA (50/50) | PV (67/33)</p>
-                    <span class="card-link">Comprar <i class="fas fa-arrow-right"></i></span>
-                </a>
-                
-                <a href="paginas/helanca-light.html" class="product-card-home">
-                    <div class="card-icon">
-                        <i class="fas fa-wind"></i>
-                    </div>
-                    <h3>Helanca Light</h3>
-                    <p>100% Poliéster</p>
-                    <span class="card-link">Comprar <i class="fas fa-arrow-right"></i></span>
-                </a>
-            </div>
-        </div>
-        
-        <div class="cta-home">
+
+        <div class="cta-home" data-reveal>
             <h2>Pronto para fazer seu pedido?</h2>
-            <p>Entre em contato conosco e solicite um orçamento personalizado</p>
-            <a href="contato.html" class="cta-button">
-                <i class="fas fa-phone-alt"></i> Falar com Especialista
+            <p>Fale direto com a gente no WhatsApp e solicite um orçamento personalizado</p>
+            <a href="https://wa.me/5519981600429?text=Ol%C3%A1!%20Quero%20solicitar%20um%20or%C3%A7amento%20de%20malhas."
+                target="_blank" rel="noopener noreferrer" class="cta-button">
+                <i class="fab fa-whatsapp"></i> Falar com Especialista
             </a>
         </div>
     `;
 
-    main.insertBefore(welcomeSection, main.firstChild);
+    // Insere depois da vitrine (fallback: topo do main)
+    const sectionHome = document.getElementById('section-home');
+    if (sectionHome) {
+        sectionHome.after(welcomeSection);
+    } else {
+        main.insertBefore(welcomeSection, main.firstChild);
+    }
 
     // ===== ADICIONAR ESTILOS DINÂMICOS =====
     const style = document.createElement('style');
     style.textContent = `
         .welcome-section {
             animation: fadeIn 0.8s ease;
+            padding: 0 20px 50px;
+            max-width: 1400px;
+            margin: 0 auto;
         }
         
         .welcome-hero {
